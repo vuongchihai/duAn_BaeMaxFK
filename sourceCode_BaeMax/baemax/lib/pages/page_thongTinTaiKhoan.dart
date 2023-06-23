@@ -2,6 +2,7 @@ import 'package:baemax/pages/page_dieuKhoanChinhSach.dart';
 import 'package:baemax/pages/page_donHangCuaToi.dart';
 import 'package:baemax/pages/page_nhaHangYeuThich.dart';
 import 'package:baemax/pages/page_thongTinChiTietTaiKhoan.dart';
+import 'package:baemax/pages/page_viCoupon.dart';
 
 import 'package:flutter/material.dart';
 
@@ -279,7 +280,14 @@ class thongTinTaiKhoanPage extends StatelessWidget {
                         ),
                       ),
                       child: GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => viCouponPage(),
+                            ),
+                          );
+                        },
                         child: const Row(
                           children: [
                             Image(

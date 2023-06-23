@@ -4,5 +4,9 @@ class diaChiLuus {
   final String diaChi;
   final String ghiChu;
 
-  diaChiLuus({required this.id, required this.ten, required this.diaChi, required this.ghiChu});
+  diaChiLuus(
+      {required this.id,
+      required this.ten,
+      required this.diaChi,
+      required this.ghiChu});
 }
