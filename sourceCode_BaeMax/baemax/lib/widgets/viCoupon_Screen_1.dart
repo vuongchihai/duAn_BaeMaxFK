@@ -1,3 +1,4 @@
+import 'package:baemax/pages/page_chiTietPhieuKM.dart';
 import 'package:flutter/material.dart';
 
 class SubScreen_1 extends StatefulWidget {
@@ -25,7 +26,12 @@ class _SubScreen_1State extends State<SubScreen_1> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        print('a');
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => thongTinChiTietPhieuKMPage(),
+                          ),
+                        );
                       },
                       child: Container(
                         decoration: BoxDecoration(
