@@ -1,14 +1,46 @@
-import 'package:baemax/pages/page_chiTietPhieuKM.dart';
+import 'package:baemax/modal/phieuKM.dart';
 import 'package:flutter/material.dart';
+import 'viCoupon_ItemphieuKM.dart';
 
 class SubScreen_1 extends StatefulWidget {
-  const SubScreen_1({super.key});
+  SubScreen_1({super.key});
 
   @override
   State<SubScreen_1> createState() => _SubScreen_1State();
 }
 
 class _SubScreen_1State extends State<SubScreen_1> {
+  DateTime dateTiemNow = DateTime.now();
+
+  final List<PhieuKM> itemsPhieuKMs = [
+    PhieuKM(
+      id_phieuKM: 'KM01',
+      ten_phieuKM: 'Quán mới nên khao',
+      HSD_phieuKM: DateTime(2023, 06, 07),
+      loai_KM: 'QUANMOIKHAOSG15',
+      noiDung_phieuKM: [
+        'Coupon giảm 15000đ cho đơn từ 30000đ.',
+        'Coupon áp dụng cho các nhà hàng có trong chương trình.',
+        'Coupon sử dụng được nhiều lần trong ngày.',
+        'Chương trình có thể thay đổi nội dung và kết thúc sớm hơn dự kiến theo chính sách công ty.',
+        'Để biết thêm chi tiết, vui lòng liên hệ bộ phân Chăm Sóc Khác Hàng qua SĐT: 0949162193 hoặc Email: vuongchihai0711@gmail.com',
+      ],
+    ),
+    PhieuKM(
+      id_phieuKM: 'KM01',
+      ten_phieuKM: 'Rảnh thì cho',
+      HSD_phieuKM: DateTime(2023, 06, 30),
+      loai_KM: 'RANHTHICHOSG30',
+      noiDung_phieuKM: [
+        'Coupon giảm 15000đ cho đơn từ 30000đ.',
+        'Coupon áp dụng cho các nhà hàng có trong chương trình.',
+        'Coupon sử dụng được nhiều lần trong ngày.',
+        'Chương trình có thể thay đổi nội dung và kết thúc sớm hơn dự kiến theo chính sách công ty.',
+        'Để biết thêm chi tiết, vui lòng liên hệ bộ phân Chăm Sóc Khác Hàng qua SĐT: 0949162193 hoặc Email: vuongchihai0711@gmail.com',
+      ],
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,129 +49,23 @@ class _SubScreen_1State extends State<SubScreen_1> {
           horizontal: 10,
           vertical: 10,
         ),
+        color: const Color.fromARGB(255, 240, 238, 238),
+        width: double.infinity,
+        height: double.infinity,
         child: SingleChildScrollView(
           child: Column(
-            children: [
-              Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => thongTinChiTietPhieuKMPage(),
-                          ),
-                        );
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(13),
-                          color: Colors.white,
+            children: itemsPhieuKMs
+                .map((item) => Column(
+                      children: [
+                        ItemPhieuKMViCoupon(
+                          item: item,
                         ),
-                        height: 100,
-                        child: Row(
-                          children: <Widget>[
-                            Container(
-                              width: 5,
-                              decoration: const BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(13),
-                                    bottomLeft: Radius.circular(13)),
-                                color: Colors.blue,
-                              ),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 10,
-                              ),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    width: 65,
-                                    height: 65,
-                                    decoration: const BoxDecoration(
-                                      color: Colors.blue,
-                                    ),
-                                    // child: Image(
-                                    //   image: AssetImage(
-                                    //     'images/hinh_56.png',
-                                    //   ),
-                                    // ),
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Container(
-                                    width: 230,
-                                    child: const Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Quán mới khao Freeship 15K cho đơn mới từ 30k',
-                                          style: TextStyle(
-                                            fontSize: 19,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                          maxLines: 4,
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          'HSD: 30.06.2023',
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
+                        const SizedBox(
+                          height: 15,
                         ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        print('b');
-                      },
-                      child: Container(
-                        height: 100,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 5,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(13),
-                          color: Colors.white,
-                        ),
-                        child: const Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            'Chọn',
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.blue,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-            ],
+                      ],
+                    ))
+                .toList(),
           ),
         ),
       ),

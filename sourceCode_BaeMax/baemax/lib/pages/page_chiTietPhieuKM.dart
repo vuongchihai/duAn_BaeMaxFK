@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class thongTinChiTietPhieuKMPage extends StatefulWidget {
-  thongTinChiTietPhieuKMPage({super.key});
+  thongTinChiTietPhieuKMPage({Key? key, required this.item}) : super(key: key);
+
+  final dynamic item;
 
   @override
   State<thongTinChiTietPhieuKMPage> createState() =>
@@ -10,6 +13,11 @@ class thongTinChiTietPhieuKMPage extends StatefulWidget {
 
 class _thongTinChiTietPhieuKMPageState
     extends State<thongTinChiTietPhieuKMPage> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +47,7 @@ class _thongTinChiTietPhieuKMPageState
                     child: Column(
                       children: [
                         Container(
-                          color: Colors.amber,
+                          color: const Color.fromARGB(255, 174, 243, 248),
                           width: double.infinity,
                           height: 300,
                           padding: const EdgeInsets.only(
@@ -50,7 +58,7 @@ class _thongTinChiTietPhieuKMPageState
                           ),
                         ),
                         Container(
-                          height: 150,
+                          height: 120,
                         ),
                       ],
                     ),
@@ -90,42 +98,44 @@ class _thongTinChiTietPhieuKMPageState
                               vertical: 3,
                             ),
                             child: Text(
-                              'QUANMOIKHAOSG15',
-                              style: TextStyle(
+                              widget.item.loai_KM,
+                              style: const TextStyle(
                                 fontSize: 22,
                                 color: Colors.white,
                               ),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 15,
                           ),
                           Text(
-                            'Quán mới khao Freeship 15K cho đơn từ 30K',
-                            style: TextStyle(
+                            widget.item.ten_phieuKM,
+                            style: const TextStyle(
                               fontSize: 25,
                               color: Colors.black,
                             ),
                             textAlign: TextAlign.center,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 15,
                           ),
                           Text.rich(
                             TextSpan(
-                              text: 'Sử dụng để: ',
-                              style: TextStyle(
+                              text: 'Sử dụng đến: ',
+                              style: const TextStyle(
                                 fontSize: 20,
                                 color: Colors.grey,
                               ),
                               children: [
                                 TextSpan(
-                                  text: '23.06.2023',
-                                  style: TextStyle(
+                                  text: DateFormat('dd/MM/yyyy')
+                                      .format(widget.item.HSD_phieuKM),
+                                  style: const TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
-                                    color: const Color.fromARGB(
-                                        255, 110, 109, 109),
+                                    color: Color.fromARGB(255, 110, 109, 109),
                                   ),
                                 ),
                               ],
@@ -139,107 +149,30 @@ class _thongTinChiTietPhieuKMPageState
               ),
             ),
             Container(
+              margin: const EdgeInsets.only(
+                top: 20,
+              ),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 13,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Coupong giảm 1500đ cho đơn từ 30000đ',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    'Coupong giảm 1500đ cho đơn từ 30000đ',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    'Coupong giảm 1500đ cho đơn từ 30000đ',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    'Coupong giảm 1500đ cho đơn từ 30000đ',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    'Coupong giảm 1500đ cho đơn từ 30000đ',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    'Coupong giảm 1500đ cho đơn từ 30000đ',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    'Coupong giảm 1500đ cho đơn từ 30000đ',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    'Coupong giảm 1500đ cho đơn từ 30000đ',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    'Coupong giảm 1500đ cho đơn từ 30000đ',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    'Coupong giảm 1500đ cho đơn từ 30000đ',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.grey,
-                    ),
-                  ),
-                ],
+                children: (widget.item.noiDung_phieuKM as List<String>)
+                    .map((noiDung) => Column(
+                          children: [
+                            Text(
+                              '*  $noiDung',
+                              style: const TextStyle(
+                                fontSize: 20,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            )
+                          ],
+                        ))
+                    .toList(),
               ),
             ),
           ],
