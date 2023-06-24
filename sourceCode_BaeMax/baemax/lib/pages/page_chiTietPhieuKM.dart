@@ -90,7 +90,7 @@ class _thongTinChiTietPhieuKMPageState
                         children: [
                           Container(
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(7),
                               color: Colors.blue,
                             ),
                             padding: const EdgeInsets.symmetric(
@@ -98,7 +98,7 @@ class _thongTinChiTietPhieuKMPageState
                               vertical: 3,
                             ),
                             child: Text(
-                              widget.item.loai_KM,
+                              widget.item.id_phieuKM,
                               style: const TextStyle(
                                 fontSize: 22,
                                 color: Colors.white,

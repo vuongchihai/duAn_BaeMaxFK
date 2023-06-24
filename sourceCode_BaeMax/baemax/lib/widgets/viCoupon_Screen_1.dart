@@ -14,10 +14,9 @@ class _SubScreen_1State extends State<SubScreen_1> {
 
   final List<PhieuKM> itemsPhieuKMs = [
     PhieuKM(
-      id_phieuKM: 'KM01',
+      id_phieuKM: 'ZALODFG',
       ten_phieuKM: 'Quán mới nên khao',
       HSD_phieuKM: DateTime(2023, 06, 07),
-      loai_KM: 'QUANMOIKHAOSG15',
       noiDung_phieuKM: [
         'Coupon giảm 15000đ cho đơn từ 30000đ.',
         'Coupon áp dụng cho các nhà hàng có trong chương trình.',
@@ -27,10 +26,9 @@ class _SubScreen_1State extends State<SubScreen_1> {
       ],
     ),
     PhieuKM(
-      id_phieuKM: 'KM01',
+      id_phieuKM: 'ZALOSDKFJ',
       ten_phieuKM: 'Rảnh thì cho',
       HSD_phieuKM: DateTime(2023, 06, 30),
-      loai_KM: 'RANHTHICHOSG30',
       noiDung_phieuKM: [
         'Coupon giảm 15000đ cho đơn từ 30000đ.',
         'Coupon áp dụng cho các nhà hàng có trong chương trình.',

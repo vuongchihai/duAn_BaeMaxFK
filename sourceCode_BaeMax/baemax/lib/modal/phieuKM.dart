@@ -2,14 +2,12 @@ class PhieuKM {
   final String id_phieuKM;
   final String ten_phieuKM;
   final DateTime HSD_phieuKM;
-  final String loai_KM;
   final List<String> noiDung_phieuKM;
 
   PhieuKM(
       {required this.id_phieuKM,
       required this.ten_phieuKM,
       required this.HSD_phieuKM,
-      required this.loai_KM,
       required this.noiDung_phieuKM});
 }
 

@@ -1,14 +1,38 @@
 import 'package:baemax/pages/page_chiTietPhieuKM.dart';
+import 'package:baemax/pages/page_danhSachNhaHangDuocApDung.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
-class ItemPhieuKMViCoupon extends StatelessWidget {
+class ItemPhieuKMViCoupon extends StatefulWidget {
   ItemPhieuKMViCoupon({
     Key? key,
     required this.item,
   }) : super(key: key);
 
   var item;
+
+  @override
+  State<ItemPhieuKMViCoupon> createState() => _ItemPhieuKMViCouponState();
+}
+
+class _ItemPhieuKMViCouponState extends State<ItemPhieuKMViCoupon> {
+  String maText = 'Zalo';
+  late String maSearchText;
+
+  @override
+  void initState() {
+    super.initState();
+    maSearchText = widget.item.id_phieuKM;
+  }
+
+  String getPathImage() {
+    if (maSearchText.toLowerCase().contains(maText.toLowerCase())) {
+      return 'images/hinh_74.png';
+    } else {
+      return 'images/hinh_18.png';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +45,8 @@ class ItemPhieuKMViCoupon extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => thongTinChiTietPhieuKMPage(item: item),
+                  builder: (context) =>
+                      thongTinChiTietPhieuKMPage(item: widget.item),
                 ),
               );
             },
@@ -69,10 +94,9 @@ class ItemPhieuKMViCoupon extends StatelessWidget {
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: const Image(
-                            image: AssetImage(
-                              'images/hinh_56.png',
-                            ),
+                          child: Image(
+                            image: AssetImage(getPathImage()),
+                            fit: BoxFit.cover,
                           ),
                         ),
                         const SizedBox(
@@ -84,7 +108,7 @@ class ItemPhieuKMViCoupon extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                item.ten_phieuKM,
+                                widget.item.ten_phieuKM,
                                 style: const TextStyle(
                                   fontSize: 19,
                                   color: Colors.black,
@@ -97,7 +121,8 @@ class ItemPhieuKMViCoupon extends StatelessWidget {
                                 height: 10,
                               ),
                               Text(
-                                DateFormat('dd/MM/yyyy').format(item.HSD_phieuKM),
+                                DateFormat('dd/MM/yyyy')
+                                    .format(widget.item.HSD_phieuKM),
                                 style: const TextStyle(
                                   fontSize: 18,
                                   color: Colors.black,
@@ -115,7 +140,20 @@ class ItemPhieuKMViCoupon extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
-              print('b');
+              Fluttertoast.showToast(
+                msg: 'Mã giảm giá đã được sao chép',
+                toastLength: Toast.LENGTH_SHORT,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Color.fromARGB(255, 97, 97, 97),
+                textColor: Colors.white,
+                fontSize: 20,
+              );
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => nhaHangDuocApDungGiamGiaPage(),
+                ),
+              );
             },
             child: Container(
               height: 100,
@@ -138,7 +176,7 @@ class ItemPhieuKMViCoupon extends StatelessWidget {
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );
