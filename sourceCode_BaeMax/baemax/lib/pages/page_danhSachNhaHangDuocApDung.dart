@@ -1,4 +1,5 @@
-import 'package:baemax/widgets/dsNhaHangDuocChon_dsChonTiemKiem.dart';
+import 'package:baemax/modal/nhaHang.dart';
+import 'package:baemax/widgets/listNhaHang_chiTietNhaHang.dart';
 import 'package:flutter/material.dart';
 
 class nhaHangDuocApDungGiamGiaPage extends StatefulWidget {
@@ -20,9 +21,70 @@ class _nhaHangDuocApDungGiamGiaPageState
     'Danh mục & cửa hàng',
   ];
 
+  final List<nhaHang> NhaHangs = [
+    nhaHang(
+      idNH: 'NH001',
+      tenNH: 'TOCO TOCO',
+      diaChiNH: '299 Tân Kỳ Tân Qúy, Phường Tân Sơn Nhì, Quận Tân Phú, Tp.HCM',
+      monAn: 'Bánh canh cá lóc',
+      khoangCach: 9.0,
+    ),
+    nhaHang(
+      idNH: 'NH002',
+      tenNH: 'TOCO TOCO',
+      diaChiNH: '299 Tân Kỳ Tân Qúy, Phường Tân Sơn Nhì, Quận Tân Phú, Tp.HCM',
+      monAn: 'Bánh canh cá lóc',
+      khoangCach: 9.0,
+    ),
+    nhaHang(
+      idNH: 'NH003',
+      tenNH: 'TOCO TOCO',
+      diaChiNH: '299 Tân Kỳ Tân Qúy, Phường Tân Sơn Nhì, Quận Tân Phú, Tp.HCM',
+      monAn: 'Bánh canh cá lóc',
+      khoangCach: 9.0,
+    ),
+    nhaHang(
+      idNH: 'NH004',
+      tenNH: 'TOCO TOCO',
+      diaChiNH: '299 Tân Kỳ Tân Qúy, Phường Tân Sơn Nhì, Quận Tân Phú, Tp.HCM',
+      monAn: 'Bánh canh cá lóc',
+      khoangCach: 9.0,
+    ),
+    nhaHang(
+      idNH: 'NH005',
+      tenNH: 'TOCO TOCO',
+      diaChiNH: '299 Tân Kỳ Tân Qúy, Phường Tân Sơn Nhì, Quận Tân Phú, Tp.HCM',
+      monAn: 'Bánh canh cá lóc',
+      khoangCach: 9.0,
+    ),
+    nhaHang(
+      idNH: 'NH006',
+      tenNH: 'TOCO TOCO',
+      diaChiNH: '299 Tân Kỳ Tân Qúy, Phường Tân Sơn Nhì, Quận Tân Phú, Tp.HCM',
+      monAn: 'Bánh canh cá lóc',
+      khoangCach: 9.0,
+    ),
+    nhaHang(
+      idNH: 'NH007',
+      tenNH: 'TOCO TOCO',
+      diaChiNH: '299 Tân Kỳ Tân Qúy, Phường Tân Sơn Nhì, Quận Tân Phú, Tp.HCM',
+      monAn: 'Bánh canh cá lóc',
+      khoangCach: 9.0,
+    ),
+    nhaHang(
+      idNH: 'NH008',
+      tenNH: 'TOCO TOCO',
+      diaChiNH: '299 Tân Kỳ Tân Qúy, Phường Tân Sơn Nhì, Quận Tân Phú, Tp.HCM',
+      monAn: 'Bánh canh cá lóc',
+      khoangCach: 9.0,
+    ),
+  ];
+
   bool isCheckedKM = false;
   bool isCheckedDMC = false;
   bool isCheckedDT = false;
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +140,7 @@ class _nhaHangDuocApDungGiamGiaPageState
                           style: TextStyle(
                             fontSize: 20,
                             color: Color.fromARGB(255, 66, 66, 66),
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                         Icon(
@@ -100,7 +162,7 @@ class _nhaHangDuocApDungGiamGiaPageState
                     style: TextStyle(
                       fontSize: 20,
                       color: Color.fromARGB(255, 66, 66, 66),
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
@@ -128,7 +190,7 @@ class _nhaHangDuocApDungGiamGiaPageState
                           style: TextStyle(
                             fontSize: 20,
                             color: Color.fromARGB(255, 66, 66, 66),
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                         Icon(
@@ -251,11 +313,11 @@ class _nhaHangDuocApDungGiamGiaPageState
           Container(
             alignment: Alignment.centerLeft,
             padding: const EdgeInsets.only(
-              left: 15,
+              left: 10,
             ),
             child: Text(
-              '577 nhà hàng tìm thấy',
-              style: TextStyle(
+              '${NhaHangs.length} nhà hàng tìm thấy',
+              style: const TextStyle(
                 fontSize: 20,
                 color: const Color.fromARGB(255, 66, 66, 66),
                 fontWeight: FontWeight.w500,
@@ -263,93 +325,20 @@ class _nhaHangDuocApDungGiamGiaPageState
             ),
           ),
           const SizedBox(
-            height: 20,
+            height: 10,
           ),
           Expanded(
-            // child: ListView.builder(
-            //   itemCount: listDanhMucChon.length,
-            //   itemBuilder: (context, index) {
-            //     return dsChonTimKiem(
-            //       child: listDanhMucChon[index],
-            //     );
-            //   },
-            // ),
             child: Container(
-              alignment: Alignment.centerLeft,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 10,
+              ),
               child: SingleChildScrollView(
                 child: Column(
-                  children: [
-                    Container(
-                      height: 200,
-                      color: Colors.red,
-                      child: Text(
-                        'asdfasdf',
-                        style: const TextStyle(
-                          fontSize: 40,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      height: 200,
-                      color: Colors.red,
-                      child: Text(
-                        'asdfasdf',
-                        style: const TextStyle(
-                          fontSize: 40,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      height: 200,
-                      color: Colors.red,
-                      child: Text(
-                        'asdfasdf',
-                        style: const TextStyle(
-                          fontSize: 40,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      height: 200,
-                      color: Colors.red,
-                      child: Text(
-                        'asdfasdf',
-                        style: const TextStyle(
-                          fontSize: 40,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      height: 200,
-                      color: Colors.red,
-                      child: Text(
-                        'asdfasdf',
-                        style: const TextStyle(
-                          fontSize: 40,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                  ],
+                  children: NhaHangs.map((item) => Column(
+                        children: [
+                          chiTietNhaHang(item: item),
+                        ],
+                      )).toList(),
                 ),
               ),
             ),
