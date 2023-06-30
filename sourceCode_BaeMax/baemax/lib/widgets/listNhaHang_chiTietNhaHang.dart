@@ -1,8 +1,8 @@
 import 'package:baemax/widgets/chiTietIemNhaHangDuocApDung.dart';
 import 'package:flutter/material.dart';
 
-class chiTietNhaHang extends StatelessWidget {
-  chiTietNhaHang({
+class dsNhaHang extends StatelessWidget {
+  dsNhaHang({
     Key? key,
     required this.item,
   }) : super(key: key);
@@ -16,7 +16,7 @@ class chiTietNhaHang extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => itemChiTietNhaHangDuocApDung(),
+            builder: (context) => itemChiTietNhaHangDuocApDung(item: item),
           ),
         );
       },
@@ -36,14 +36,39 @@ class chiTietNhaHang extends StatelessWidget {
         child: Row(
           children: [
             Container(
-              width: 100,
-              height: 105,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                image: DecorationImage(
-                  image: AssetImage('images/hinh_73.jpg'),
-                  fit: BoxFit.cover,
-                ),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image(
+                      image: AssetImage('images/hinh_73.jpg'),
+                      fit: BoxFit.cover,
+                      width: 100,
+                      height: 105,
+                    ),
+                  ),
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.orange,
+                        borderRadius: BorderRadius.only(
+                          bottomRight: Radius.circular(10),
+                        ),
+                      ),
+                      child: const Text(
+                        'PROMO',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             const SizedBox(
@@ -67,7 +92,7 @@ class chiTietNhaHang extends StatelessWidget {
                               item.tenNH,
                               style: const TextStyle(
                                 fontSize: 20,
-                                fontWeight: FontWeight.w400,
+                                fontWeight: FontWeight.w500,
                               ),
                               softWrap: true,
                             ),
@@ -89,12 +114,48 @@ class chiTietNhaHang extends StatelessWidget {
                     height: 10,
                   ),
                   Container(
-                    child: Text(
-                      '${item.khoangCach} km',
-                      style: const TextStyle(
-                        fontSize: 20,
-                        color: Colors.grey,
-                      ),
+                    width: 250,
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.star,
+                          color: Colors.yellow,
+                          size: 27,
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        const Text.rich(
+                          TextSpan(
+                            children: [
+                              TextSpan(
+                                text: '4.7',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              TextSpan(
+                                text: ' (999+)',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          '· ${item.khoangCach} km',
+                          style: const TextStyle(
+                            fontSize: 20,
+                            color: Color.fromARGB(255, 92, 92, 92),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],

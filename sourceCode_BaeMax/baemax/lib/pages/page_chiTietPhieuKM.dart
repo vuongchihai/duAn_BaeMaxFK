@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class thongTinChiTietPhieuKMPage extends StatefulWidget {
-  thongTinChiTietPhieuKMPage({Key? key, required this.item}) : super(key: key);
+  thongTinChiTietPhieuKMPage({
+    Key? key,
+    required this.item,
+  }) : super(key: key);
 
   final dynamic item;
 

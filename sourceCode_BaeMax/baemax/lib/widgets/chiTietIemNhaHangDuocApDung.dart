@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
 class itemChiTietNhaHangDuocApDung extends StatelessWidget {
-  const itemChiTietNhaHangDuocApDung({super.key});
+  itemChiTietNhaHangDuocApDung({
+    Key? key,
+    required this.item,
+  }) : super(key: key);
+
+  final dynamic item;
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +65,7 @@ class itemChiTietNhaHangDuocApDung extends StatelessWidget {
         ],
       ),
       body: Container(
-        color: Colors.red,
+        color: Colors.grey,
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -117,9 +122,9 @@ class itemChiTietNhaHangDuocApDung extends StatelessWidget {
                                 horizontal: 3,
                                 vertical: 3,
                               ),
-                              child: Text(
+                              child: const Text(
                                 'ĐỐI TÁC CỦA BEAMAX',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 20,
                                   color: Colors.blue,
                                   fontWeight: FontWeight.w500,
@@ -130,7 +135,7 @@ class itemChiTietNhaHangDuocApDung extends StatelessWidget {
                               height: 15,
                             ),
                             Text(
-                              'BỘT CHIÊN KIM LOAN',
+                              item.tenNH,
                               style: const TextStyle(
                                 fontSize: 25,
                                 color: Colors.black,
@@ -147,7 +152,7 @@ class itemChiTietNhaHangDuocApDung extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  '0.1km',
+                                  '${item.khoangCach}km',
                                   style: const TextStyle(
                                     fontSize: 20,
                                     color: Colors.grey,
@@ -160,7 +165,7 @@ class itemChiTietNhaHangDuocApDung extends StatelessWidget {
                                 Container(
                                   width: 280,
                                   child: Text(
-                                    '15/44 Cầu Xéo, Tân Qúy, Tân Sơn Nhì, Tân Phú, Tp.HCM',
+                                    item.diaChiNH,
                                     style: const TextStyle(
                                       fontSize: 20,
                                       color: Color.fromARGB(255, 110, 109, 109),
@@ -179,7 +184,7 @@ class itemChiTietNhaHangDuocApDung extends StatelessWidget {
                 ),
               ),
               Container(
-                color: Colors.amber,
+                color: Colors.white,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 15,
                   vertical: 10,
@@ -295,7 +300,7 @@ class itemChiTietNhaHangDuocApDung extends StatelessWidget {
                 height: 10,
               ),
               Container(
-                color: Colors.amber,
+                color: Colors.white,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 15,
                   vertical: 10,
@@ -348,7 +353,6 @@ class itemChiTietNhaHangDuocApDung extends StatelessWidget {
                               ),
                               Container(
                                 width: 180,
-                                color: Colors.red,
                                 child: Text(
                                   'Bột chiên 1 trứng',
                                   style: TextStyle(
@@ -380,7 +384,6 @@ class itemChiTietNhaHangDuocApDung extends StatelessWidget {
                               ),
                               Container(
                                 width: 180,
-                                color: Colors.red,
                                 child: Text(
                                   'Bột chiên 1 trứng',
                                   style: TextStyle(
@@ -391,6 +394,80 @@ class itemChiTietNhaHangDuocApDung extends StatelessWidget {
                                 ),
                               ),
                             ],
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              Container(
+                color: Colors.white,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 15,
+                  vertical: 10,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Thập cẩm/ Mixed',
+                          style: TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Image(
+                          image: AssetImage('images/hinh_19.png'),
+                          width: 30,
+                          height: 30,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          width: 200,
+                          height: 130,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Bột khoai môn 3 trứng',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.black,
+                                ),
+                                softWrap: true,
+                              ),
+                              Text(
+                                '45.000 đ',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image(
+                            image: AssetImage('images/hinh_73.jpg'),
+                            fit: BoxFit.cover,
+                            width: 150,
+                            height: 150,
                           ),
                         ),
                       ],

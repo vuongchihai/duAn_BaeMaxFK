@@ -25,23 +25,23 @@ class _nhaHangDuocApDungGiamGiaPageState
     nhaHang(
       idNH: 'NH001',
       tenNH: 'TOCO TOCO',
-      diaChiNH: '299 Tân Kỳ Tân Qúy, Phường Tân Sơn Nhì, Quận Tân Phú, Tp.HCM',
+      diaChiNH: 'Cà MauCà MauCà MauCà MauCà MauCà MauCà MauCà Mau',
       monAn: 'Bánh canh cá lóc',
       khoangCach: 9.0,
     ),
     nhaHang(
       idNH: 'NH002',
-      tenNH: 'TOCO TOCO',
+      tenNH: 'HINGHLENG',
       diaChiNH: '299 Tân Kỳ Tân Qúy, Phường Tân Sơn Nhì, Quận Tân Phú, Tp.HCM',
       monAn: 'Bánh canh cá lóc',
-      khoangCach: 9.0,
+      khoangCach: 0.1,
     ),
     nhaHang(
       idNH: 'NH003',
-      tenNH: 'TOCO TOCO',
+      tenNH: 'PHUC LONG',
       diaChiNH: '299 Tân Kỳ Tân Qúy, Phường Tân Sơn Nhì, Quận Tân Phú, Tp.HCM',
       monAn: 'Bánh canh cá lóc',
-      khoangCach: 9.0,
+      khoangCach: 2.8,
     ),
     nhaHang(
       idNH: 'NH004',
@@ -336,7 +336,7 @@ class _nhaHangDuocApDungGiamGiaPageState
                 child: Column(
                   children: NhaHangs.map((item) => Column(
                         children: [
-                          chiTietNhaHang(item: item),
+                          dsNhaHang(item: item),
                         ],
                       )).toList(),
                 ),
