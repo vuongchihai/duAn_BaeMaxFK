@@ -1,5 +1,7 @@
 import 'package:baemax/modal/nhaHang.dart';
 import 'package:baemax/widgets/listNhaHang_chiTietNhaHang.dart';
+import 'package:baemax/widgets/listNhaHang_danhMucVaCuaHang.dart';
+import 'package:baemax/widgets/listNhaHang_sapXep.dart';
 import 'package:flutter/material.dart';
 import 'package:tiengviet/tiengviet.dart';
 
@@ -65,7 +67,7 @@ class _nhaHangDuocApDungGiamGiaPageState
     ),
     nhaHang(
       idNH: 'NH008',
-      tenNH: 'TOCO TOCO',
+      tenNH: 'KATI NAT',
       diaChiNH: '299 Tân Kỳ Tân Qúy, Phường Tân Sơn Nhì, Quận Tân Phú, Tp.HCM',
       monAn: 'Bánh canh cá lóc',
       khoangCach: 9.0,
@@ -79,13 +81,15 @@ class _nhaHangDuocApDungGiamGiaPageState
   List<nhaHang> timKiemNhaHang(List<nhaHang> danhSachNhaHang, String tuKhoa) {
     return danhSachNhaHang
         .where((element) =>
-            TiengViet.parse(element.tenNH.toLowerCase()).contains(TiengViet.parse(tuKhoa.toLowerCase())) ||
-            element.idNH.toLowerCase().contains(tuKhoa.toLowerCase()))
+            TiengViet.parse(element.tenNH.toLowerCase())
+                .contains(TiengViet.parse(tuKhoa.toLowerCase())) ||
+            element.idNH.toLowerCase().contains(tuKhoa.toLowerCase()) ||
+            element.tenNH.toLowerCase().contains(tuKhoa.toLowerCase()))
         .toList();
   }
 
   Widget build(BuildContext context) {
-    String tenNhaHangCanTim = 'H';
+    String tenNhaHangCanTim = 'T';
     List<nhaHang> ketQuaTimKiem = timKiemNhaHang(NhaHangs, tenNhaHangCanTim);
 
     return Scaffold(
@@ -121,7 +125,10 @@ class _nhaHangDuocApDungGiamGiaPageState
               children: [
                 GestureDetector(
                   onTap: () {
-                    print('object');
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => sapXepListNhaHang()));
                   },
                   child: Container(
                     width: 125,
@@ -171,7 +178,11 @@ class _nhaHangDuocApDungGiamGiaPageState
                 ),
                 GestureDetector(
                   onTap: () {
-                    print('object');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => danhMucVaCuaHangListNhaHang()),
+                    );
                   },
                   child: Container(
                     width: 280,
