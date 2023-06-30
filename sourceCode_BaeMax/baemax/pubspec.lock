@@ -90,10 +90,10 @@ packages:
     dependency: "direct dev"
     description:
       name: flutter_lints
-      sha256: aeb0b80a8b3709709c9cc496cdc027c5b3216796bc0af0ce1007eaf24464fd4c
+      sha256: "2118df84ef0c3ca93f96123a616ae8540879991b8b57af2f81b76a7ada49b2a4"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.1"
+    version: "2.0.2"
   flutter_localizations:
     dependency: "direct main"
     description: flutter
@@ -161,10 +161,10 @@ packages:
     dependency: "direct main"
     description:
       name: http
-      sha256: "4c3f04bfb64d3efd508d06b41b825542f08122d30bda4933fb95c069d22a4fa3"
+      sha256: "759d1a329847dd0f39226c688d3e06a6b8679668e350e2891a6474f8b4bb8525"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0"
+    version: "1.1.0"
   http_parser:
     dependency: transitive
     description:
@@ -249,10 +249,10 @@ packages:
     dependency: "direct main"
     description:
       name: scroll_date_picker
-      sha256: "65b4e0223f561a9475e156ff93fbe0712d2e995d399b40352b2f2f44540909d9"
+      sha256: "99f8caf3f1b6a77ba60a2973c2f9061bcf3b3c4c5049f19ec7271ee5d34387c7"
       url: "https://pub.dev"
     source: hosted
-    version: "3.7.1"
+    version: "3.7.3"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -306,6 +306,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.5.1"
+  tiengviet:
+    dependency: "direct main"
+    description:
+      name: tiengviet
+      sha256: "4b9c8371b4c2255ad7363820ec9873eab4cb4202516532cab4f76bd5826d94a8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.5.0"
   typed_data:
     dependency: transitive
     description:
@@ -314,6 +322,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.2"
+  unorm_dart:
+    dependency: "direct main"
+    description:
+      name: unorm_dart
+      sha256: "5b35bff83fce4d76467641438f9e867dc9bcfdb8c1694854f230579d68cd8f4b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.0"
   vector_math:
     dependency: transitive
     description:

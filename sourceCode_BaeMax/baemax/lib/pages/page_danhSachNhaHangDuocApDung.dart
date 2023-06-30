@@ -1,6 +1,7 @@
 import 'package:baemax/modal/nhaHang.dart';
 import 'package:baemax/widgets/listNhaHang_chiTietNhaHang.dart';
 import 'package:flutter/material.dart';
+import 'package:tiengviet/tiengviet.dart';
 
 class nhaHangDuocApDungGiamGiaPage extends StatefulWidget {
   const nhaHangDuocApDungGiamGiaPage({super.key});
@@ -12,19 +13,10 @@ class nhaHangDuocApDungGiamGiaPage extends StatefulWidget {
 
 class _nhaHangDuocApDungGiamGiaPageState
     extends State<nhaHangDuocApDungGiamGiaPage> {
-  final listDanhMucChon = [
-    'Sắp xếp',
-    'Chọn',
-    'Danh mục & cửa hàng',
-    'Sắp xếp',
-    'Chọn',
-    'Danh mục & cửa hàng',
-  ];
-
   final List<nhaHang> NhaHangs = [
     nhaHang(
       idNH: 'NH001',
-      tenNH: 'TOCO TOCO',
+      tenNH: 'PHÚC LONG',
       diaChiNH: 'Cà MauCà MauCà MauCà MauCà MauCà MauCà MauCà Mau',
       monAn: 'Bánh canh cá lóc',
       khoangCach: 9.0,
@@ -84,10 +76,18 @@ class _nhaHangDuocApDungGiamGiaPageState
   bool isCheckedDMC = false;
   bool isCheckedDT = false;
 
-  
+  List<nhaHang> timKiemNhaHang(List<nhaHang> danhSachNhaHang, String tuKhoa) {
+    return danhSachNhaHang
+        .where((element) =>
+            TiengViet.parse(element.tenNH.toLowerCase()).contains(TiengViet.parse(tuKhoa.toLowerCase())) ||
+            element.idNH.toLowerCase().contains(tuKhoa.toLowerCase()))
+        .toList();
+  }
 
-  @override
   Widget build(BuildContext context) {
+    String tenNhaHangCanTim = 'H';
+    List<nhaHang> ketQuaTimKiem = timKiemNhaHang(NhaHangs, tenNhaHangCanTim);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -316,7 +316,7 @@ class _nhaHangDuocApDungGiamGiaPageState
               left: 10,
             ),
             child: Text(
-              '${NhaHangs.length} nhà hàng tìm thấy',
+              '${ketQuaTimKiem.length} nhà hàng tìm thấy',
               style: const TextStyle(
                 fontSize: 20,
                 color: const Color.fromARGB(255, 66, 66, 66),
@@ -334,11 +334,16 @@ class _nhaHangDuocApDungGiamGiaPageState
               ),
               child: SingleChildScrollView(
                 child: Column(
-                  children: NhaHangs.map((item) => Column(
-                        children: [
-                          dsNhaHang(item: item),
-                        ],
-                      )).toList(),
+                  children: [
+                    if (ketQuaTimKiem.isNotEmpty)
+                      Column(
+                        children: ketQuaTimKiem
+                            .map((item) => dsNhaHang(item: item))
+                            .toList(),
+                      )
+                    else
+                      Text('Không tìm thấy nhà hàng'),
+                  ],
                 ),
               ),
             ),

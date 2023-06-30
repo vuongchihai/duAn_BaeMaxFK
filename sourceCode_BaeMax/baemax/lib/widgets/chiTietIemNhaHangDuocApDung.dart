@@ -65,7 +65,7 @@ class itemChiTietNhaHangDuocApDung extends StatelessWidget {
         ],
       ),
       body: Container(
-        color: Colors.grey,
+        color: Color.fromARGB(255, 225, 225, 225),
         child: SingleChildScrollView(
           child: Column(
             children: [

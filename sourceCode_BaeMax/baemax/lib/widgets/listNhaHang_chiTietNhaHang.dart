@@ -36,6 +36,8 @@ class dsNhaHang extends StatelessWidget {
         child: Row(
           children: [
             Container(
+              width: 120,
+              height: 125,
               child: Stack(
                 alignment: Alignment.center,
                 children: [
@@ -52,6 +54,10 @@ class dsNhaHang extends StatelessWidget {
                     top: 0,
                     left: 0,
                     child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 5,
+                        vertical: 5,
+                      ),
                       decoration: const BoxDecoration(
                         color: Colors.orange,
                         borderRadius: BorderRadius.only(
@@ -79,11 +85,16 @@ class dsNhaHang extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    width: 270,
+                    width: 220,
                     child: Row(
                       children: [
-                        const Icon(
-                          Icons.check,
+                        Image(
+                          image: AssetImage('images/hinh_76.png'),
+                          width: 25,
+                          height: 25,
+                        ),
+                        const SizedBox(
+                          width: 8,
                         ),
                         Flexible(
                           child: Container(
@@ -102,19 +113,21 @@ class dsNhaHang extends StatelessWidget {
                     ),
                   ),
                   Container(
+                    width: 220,
                     child: Text(
                       item.monAn,
                       style: const TextStyle(
                         fontSize: 20,
                         color: Colors.grey,
                       ),
+                      softWrap: true,
                     ),
                   ),
                   const SizedBox(
                     height: 10,
                   ),
                   Container(
-                    width: 250,
+                    width: 220,
                     child: Row(
                       children: [
                         const Icon(
@@ -152,7 +165,7 @@ class dsNhaHang extends StatelessWidget {
                           '· ${item.khoangCach} km',
                           style: const TextStyle(
                             fontSize: 20,
-                            color: Color.fromARGB(255, 92, 92, 92),
+                            color: Color.fromARGB(255, 72, 72, 72),
                           ),
                         ),
                       ],
