@@ -8,7 +8,7 @@ class sapXepListNhaHang extends StatefulWidget {
 }
 
 class _sapXepListNhaHangState extends State<sapXepListNhaHang> {
-  String? sort;
+  String sort = '';
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,7 @@ class _sapXepListNhaHangState extends State<sapXepListNhaHang> {
                   color: Colors.black,
                 ),
               ),
-              value: 'gannhat',
+              value: 'Gần nhất',
               groupValue: sort,
               controlAffinity: ListTileControlAffinity.trailing,
               onChanged: (value) {
@@ -49,6 +49,7 @@ class _sapXepListNhaHangState extends State<sapXepListNhaHang> {
                   sort = value.toString();
                   print(sort);
                 });
+                Navigator.pop(context, value);
               },
             ),
             RadioListTile(
@@ -59,7 +60,7 @@ class _sapXepListNhaHangState extends State<sapXepListNhaHang> {
                   color: Colors.black,
                 ),
               ),
-              value: 'danhgiatot',
+              value: 'Đánh giá tốt',
               groupValue: sort,
               controlAffinity: ListTileControlAffinity.trailing,
               onChanged: (value) {
@@ -67,6 +68,7 @@ class _sapXepListNhaHangState extends State<sapXepListNhaHang> {
                   sort = value.toString();
                   print(sort);
                 });
+                Navigator.pop(context, value);
               },
             ),
             RadioListTile(
@@ -77,7 +79,7 @@ class _sapXepListNhaHangState extends State<sapXepListNhaHang> {
                   color: Colors.black,
                 ),
               ),
-              value: 'phobien',
+              value: 'Phổ biến',
               groupValue: sort,
               controlAffinity: ListTileControlAffinity.trailing,
               onChanged: (value) {
@@ -85,6 +87,7 @@ class _sapXepListNhaHangState extends State<sapXepListNhaHang> {
                   sort = value.toString();
                   print(sort);
                 });
+                Navigator.pop(context, value);
               },
             ),
           ],

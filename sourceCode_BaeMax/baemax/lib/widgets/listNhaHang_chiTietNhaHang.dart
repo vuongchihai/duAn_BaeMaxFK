@@ -138,17 +138,17 @@ class dsNhaHang extends StatelessWidget {
                         const SizedBox(
                           width: 5,
                         ),
-                        const Text.rich(
+                        Text.rich(
                           TextSpan(
                             children: [
                               TextSpan(
-                                text: '4.7',
-                                style: TextStyle(
+                                text: '${item.danhGia} ',
+                                style: const TextStyle(
                                   fontSize: 20,
                                   color: Colors.black,
                                 ),
                               ),
-                              TextSpan(
+                              const TextSpan(
                                 text: ' (999+)',
                                 style: TextStyle(
                                   fontSize: 20,
