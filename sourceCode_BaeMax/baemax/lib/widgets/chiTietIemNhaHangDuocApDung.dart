@@ -1,3 +1,4 @@
+import 'package:baemax/pages/page_chiTietMonAn.dart';
 import 'package:flutter/material.dart';
 
 class itemChiTietNhaHangDuocApDung extends StatelessWidget {
@@ -433,45 +434,58 @@ class itemChiTietNhaHangDuocApDung extends StatelessWidget {
                     const SizedBox(
                       height: 10,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          width: 200,
-                          height: 130,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Bột khoai môn 3 trứng',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.black,
-                                ),
-                                softWrap: true,
-                              ),
-                              Text(
-                                '45.000 đ',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ],
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => chiTietMonAnPage(),
                           ),
+                        );
+                      },
+                      child: Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              width: 200,
+                              height: 130,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Bột khoai môn 3 trứng',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: Colors.black,
+                                    ),
+                                    softWrap: true,
+                                  ),
+                                  Text(
+                                    '45.000 đ',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image(
+                                image: AssetImage('images/hinh_73.jpg'),
+                                fit: BoxFit.cover,
+                                width: 150,
+                                height: 150,
+                              ),
+                            ),
+                          ],
                         ),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image(
-                            image: AssetImage('images/hinh_73.jpg'),
-                            fit: BoxFit.cover,
-                            width: 150,
-                            height: 150,
-                          ),
-                        ),
-                      ],
-                    )
+                      ),
+                    ),
                   ],
                 ),
               ),
