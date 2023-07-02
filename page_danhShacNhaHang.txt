@@ -42,7 +42,7 @@ class _nhaHangDuocApDungGiamGiaPageState
     ),
     nhaHang(
       idNH: 'NH004',
-      tenNH: 'E',
+      tenNH: 'Trà sữa',
       diaChiNH: '299 Tân Kỳ Tân Qúy, Phường Tân Sơn Nhì, Quận Tân Phú, Tp.HCM',
       monAn: 'Bánh canh cá lóc',
       khoangCach: 9.0,
@@ -58,7 +58,7 @@ class _nhaHangDuocApDungGiamGiaPageState
     ),
     nhaHang(
       idNH: 'NH006',
-      tenNH: 'B',
+      tenNH: 'trà/ cà phê',
       diaChiNH: '299 Tân Kỳ Tân Qúy, Phường Tân Sơn Nhì, Quận Tân Phú, Tp.HCM',
       monAn: 'Bánh canh cá lóc',
       khoangCach: 9.0,
@@ -116,8 +116,18 @@ class _nhaHangDuocApDungGiamGiaPageState
     return ketQuaTimKiem;
   }
 
+String? selectedItem;
+
+
+void updateSelectedItem(String value) {
+  setState(() {
+    selectedItem = value;
+  });
+}
+
+
   Widget build(BuildContext context) {
-    String tuaKhoaTimKiem = '';
+    String tuaKhoaTimKiem = selectedItem.toString();
     List<nhaHang> ketQuaTimKiem =
         timKiemVaSapXepTangDan(NhaHangs, tuaKhoaTimKiem, selectedSortStyle);
 
@@ -152,6 +162,7 @@ class _nhaHangDuocApDungGiamGiaPageState
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: [
+                Text('Selected Value: ${selectedItem}'),
                 GestureDetector(
                   onTap: () {
                     Navigator.push(
@@ -227,6 +238,7 @@ class _nhaHangDuocApDungGiamGiaPageState
                       MaterialPageRoute(
                         builder: (context) => danhMucVaCuaHangListNhaHang(
                           onCheckboxCountChanged: capNhatSoLuongDMCHDuocChon,
+                           onItemSelected: updateSelectedItem,
                         ),
                       ),
                     );

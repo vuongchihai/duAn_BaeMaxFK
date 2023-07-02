@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 
 class danhMucVaCuaHangListNhaHang extends StatefulWidget {
   final ValueChanged<int> onCheckboxCountChanged;
+  final Function(String) onItemSelected;
 
-  danhMucVaCuaHangListNhaHang({required this.onCheckboxCountChanged});
+  const danhMucVaCuaHangListNhaHang({
+    required this.onCheckboxCountChanged,
+    required this.onItemSelected,
+  });
 
   @override
   State<danhMucVaCuaHangListNhaHang> createState() =>
@@ -59,6 +63,12 @@ class _danhMucVaCuaHangListNhaHangState
     setState(() {
       kiemTraNhanCheckButtons = dem > 0;
     });
+  }
+
+  void onItemSelected(String selectedItem) {
+    // Xử lý logic khi mục được chọn
+    widget.onItemSelected(selectedItem);
+    print('Selected item: $selectedItem');
   }
 
   void xoaTatCaLuaChon() {
@@ -179,6 +189,8 @@ class _danhMucVaCuaHangListNhaHangState
                               isCheckedListCheck[i] = value;
                               capNhatSoluongCheckBoxDuocChon();
                             });
+                            onItemSelected(checkBoxTexts[i].toString());
+                            Navigator.pop(context);
                           }
                         },
                       ),
