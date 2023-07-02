@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class danhMucVaCuaHangListNhaHang extends StatefulWidget {
   final ValueChanged<int> onCheckboxCountChanged;
+  final Function(String) onItemSelected;
 
-  danhMucVaCuaHangListNhaHang({required this.onCheckboxCountChanged});
+  danhMucVaCuaHangListNhaHang({required this.onCheckboxCountChanged, required this.onItemSelected,});
 
   @override
   State<danhMucVaCuaHangListNhaHang> createState() =>
@@ -13,25 +14,7 @@ class danhMucVaCuaHangListNhaHang extends StatefulWidget {
 class _danhMucVaCuaHangListNhaHangState
     extends State<danhMucVaCuaHangListNhaHang> {
   String? chonCuaHang;
-  List<bool> isCheckedListCheck = [
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-  ];
+  List<bool> isCheckedListCheck = List.generate(17, (index) => false);
   List<String> checkBoxTexts = [
     'Trà/ Cà phê',
     'Trà sữa',
@@ -52,6 +35,11 @@ class _danhMucVaCuaHangListNhaHangState
     'Tráng miệng',
   ];
   bool kiemTraNhanCheckButtons = false;
+
+  void onItemSelected(String selectedItem){
+    widget.onItemSelected(selectedItem);
+    print('selected item: ${onItemSelected}');
+  }
 
   void capNhatSoluongCheckBoxDuocChon() {
     int dem = isCheckedListCheck.where((isChecked) => isChecked).length;
@@ -179,6 +167,8 @@ class _danhMucVaCuaHangListNhaHangState
                               isCheckedListCheck[i] = value;
                               capNhatSoluongCheckBoxDuocChon();
                             });
+                            onItemSelected(checkBoxTexts[i].toString());
+                            Navigator.pop(context);
                           }
                         },
                       ),

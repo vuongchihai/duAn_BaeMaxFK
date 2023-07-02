@@ -34,7 +34,7 @@ class _nhaHangDuocApDungGiamGiaPageState
     ),
     nhaHang(
       idNH: 'NH003',
-      tenNH: 'PHUC LONG',
+      tenNH: 'CƠM',
       diaChiNH: '299 Tân Kỳ Tân Qúy, Phường Tân Sơn Nhì, Quận Tân Phú, Tp.HCM',
       monAn: 'Bánh canh cá lóc',
       khoangCach: 2.8,
@@ -42,7 +42,7 @@ class _nhaHangDuocApDungGiamGiaPageState
     ),
     nhaHang(
       idNH: 'NH004',
-      tenNH: 'E',
+      tenNH: 'TRÀ',
       diaChiNH: '299 Tân Kỳ Tân Qúy, Phường Tân Sơn Nhì, Quận Tân Phú, Tp.HCM',
       monAn: 'Bánh canh cá lóc',
       khoangCach: 9.0,
@@ -58,7 +58,7 @@ class _nhaHangDuocApDungGiamGiaPageState
     ),
     nhaHang(
       idNH: 'NH006',
-      tenNH: 'B',
+      tenNH: 'MÌ',
       diaChiNH: '299 Tân Kỳ Tân Qúy, Phường Tân Sơn Nhì, Quận Tân Phú, Tp.HCM',
       monAn: 'Bánh canh cá lóc',
       khoangCach: 9.0,
@@ -66,7 +66,7 @@ class _nhaHangDuocApDungGiamGiaPageState
     ),
     nhaHang(
       idNH: 'NH007',
-      tenNH: 'A',
+      tenNH: 'LẨU',
       diaChiNH: '299 Tân Kỳ Tân Qúy, Phường Tân Sơn Nhì, Quận Tân Phú, Tp.HCM',
       monAn: 'Bánh canh cá lóc',
       khoangCach: 9.0,
@@ -87,6 +87,13 @@ class _nhaHangDuocApDungGiamGiaPageState
   bool isCheckedDT = false;
   String selectedSortStyle = '';
   int soLuongDMCHDuocChon = 0;
+  String chonDanhMucCuaHang = '';
+
+  void capNhatChonDanhMucCuaHang(String value) {
+    setState(() {
+      chonDanhMucCuaHang += '$value ';
+    });
+  }
 
   void capNhatSoLuongDMCHDuocChon(int soLuongMoi) {
     setState(() {
@@ -97,12 +104,12 @@ class _nhaHangDuocApDungGiamGiaPageState
   List<nhaHang> ketQuaTimKiem = [];
 
   List<nhaHang> timKiemVaSapXepTangDan(
-      List<nhaHang> danhSachNhaHang, String tuKhoa, String kieuSapXep) {
+      List<nhaHang> danhSachNhaHang, String kieuSapXep) {
     ketQuaTimKiem = danhSachNhaHang
         .where((nhaHang) =>
             TiengViet.parse(nhaHang.tenNH.toLowerCase())
-                .contains(TiengViet.parse(tuKhoa.toLowerCase())) ||
-            nhaHang.idNH.toLowerCase().contains(tuKhoa.toLowerCase()))
+                .contains(TiengViet.parse(chonDanhMucCuaHang.toLowerCase())) ||
+            nhaHang.idNH.toLowerCase().contains(chonDanhMucCuaHang.toLowerCase()))
         .toList();
 
     if (kieuSapXep == 'Gần nhất') {
@@ -117,9 +124,8 @@ class _nhaHangDuocApDungGiamGiaPageState
   }
 
   Widget build(BuildContext context) {
-    String tuaKhoaTimKiem = '';
     List<nhaHang> ketQuaTimKiem =
-        timKiemVaSapXepTangDan(NhaHangs, tuaKhoaTimKiem, selectedSortStyle);
+        timKiemVaSapXepTangDan(NhaHangs, selectedSortStyle);
 
     return Scaffold(
       appBar: AppBar(
@@ -141,6 +147,7 @@ class _nhaHangDuocApDungGiamGiaPageState
       ),
       body: Column(
         children: [
+          Text('selectedItem: $chonDanhMucCuaHang'),
           Container(
             margin: const EdgeInsets.only(
               top: 15,
@@ -227,6 +234,7 @@ class _nhaHangDuocApDungGiamGiaPageState
                       MaterialPageRoute(
                         builder: (context) => danhMucVaCuaHangListNhaHang(
                           onCheckboxCountChanged: capNhatSoLuongDMCHDuocChon,
+                          onItemSelected: capNhatChonDanhMucCuaHang,
                         ),
                       ),
                     );
