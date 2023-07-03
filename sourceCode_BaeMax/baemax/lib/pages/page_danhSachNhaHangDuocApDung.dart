@@ -26,7 +26,7 @@ class _nhaHangDuocApDungGiamGiaPageState
     ),
     nhaHang(
       idNH: 'NH002',
-      tenNH: 'HINGHLENG',
+      tenNH: 'ĂN VẶT',
       diaChiNH: '299 Tân Kỳ Tân Qúy, Phường Tân Sơn Nhì, Quận Tân Phú, Tp.HCM',
       monAn: 'Bánh canh cá lóc',
       khoangCach: 0.1,
