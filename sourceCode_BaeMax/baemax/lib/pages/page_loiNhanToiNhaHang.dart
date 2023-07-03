@@ -8,7 +8,7 @@ class loiNhanToiNhaHangPage extends StatefulWidget {
 }
 
 class _loiNhanToiNhaHangPageState extends State<loiNhanToiNhaHangPage> {
-  String loiNhan = 'a';
+  final TextEditingController loiNhanController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +53,7 @@ class _loiNhanToiNhaHangPageState extends State<loiNhanToiNhaHangPage> {
                   Container(
                     width: double.infinity,
                     child: TextField(
+                      controller: loiNhanController,
                       decoration: const InputDecoration(
                         hintText: 'Ví dụ: không hành lá...',
                         hintStyle: TextStyle(
@@ -68,7 +69,7 @@ class _loiNhanToiNhaHangPageState extends State<loiNhanToiNhaHangPage> {
                       maxLines: null,
                       onChanged: (value) {
                         setState(() {
-                          loiNhan = value.isEmpty ? '' : value;
+                          loiNhanController.text = value.isEmpty ? '' : value;
                         });
                       },
                     ),
@@ -124,12 +125,12 @@ class _loiNhanToiNhaHangPageState extends State<loiNhanToiNhaHangPage> {
                       ),
                       height: 50,
                       child: ElevatedButton(
-                        onPressed: loiNhan.isEmpty
+                        onPressed: loiNhanController.text.isEmpty
                             ? null
                             : () {
-                                print('object');
+                                Navigator.pop(context, loiNhanController.text);
                               },
-                        child: Text(
+                        child: const Text(
                           'Thêm',
                           style: TextStyle(
                             fontSize: 20,

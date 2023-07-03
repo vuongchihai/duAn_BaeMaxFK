@@ -11,6 +11,7 @@ class chiTietMonAnPage extends StatefulWidget {
 class _chiTietMonAnPageState extends State<chiTietMonAnPage> {
   String chonMucDuong = '';
   String chonMucDa = '';
+  String loiNhanTuKH = '';
 
   double giaTien = 0;
   int soLuong = 1;
@@ -18,6 +19,17 @@ class _chiTietMonAnPageState extends State<chiTietMonAnPage> {
   String tienTamTinh(double giaTien, int soLuong) {
     double tienTamTinh = giaTien * soLuong;
     return tienTamTinh.toStringAsFixed(3);
+  }
+
+  void layLoiNhanTuWidgetLoiNhan() async {
+    final loiNhan = await Navigator.push(context,
+        MaterialPageRoute(builder: (context) => loiNhanToiNhaHangPage()));
+
+    if (loiNhan != null) {
+      setState(() {
+        loiNhanTuKH = loiNhan;
+      });
+    }
   }
 
   @override
@@ -104,12 +116,7 @@ class _chiTietMonAnPageState extends State<chiTietMonAnPage> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => loiNhanToiNhaHangPage(),
-                                ),
-                              );
+                              layLoiNhanTuWidgetLoiNhan();
                             },
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -128,7 +135,10 @@ class _chiTietMonAnPageState extends State<chiTietMonAnPage> {
                                 Container(
                                   width: 300,
                                   child: Text(
-                                    'Bạn có muốn nhắn tới nhà hàng không?',
+                                    loiNhanTuKH.isEmpty
+                                        ? 'Bạn có muốn nhắn tới nhà hàng không?'
+                                        : loiNhanTuKH,
+                                    // 'loiNhan: ${loiNhanTuKH}',
                                     style: const TextStyle(
                                       fontSize: 20,
                                       color: Colors.grey,
