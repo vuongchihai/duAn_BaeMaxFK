@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 class loiNhanToiNhaHangPage extends StatefulWidget {
   final String initialText;
-  loiNhanToiNhaHangPage({Key? key, required this.initialText}) : super(key: key);
+  loiNhanToiNhaHangPage({Key? key, required this.initialText})
+      : super(key: key);
 
   @override
   State<loiNhanToiNhaHangPage> createState() => _loiNhanToiNhaHangPageState();
@@ -10,7 +11,6 @@ class loiNhanToiNhaHangPage extends StatefulWidget {
 
 class _loiNhanToiNhaHangPageState extends State<loiNhanToiNhaHangPage> {
   late TextEditingController loiNhanController;
-  String loiNhan = '';
 
   @override
   void initState() {
@@ -81,11 +81,11 @@ class _loiNhanToiNhaHangPageState extends State<loiNhanToiNhaHangPage> {
                         color: Colors.black,
                       ),
                       maxLines: null,
-                      onChanged: (value) {
-                        setState(() {
-                          loiNhan = value;
-                        });
-                      },
+                      // onChanged: (value) {
+                      //   setState(() {
+                      //     textFieldLoiNhanValue = value;
+                      //   });
+                      // },
                     ),
                   ),
                 ],
@@ -139,14 +139,14 @@ class _loiNhanToiNhaHangPageState extends State<loiNhanToiNhaHangPage> {
                       ),
                       height: 50,
                       child: ElevatedButton(
-                        // onPressed: () {
-                        //   Navigator.pop(context, loiNhanController.text);
-                        // },
-                        onPressed: loiNhan.isEmpty
-                            ? null
-                            : () {
-                                Navigator.pop(context, loiNhanController.text);
-                              },
+                        onPressed: () {
+                          Navigator.pop(context, loiNhanController.text);
+                        },
+                        // onPressed: loiNhanController.text.isEmpty
+                        //     ? null
+                        //     : () {
+                        //         Navigator.pop(context, loiNhanController.text);
+                        //       },
                         child: const Text(
                           'Thêm',
                           style: TextStyle(

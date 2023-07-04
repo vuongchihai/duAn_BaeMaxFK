@@ -69,7 +69,7 @@ class _chiTietMonAnPageState extends State<chiTietMonAnPage> {
                       width: double.infinity,
                       height: 240,
                       child: ClipRRect(
-                        borderRadius: BorderRadius.only(
+                        borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(10),
                           topRight: Radius.circular(10),
                         ),
