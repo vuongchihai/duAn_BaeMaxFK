@@ -19,14 +19,15 @@ class _itemChiTietNhaHangDuocApDungState
     extends State<itemChiTietNhaHangDuocApDung> {
   late ScrollController scrollController;
   late bool showAppBar;
-  late Color textColor;
-
+  bool showAppBarDanhMucLoaiMonAn = false;
+  late Color iconColor;
+  double khoangCachTruocKhiAnAppBarDM = 25;
   @override
   void initState() {
     super.initState();
     scrollController = ScrollController();
     showAppBar = true;
-    textColor = Colors.blue;
+    iconColor = Colors.white;
 
     scrollController.addListener(() {
       if (scrollController.offset > 0 &&
@@ -34,13 +35,23 @@ class _itemChiTietNhaHangDuocApDungState
               ScrollDirection.reverse) {
         setState(() {
           showAppBar = false;
-          textColor = Colors.red;
+          iconColor = Colors.black;
         });
       } else if (scrollController.position.userScrollDirection ==
           ScrollDirection.forward) {
         setState(() {
           showAppBar = true;
-          textColor = Colors.blue;
+          iconColor = Colors.white;
+        });
+      }
+      if (scrollController.offset > khoangCachTruocKhiAnAppBarDM &&
+          !scrollController.position.outOfRange) {
+        setState(() {
+          showAppBarDanhMucLoaiMonAn = true;
+        });
+      } else {
+        setState(() {
+          showAppBarDanhMucLoaiMonAn = false;
         });
       }
     });
@@ -79,7 +90,7 @@ class _itemChiTietNhaHangDuocApDungState
                                     ),
                                   ),
                                   Container(
-                                    height: 120,
+                                    height: 100,
                                   ),
                                 ],
                               ),
@@ -96,8 +107,8 @@ class _itemChiTietNhaHangDuocApDungState
                                   boxShadow: const [
                                     BoxShadow(
                                       color: Color(0xffDDDDDD),
-                                      blurRadius: 8,
-                                      spreadRadius: 2,
+                                      blurRadius: 1,
+                                      spreadRadius: 1,
                                       offset: Offset(0, 0),
                                     ),
                                   ],
@@ -110,21 +121,31 @@ class _itemChiTietNhaHangDuocApDungState
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(7),
-                                        color: textColor,
-                                      ),
                                       padding: const EdgeInsets.symmetric(
                                         horizontal: 3,
                                         vertical: 3,
                                       ),
-                                      child: const Text(
-                                        'ĐỐI TÁC CỦA BEAMAX',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          color: Colors.blue,
-                                          fontWeight: FontWeight.w500,
-                                        ),
+                                      child: const Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Image(
+                                            image: AssetImage(
+                                                'images/hinh_78.png'),
+                                            width: 27,
+                                            height: 27,
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Text(
+                                            'ĐỐI TÁC CỦA BEAMAX',
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.blue,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                     const SizedBox(
@@ -607,16 +628,19 @@ class _itemChiTietNhaHangDuocApDungState
             ],
           ),
           Container(
-            height: 150,
-            color: Colors.blue,
+            height: 135,
             child: Column(
               children: [
                 //appabr + icon
                 Container(
-                  height: 100,
-                  color: Colors.red,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
+                  height: 80,
+                  color: !showAppBarDanhMucLoaiMonAn
+                      ? Colors.transparent
+                      : Colors.white,
+                  padding: const EdgeInsets.only(
+                    top: 20,
+                    right: 10,
+                    left: 10,
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -628,80 +652,338 @@ class _itemChiTietNhaHangDuocApDungState
                         child: Container(
                           width: 40,
                           height: 40,
-                          decoration: const BoxDecoration(
+                          decoration: BoxDecoration(
                             shape: BoxShape
                                 .circle, // Đặt hình dạng thành hình tròn
-                            color: Color.fromARGB(255, 101, 101, 101),
+                            color: !showAppBarDanhMucLoaiMonAn
+                                ? Color.fromARGB(255, 101, 101, 101)
+                                : Colors.transparent,
                           ),
                           child: Icon(
                             Icons.arrow_back,
-                            color: textColor,
+                            color: !showAppBarDanhMucLoaiMonAn
+                                ? Colors.white
+                                : Colors.black,
                           ),
                         ),
                       ),
-                      Container(
-                        child: Row(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                print('đã nhấn tìm kiếm');
-                              },
+                      !showAppBarDanhMucLoaiMonAn
+                          ? AnimatedOpacity(
+                              opacity: 1,
+                              duration: const Duration(milliseconds: 400),
                               child: Container(
-                                width: 40,
-                                height: 40,
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape
-                                      .circle, // Đặt hình dạng thành hình tròn
-                                  color: Color.fromARGB(255, 101, 101, 101),
+                                child: Row(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        print('đã nhấn tìm kiếm');
+                                      },
+                                      child: Container(
+                                        width: 40,
+                                        height: 40,
+                                        decoration: const BoxDecoration(
+                                          shape: BoxShape
+                                              .circle, // Đặt hình dạng thành hình tròn
+                                          color: Color.fromARGB(
+                                              255, 101, 101, 101),
+                                        ),
+                                        child: Icon(
+                                          Icons.search,
+                                          color: iconColor,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 15,
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        print('đã nhấn tym');
+                                      },
+                                      child: Container(
+                                        width: 40,
+                                        height: 40,
+                                        decoration: const BoxDecoration(
+                                          shape: BoxShape
+                                              .circle, // Đặt hình dạng thành hình tròn
+                                          color: Color.fromARGB(
+                                              255, 101, 101, 101),
+                                        ),
+                                        child: Icon(
+                                          Icons.favorite_outline,
+                                          color: iconColor,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 15,
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        print('đã nhấn share');
+                                      },
+                                      child: Container(
+                                        width: 40,
+                                        height: 40,
+                                        decoration: const BoxDecoration(
+                                          shape: BoxShape
+                                              .circle, // Đặt hình dạng thành hình tròn
+                                          color: Color.fromARGB(
+                                              255, 101, 101, 101),
+                                        ),
+                                        child: Icon(
+                                          Icons.share,
+                                          color: iconColor,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                child: const Icon(Icons.search),
+                              ),
+                            )
+                          : AnimatedOpacity(
+                              opacity: 1,
+                              duration: const Duration(milliseconds: 400),
+                              child: Container(
+                                child: Row(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        print('đã nhấn tìm kiếm');
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 8,
+                                        ),
+                                        height: 40,
+                                        decoration: BoxDecoration(
+                                          color: const Color.fromARGB(
+                                              255, 245, 235, 235),
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            const Icon(
+                                              Icons.search,
+                                              color: Colors.grey,
+                                            ),
+                                            const SizedBox(
+                                              width: 5,
+                                            ),
+                                            Container(
+                                              width: 238,
+                                              child: Text(
+                                                'Tìm Bún Bò Huế Cố Đô - Tân Sơn Nhì',
+                                                style: const TextStyle(
+                                                  fontSize: 20,
+                                                  color: Colors.black,
+                                                ),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 15,
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        print('đã nhấn tym');
+                                      },
+                                      child: Container(
+                                        width: 40,
+                                        height: 40,
+                                        decoration: const BoxDecoration(
+                                          shape: BoxShape
+                                              .circle, // Đặt hình dạng thành hình tròn
+                                          color: Colors.transparent,
+                                        ),
+                                        child: Icon(
+                                          Icons.favorite_outline,
+                                          color: !showAppBarDanhMucLoaiMonAn
+                                              ? Colors.white
+                                              : Colors.black,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                print('đã nhấn tym');
-                              },
-                              child: Container(
-                                width: 40,
-                                height: 40,
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape
-                                      .circle, // Đặt hình dạng thành hình tròn
-                                  color: Color.fromARGB(255, 101, 101, 101),
-                                ),
-                                child: const Icon(Icons.favorite_outline),
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                print('đã nhấn share');
-                              },
-                              child: Container(
-                                width: 40,
-                                height: 40,
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape
-                                      .circle, // Đặt hình dạng thành hình tròn
-                                  color: Color.fromARGB(255, 101, 101, 101),
-                                ),
-                                child: const Icon(Icons.share),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
                     ],
                   ),
                 ),
                 // appbar + search
                 Expanded(
-                  child: Container(),
+                  child: AnimatedOpacity(
+                    opacity: showAppBarDanhMucLoaiMonAn ? 1.0 : 0.0,
+                    duration: const Duration(milliseconds: 300),
+                    child: Container(
+                      color: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 8,
+                      ),
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: [
+                          GestureDetector(
+                            child: Container(
+                              height: 55,
+                              alignment: Alignment.center,
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 5,
+                                horizontal: 15,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Color.fromARGB(255, 163, 240, 225),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Text(
+                                'Món hot',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Color.fromARGB(255, 1, 106, 78),
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          GestureDetector(
+                            child: Container(
+                              height: 55,
+                              alignment: Alignment.center,
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 5,
+                                horizontal: 15,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: const Text(
+                                'Milk tea',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          GestureDetector(
+                            child: Container(
+                              height: 55,
+                              alignment: Alignment.center,
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 5,
+                                horizontal: 15,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: const Text(
+                                'Milk',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          GestureDetector(
+                            child: Container(
+                              height: 55,
+                              alignment: Alignment.center,
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 5,
+                                horizontal: 15,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: const Text(
+                                'Tea',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          GestureDetector(
+                            child: Container(
+                              height: 55,
+                              alignment: Alignment.center,
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 5,
+                                horizontal: 15,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: const Text(
+                                'Special drinks',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          GestureDetector(
+                            child: Container(
+                              height: 55,
+                              alignment: Alignment.center,
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 5,
+                                horizontal: 15,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: const Text(
+                                'Soda',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
