@@ -22,8 +22,14 @@ class _chiTietMonAnPageState extends State<chiTietMonAnPage> {
   }
 
   void layLoiNhanTuWidgetLoiNhan() async {
-    final loiNhan = await Navigator.push(context,
-        MaterialPageRoute(builder: (context) => loiNhanToiNhaHangPage()));
+    final loiNhan = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => loiNhanToiNhaHangPage(
+          initialText: loiNhanTuKH,
+        ),
+      ),
+    );
 
     if (loiNhan != null) {
       setState(() {
@@ -124,16 +130,16 @@ class _chiTietMonAnPageState extends State<chiTietMonAnPage> {
                               children: [
                                 const Image(
                                   image: AssetImage(
-                                    'images/hinh_25.png',
+                                    'images/hinh_77.png',
                                   ),
-                                  width: 50,
-                                  height: 50,
+                                  width: 38,
+                                  height: 38,
                                 ),
                                 const SizedBox(
                                   width: 15,
                                 ),
                                 Container(
-                                  width: 300,
+                                  width: 280,
                                   child: Text(
                                     loiNhanTuKH.isEmpty
                                         ? 'Bạn có muốn nhắn tới nhà hàng không?'
@@ -141,11 +147,21 @@ class _chiTietMonAnPageState extends State<chiTietMonAnPage> {
                                     // 'loiNhan: ${loiNhanTuKH}',
                                     style: const TextStyle(
                                       fontSize: 20,
-                                      color: Colors.grey,
+                                      color: Colors.black,
                                     ),
                                     softWrap: true,
                                   ),
                                 ),
+                                loiNhanTuKH.isNotEmpty
+                                    ? const Image(
+                                        image: AssetImage(
+                                          'images/hinh_32.png',
+                                        ),
+                                        width: 25,
+                                        height: 25,
+                                        color: Colors.blue,
+                                      )
+                                    : const SizedBox(),
                               ],
                             ),
                           ),

@@ -1,14 +1,28 @@
 import 'package:flutter/material.dart';
 
 class loiNhanToiNhaHangPage extends StatefulWidget {
-  const loiNhanToiNhaHangPage({super.key});
+  final String initialText;
+  loiNhanToiNhaHangPage({Key? key, required this.initialText}) : super(key: key);
 
   @override
   State<loiNhanToiNhaHangPage> createState() => _loiNhanToiNhaHangPageState();
 }
 
 class _loiNhanToiNhaHangPageState extends State<loiNhanToiNhaHangPage> {
-  final TextEditingController loiNhanController = TextEditingController();
+  late TextEditingController loiNhanController;
+  String loiNhan = '';
+
+  @override
+  void initState() {
+    super.initState();
+    loiNhanController = TextEditingController(text: widget.initialText);
+  }
+
+  @override
+  void dispose() {
+    loiNhanController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +83,7 @@ class _loiNhanToiNhaHangPageState extends State<loiNhanToiNhaHangPage> {
                       maxLines: null,
                       onChanged: (value) {
                         setState(() {
-                          loiNhanController.text = value.isEmpty ? '' : value;
+                          loiNhan = value;
                         });
                       },
                     ),
@@ -125,7 +139,10 @@ class _loiNhanToiNhaHangPageState extends State<loiNhanToiNhaHangPage> {
                       ),
                       height: 50,
                       child: ElevatedButton(
-                        onPressed: loiNhanController.text.isEmpty
+                        // onPressed: () {
+                        //   Navigator.pop(context, loiNhanController.text);
+                        // },
+                        onPressed: loiNhan.isEmpty
                             ? null
                             : () {
                                 Navigator.pop(context, loiNhanController.text);
