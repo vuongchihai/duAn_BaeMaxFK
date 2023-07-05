@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 class loiNhanToiNhaHangPage extends StatefulWidget {
   final String initialText;
-  loiNhanToiNhaHangPage({Key? key, required this.initialText})
-      : super(key: key);
+  loiNhanToiNhaHangPage({
+    Key? key,
+    required this.initialText,
+  }) : super(key: key);
 
   @override
   State<loiNhanToiNhaHangPage> createState() => _loiNhanToiNhaHangPageState();
@@ -81,11 +83,11 @@ class _loiNhanToiNhaHangPageState extends State<loiNhanToiNhaHangPage> {
                         color: Colors.black,
                       ),
                       maxLines: null,
-                      // onChanged: (value) {
-                      //   setState(() {
-                      //     textFieldLoiNhanValue = value;
-                      //   });
-                      // },
+                      onChanged: (value) {
+                        setState(() {
+                          value = loiNhanController.text;
+                        });
+                      },
                     ),
                   ),
                 ],
@@ -139,24 +141,22 @@ class _loiNhanToiNhaHangPageState extends State<loiNhanToiNhaHangPage> {
                       ),
                       height: 50,
                       child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context, loiNhanController.text);
-                        },
-                        // onPressed: loiNhanController.text.isEmpty
-                        //     ? null
-                        //     : () {
-                        //         Navigator.pop(context, loiNhanController.text);
-                        //       },
-                        child: const Text(
+                        onPressed: loiNhanController.text.isEmpty
+                            ? null
+                            : () {
+                                Navigator.pop(context, loiNhanController.text);
+                              },
+                        child: Text(
                           'Thêm',
                           style: TextStyle(
                             fontSize: 20,
                             color: Colors.white,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                         style: ButtonStyle(
                           backgroundColor:
-                              MaterialStateProperty.all<Color>(Colors.blue),
+                              MaterialStateProperty.all<Color>(loiNhanController.text.isEmpty ? Colors.grey : Colors.blue),
                         ),
                       ),
                     ),

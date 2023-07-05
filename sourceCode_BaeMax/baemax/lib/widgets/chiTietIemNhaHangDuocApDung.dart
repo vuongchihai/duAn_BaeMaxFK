@@ -22,12 +22,16 @@ class _itemChiTietNhaHangDuocApDungState
   bool showAppBarDanhMucLoaiMonAn = false;
   late Color iconColor;
   double khoangCachTruocKhiAnAppBarDM = 25;
+
+  late bool checkedHeart;
+
   @override
   void initState() {
     super.initState();
     scrollController = ScrollController();
     showAppBar = true;
     iconColor = Colors.white;
+    checkedHeart = false;
 
     scrollController.addListener(() {
       if (scrollController.offset > 0 &&
@@ -126,7 +130,8 @@ class _itemChiTietNhaHangDuocApDungState
                                         vertical: 3,
                                       ),
                                       child: const Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           Image(
                                             image: AssetImage(
@@ -699,6 +704,9 @@ class _itemChiTietNhaHangDuocApDungState
                                     GestureDetector(
                                       onTap: () {
                                         print('đã nhấn tym');
+                                        setState(() {
+                                          checkedHeart = !checkedHeart;
+                                        });
                                       },
                                       child: Container(
                                         width: 40,
@@ -710,8 +718,12 @@ class _itemChiTietNhaHangDuocApDungState
                                               255, 101, 101, 101),
                                         ),
                                         child: Icon(
-                                          Icons.favorite_outline,
-                                          color: iconColor,
+                                          checkedHeart
+                                              ? Icons.favorite
+                                              : Icons.favorite_outline,
+                                          color: checkedHeart
+                                              ? Colors.red
+                                              : iconColor,
                                         ),
                                       ),
                                     ),
@@ -793,6 +805,9 @@ class _itemChiTietNhaHangDuocApDungState
                                     GestureDetector(
                                       onTap: () {
                                         print('đã nhấn tym');
+                                        setState(() {
+                                          checkedHeart = !checkedHeart;
+                                        });
                                       },
                                       child: Container(
                                         width: 40,
@@ -803,9 +818,11 @@ class _itemChiTietNhaHangDuocApDungState
                                           color: Colors.transparent,
                                         ),
                                         child: Icon(
-                                          Icons.favorite_outline,
-                                          color: !showAppBarDanhMucLoaiMonAn
-                                              ? Colors.white
+                                          checkedHeart
+                                              ? Icons.favorite
+                                              : Icons.favorite_outline,
+                                          color: checkedHeart
+                                              ? Colors.red
                                               : Colors.black,
                                         ),
                                       ),
@@ -823,9 +840,22 @@ class _itemChiTietNhaHangDuocApDungState
                     opacity: showAppBarDanhMucLoaiMonAn ? 1.0 : 0.0,
                     duration: const Duration(milliseconds: 300),
                     child: Container(
-                      color: Colors.white,
                       padding: const EdgeInsets.symmetric(
                         vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            blurRadius: 5, // làm mềm
+                            spreadRadius: 0, // mở rộng
+                            offset: const Offset(
+                              0, // di chuyển sang phải theo chiều ngang
+                              5.0, // dieu chuyển xuống dưới theo chiều dọc
+                            ),
+                          ),
+                        ],
                       ),
                       child: ListView(
                         scrollDirection: Axis.horizontal,
