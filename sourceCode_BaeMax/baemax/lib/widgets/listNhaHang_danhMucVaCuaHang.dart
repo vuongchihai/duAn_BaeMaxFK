@@ -2,9 +2,15 @@ import 'package:flutter/material.dart';
 
 class danhMucVaCuaHangListNhaHang extends StatefulWidget {
   final ValueChanged<int> onCheckboxCountChanged;
-  final Function(String) onItemSelected;
+  final Function(String, String) onItemSelected;
+  late String initialIndexSelectedItem;
 
-  danhMucVaCuaHangListNhaHang({required this.onCheckboxCountChanged, required this.onItemSelected,});
+  danhMucVaCuaHangListNhaHang({
+    Key? key,
+    required this.onCheckboxCountChanged,
+    required this.onItemSelected,
+    required this.initialIndexSelectedItem,
+  }) : super(key: key);
 
   @override
   State<danhMucVaCuaHangListNhaHang> createState() =>
@@ -14,31 +20,50 @@ class danhMucVaCuaHangListNhaHang extends StatefulWidget {
 class _danhMucVaCuaHangListNhaHangState
     extends State<danhMucVaCuaHangListNhaHang> {
   String? chonCuaHang;
-  List<bool> isCheckedListCheck = List.generate(17, (index) => false);
   List<String> checkBoxTexts = [
-    'Trà/ Cà phê',
+    'Trà / Cà phê',
     'Trà sữa',
-    'Sinh tố/ Nước ép/ Sữa',
+    'Sinh tố / Nước ép / Sữa',
     'Sữa chua trân châu',
     'Ăn vặt',
-    'Sald/ Thực phẩm bổ dưỡng',
+    'Sald / Thực phẩm bổ dưỡng',
     'Cơm - Cơm tấm',
     'Cơm - Các loại khác',
-    'Bánh mì/ Xôi',
-    'Mỳ/ Cháo/ Bún/ Phở',
+    'Bánh mì / Xôi',
+    'Mỳ / Cháo / Bún / Phở',
     'Pizza',
     'Đồ ăn nhanh',
-    'Món truyền thống/ Đặc sản',
-    'Cá/ Ốc/ Hải sản',
-    'Lẩu/ Nướng',
+    'Món truyền thống / Đặc sản',
+    'Cá/ Ốc / Hải sản',
+    'Lẩu / Nướng',
     'Đồ ăn nước ngoài',
     'Tráng miệng',
   ];
+  late List<bool> isCheckedListCheck;
   bool kiemTraNhanCheckButtons = false;
 
-  void onItemSelected(String selectedItem){
-    widget.onItemSelected(selectedItem);
-    print('selected item: ${onItemSelected}');
+  String nhanViTriDMCH = '';
+
+  @override
+  void initState() {
+    super.initState();
+    nhanViTriDMCH += widget.initialIndexSelectedItem;
+    isCheckedListCheck = List.generate(17, (index) => false);
+
+    List<String> indexList = nhanViTriDMCH.split(' ');
+    for (String index in indexList) {
+      int? parsedIndex = int.tryParse(index);
+      if (parsedIndex != null &&
+          parsedIndex >= 0 &&
+          parsedIndex < isCheckedListCheck.length) {
+        isCheckedListCheck[parsedIndex] = true;
+      }
+    }
+  }
+
+  void onItemSelected(String selectedItem, String indexSelectedItem) {
+    widget.onItemSelected(selectedItem, indexSelectedItem);
+    print('selected item: $selectedItem - $indexSelectedItem');
   }
 
   void capNhatSoluongCheckBoxDuocChon() {
@@ -52,6 +77,8 @@ class _danhMucVaCuaHangListNhaHangState
   void xoaTatCaLuaChon() {
     setState(() {
       isCheckedListCheck = List<bool>.filled(isCheckedListCheck.length, false);
+      nhanViTriDMCH = '';
+      widget.initialIndexSelectedItem = '';
       capNhatSoluongCheckBoxDuocChon();
     });
   }
@@ -89,6 +116,13 @@ class _danhMucVaCuaHangListNhaHangState
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Text(
+                      nhanViTriDMCH,
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.black,
+                      ),
+                    ),
                     const Text(
                       'Cửa hàng',
                       style: TextStyle(
@@ -167,7 +201,8 @@ class _danhMucVaCuaHangListNhaHangState
                               isCheckedListCheck[i] = value;
                               capNhatSoluongCheckBoxDuocChon();
                             });
-                            onItemSelected(checkBoxTexts[i].toString());
+                            onItemSelected(
+                                checkBoxTexts[i].toString(), i.toString());
                             Navigator.pop(context);
                           }
                         },
@@ -186,7 +221,7 @@ class _danhMucVaCuaHangListNhaHangState
                   ),
                 ),
                 child: TextButton(
-                  onPressed: kiemTraNhanCheckButtons ? xoaTatCaLuaChon : null,
+                  onPressed: xoaTatCaLuaChon,
                   child: Text(
                     'Bỏ lựa chọn',
                     style: TextStyle(

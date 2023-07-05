@@ -3,7 +3,6 @@ import 'package:baemax/widgets/listNhaHang_chiTietNhaHang.dart';
 import 'package:baemax/widgets/listNhaHang_danhMucVaCuaHang.dart';
 import 'package:baemax/widgets/listNhaHang_sapXep.dart';
 import 'package:flutter/material.dart';
-import 'package:tiengviet/tiengviet.dart';
 
 class nhaHangDuocApDungGiamGiaPage extends StatefulWidget {
   const nhaHangDuocApDungGiamGiaPage({super.key});
@@ -88,10 +87,12 @@ class _nhaHangDuocApDungGiamGiaPageState
   String selectedSortStyle = '';
   int soLuongDMCHDuocChon = 0;
   String chonDanhMucCuaHang = '';
+  String viTriDanhMucCuaHangDuocCho = '';
 
-  void capNhatChonDanhMucCuaHang(String value) {
+  void capNhatChonDanhMucCuaHang(String value, String viTri) {
     setState(() {
       chonDanhMucCuaHang += '$value ';
+      viTriDanhMucCuaHangDuocCho += '$viTri ';
     });
   }
 
@@ -105,11 +106,12 @@ class _nhaHangDuocApDungGiamGiaPageState
 
   List<nhaHang> timKiemVaSapXepTangDan(
       List<nhaHang> danhSachNhaHang, String kieuSapXep) {
-    ketQuaTimKiem = danhSachNhaHang
-        .where((nhaHang) =>
-            TiengViet.parse(nhaHang.tenNH.toLowerCase())
-                .contains(TiengViet.parse(chonDanhMucCuaHang.toLowerCase())) ||
-            nhaHang.idNH.toLowerCase().contains(chonDanhMucCuaHang.toLowerCase()))
+    List<nhaHang> ketQuaTimKiem = danhSachNhaHang
+        .where((nhaHang) => chonDanhMucCuaHang
+            .trim()
+            .toLowerCase()
+            .split(' ')
+            .any((tukhoa) => nhaHang.tenNH.toLowerCase().contains(tukhoa)))
         .toList();
 
     if (kieuSapXep == 'Gần nhất') {
@@ -148,6 +150,7 @@ class _nhaHangDuocApDungGiamGiaPageState
       body: Column(
         children: [
           Text('selectedItem: $chonDanhMucCuaHang'),
+          Text('IndexselectedItem: $viTriDanhMucCuaHangDuocCho'),
           Container(
             margin: const EdgeInsets.only(
               top: 15,
@@ -235,9 +238,17 @@ class _nhaHangDuocApDungGiamGiaPageState
                         builder: (context) => danhMucVaCuaHangListNhaHang(
                           onCheckboxCountChanged: capNhatSoLuongDMCHDuocChon,
                           onItemSelected: capNhatChonDanhMucCuaHang,
+                          initialIndexSelectedItem: viTriDanhMucCuaHangDuocCho,
                         ),
                       ),
-                    );
+                    ).then((value) {
+                      if (value == 'rỗng') {
+                        setState(() {
+                          chonDanhMucCuaHang = '';
+                          viTriDanhMucCuaHangDuocCho = '';
+                        });
+                      }
+                    });
                   },
                   child: Container(
                     width: 280,
