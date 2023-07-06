@@ -153,8 +153,8 @@ class _nhaHangDuocApDungGiamGiaPageState
       ),
       body: Column(
         children: [
-          Text('selectedItem: $chonDanhMucCuaHang'),
-          Text('IndexselectedItem: $viTriDanhMucCuaHangDuocCho'),
+          // Text('selectedItem: $chonDanhMucCuaHang'),
+          // Text('IndexselectedItem: $viTriDanhMucCuaHangDuocCho'),
           Container(
             margin: const EdgeInsets.only(
               top: 15,

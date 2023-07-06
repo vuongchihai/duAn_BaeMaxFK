@@ -51,156 +51,156 @@ class _gioHangPageState extends State<gioHangPage> {
       ),
       body: Container(
         height: double.infinity,
-        child: Stack(
+        child: Column(
           children: [
-            SingleChildScrollView(
-              child: Column(
-                children: [
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 20,
-                    ),
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      border: Border(
-                        bottom: BorderSide(
-                          color: Colors.black,
-                          width: 0.3,
+            Container(
+              height: 675,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 20,
+                      ),
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        border: Border(
+                          bottom: BorderSide(
+                            color: Colors.black,
+                            width: 0.3,
+                          ),
                         ),
                       ),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: double.infinity,
-                          child: Text(
-                            'Bún tươi mực thịt bầm',
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.black,
-                            ),
-                            softWrap: true,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          width: double.infinity,
-                          child: Text(
-                            'Trụng sẵn',
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.grey,
-                            ),
-                            softWrap: true,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 25,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              '40.000đ',
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: double.infinity,
+                            child: Text(
+                              'Bún tươi mực thịt bầm',
                               style: TextStyle(
                                 fontSize: 20,
                                 color: Colors.black,
-                                fontWeight: FontWeight.bold,
                               ),
+                              softWrap: true,
                             ),
-                            Container(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    width: 45,
-                                    height: 45,
-                                    decoration: BoxDecoration(
-                                      color: soLuong < 2
-                                          ? const Color.fromARGB(
-                                              255, 238, 238, 238)
-                                          : const Color.fromARGB(
-                                              255, 224, 224, 224),
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: TextButton(
-                                      onPressed: soLuong < 2
-                                          ? null
-                                          : () {
-                                              setState(() {
-                                                soLuong--;
-                                              });
-                                            },
-                                      child: const Text(
-                                        '-',
-                                        style: TextStyle(
-                                          fontSize: 30,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.blue,
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            width: double.infinity,
+                            child: Text(
+                              'Trụng sẵn',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.grey,
+                              ),
+                              softWrap: true,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 25,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                '40.000đ',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Container(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      width: 45,
+                                      height: 45,
+                                      decoration: BoxDecoration(
+                                        color: soLuong < 2
+                                            ? const Color.fromARGB(
+                                                255, 238, 238, 238)
+                                            : const Color.fromARGB(
+                                                255, 224, 224, 224),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: TextButton(
+                                        onPressed: soLuong < 2
+                                            ? null
+                                            : () {
+                                                setState(() {
+                                                  soLuong--;
+                                                });
+                                              },
+                                        child: const Text(
+                                          '-',
+                                          style: TextStyle(
+                                            fontSize: 30,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.blue,
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    width: 15,
-                                  ),
-                                  Text(
-                                    '${soLuong}',
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
+                                    const SizedBox(
+                                      width: 15,
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    width: 15,
-                                  ),
-                                  Container(
-                                    width: 45,
-                                    height: 45,
-                                    decoration: BoxDecoration(
-                                      color: const Color.fromARGB(
-                                          255, 224, 224, 224),
-                                      borderRadius: BorderRadius.circular(10),
+                                    Text(
+                                      '${soLuong}',
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
                                     ),
-                                    child: TextButton(
-                                      onPressed: soLuong < 10
-                                          ? () {
-                                              setState(() {
-                                                soLuong++;
-                                              });
-                                            }
-                                          : null,
-                                      child: const Text(
-                                        '+',
-                                        style: TextStyle(
-                                          fontSize: 30,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.blue,
+                                    const SizedBox(
+                                      width: 15,
+                                    ),
+                                    Container(
+                                      width: 45,
+                                      height: 45,
+                                      decoration: BoxDecoration(
+                                        color: const Color.fromARGB(
+                                            255, 224, 224, 224),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: TextButton(
+                                        onPressed: soLuong < 10
+                                            ? () {
+                                                setState(() {
+                                                  soLuong++;
+                                                });
+                                              }
+                                            : null,
+                                        child: const Text(
+                                          '+',
+                                          style: TextStyle(
+                                            fontSize: 30,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.blue,
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
+            Expanded(
               child: GestureDetector(
                 onTap: () {
                   Navigator.push(
@@ -212,6 +212,7 @@ class _gioHangPageState extends State<gioHangPage> {
                 },
                 child: Container(
                   height: 100,
+                  width: double.infinity,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 10,
                     vertical: 10,

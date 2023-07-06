@@ -1113,59 +1113,59 @@ class _itemChiTietNhaHangDuocApDungState
               maintainSize: false,
               maintainState: true,
               maintainAnimation: true,
-              child: Container(
-                height: 100,
-                color: Colors.white,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: 65,
-                      width: 100,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        border: Border.all(
-                          color: Colors.blue,
-                          width: 2,
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Image(
-                            image: AssetImage('images/hinh_28.png'),
-                            height: 35,
-                            width: 35,
-                            fit: BoxFit.fill,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => gioHangPage(),
+                    ),
+                  );
+                },
+                child: Container(
+                  height: 100,
+                  color: Colors.white,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        height: 65,
+                        width: 100,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(
                             color: Colors.blue,
+                            width: 2,
                           ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            '${soLuong}',
-                            style: const TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Image(
+                              image: AssetImage('images/hinh_79.png'),
+                              height: 35,
+                              width: 35,
+                              fit: BoxFit.fill,
                               color: Colors.blue,
                             ),
-                          ),
-                        ],
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              '${soLuong}',
+                              style: const TextStyle(
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => gioHangPage(),
-                          ),
-                        );
-                      },
-                      child: Container(
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Container(
                         height: 65,
                         alignment: Alignment.center,
                         padding: const EdgeInsets.symmetric(
@@ -1184,8 +1184,8 @@ class _itemChiTietNhaHangDuocApDungState
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
