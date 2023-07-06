@@ -40,7 +40,9 @@ class _danhMucVaCuaHangListNhaHangState
     'Tráng miệng',
   ];
   late List<bool> isCheckedListCheck;
+  List<bool> shouldCancelSelection = List.generate(17, (index) => false);
   bool kiemTraNhanCheckButtons = false;
+  bool shouldPop = true; // biến cờ để kiểm tra xem có nên pop về hay không
 
   String nhanViTriDMCH = '';
 
@@ -102,6 +104,19 @@ class _danhMucVaCuaHangListNhaHangState
           color: Colors.black,
           size: 30,
         ),
+        leading: IconButton(
+            onPressed: () {
+              String selectedIndices = ' ';
+              for (int i = 0; i < isCheckedListCheck.length; i++) {
+                if (isCheckedListCheck[i]) {
+                  selectedIndices += '$i';
+                }
+              }
+              Navigator.pop(context, selectedIndices);
+            },
+            icon: const Icon(
+              Icons.arrow_back,
+            )),
       ),
       body: Container(
         padding: const EdgeInsets.symmetric(
@@ -198,12 +213,22 @@ class _danhMucVaCuaHangListNhaHangState
                         onChanged: (bool? value) {
                           if (value != null) {
                             setState(() {
-                              isCheckedListCheck[i] = value;
-                              capNhatSoluongCheckBoxDuocChon();
+                              if (isCheckedListCheck[i] &&
+                                  !shouldCancelSelection[i]) {
+                                isCheckedListCheck[i] = false;
+                                shouldCancelSelection[i] = true;
+                              } else {
+                                isCheckedListCheck[i] = value;
+                                shouldCancelSelection[i] = false;
+                                capNhatSoluongCheckBoxDuocChon();
+                              }
                             });
                             onItemSelected(
                                 checkBoxTexts[i].toString(), i.toString());
-                            Navigator.pop(context);
+                            if (isCheckedListCheck[i] &&
+                                !shouldCancelSelection[i]) {
+                              Navigator.pop(context);
+                            }
                           }
                         },
                       ),

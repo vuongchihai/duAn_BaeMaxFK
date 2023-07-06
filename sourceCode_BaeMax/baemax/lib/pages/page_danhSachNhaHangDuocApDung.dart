@@ -99,6 +99,10 @@ class _nhaHangDuocApDungGiamGiaPageState
   void capNhatSoLuongDMCHDuocChon(int soLuongMoi) {
     setState(() {
       soLuongDMCHDuocChon = soLuongMoi;
+      if(soLuongDMCHDuocChon == 0){
+        chonDanhMucCuaHang = '';
+        viTriDanhMucCuaHangDuocCho = '';
+      }
     });
   }
 
@@ -241,11 +245,10 @@ class _nhaHangDuocApDungGiamGiaPageState
                           initialIndexSelectedItem: viTriDanhMucCuaHangDuocCho,
                         ),
                       ),
-                    ).then((value) {
-                      if (value == 'rỗng') {
+                    ).then((value){
+                      if(value != null && value is String){
                         setState(() {
-                          chonDanhMucCuaHang = '';
-                          viTriDanhMucCuaHangDuocCho = '';
+                          viTriDanhMucCuaHangDuocCho = value;
                         });
                       }
                     });
