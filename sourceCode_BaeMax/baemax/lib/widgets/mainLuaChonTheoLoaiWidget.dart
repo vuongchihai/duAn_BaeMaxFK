@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class main_luaChonTheoLoai_widget extends StatelessWidget {
@@ -9,14 +8,14 @@ class main_luaChonTheoLoai_widget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Colors.white,
       padding: const EdgeInsets.symmetric(
-        horizontal: 20,
         vertical: 20,
       ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               GestureDetector(
                 onTap: () {
@@ -133,6 +132,7 @@ class main_luaChonTheoLoai_widget extends StatelessWidget {
             ],
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               GestureDetector(
                 onTap: () {
@@ -249,6 +249,7 @@ class main_luaChonTheoLoai_widget extends StatelessWidget {
             ],
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               GestureDetector(
                 onTap: () {
@@ -365,6 +366,7 @@ class main_luaChonTheoLoai_widget extends StatelessWidget {
             ],
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               GestureDetector(
                 onTap: () {

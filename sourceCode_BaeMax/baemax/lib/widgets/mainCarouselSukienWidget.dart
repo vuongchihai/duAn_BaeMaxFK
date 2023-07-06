@@ -9,7 +9,8 @@ class main_carousel_suKien_widget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 198,
+      color: Colors.white,
+      height: 200,
       child: CarouselSlider(
         items: [
           GestureDetector(

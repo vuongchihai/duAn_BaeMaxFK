@@ -11,7 +11,10 @@ class main_header_widget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 20),
+      color: Colors.white,
+      margin: const EdgeInsets.only(
+        top: 20,
+      ),
       width: double.infinity,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -25,6 +28,9 @@ class main_header_widget extends StatelessWidget {
                   image: AssetImage('images/hinh_20.png'),
                   width: 20,
                   height: 20,
+                ),
+                SizedBox(
+                  width: 5,
                 ),
                 Text(
                   'ktx >',
