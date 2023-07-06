@@ -1,6 +1,8 @@
 import 'package:baemax/pages/page_chiTietMonAn.dart';
+import 'package:baemax/pages/page_gioHang.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:intl/intl.dart';
 
 class itemChiTietNhaHangDuocApDung extends StatefulWidget {
   itemChiTietNhaHangDuocApDung({
@@ -23,8 +25,9 @@ class _itemChiTietNhaHangDuocApDungState
   late Color iconColor;
   double khoangCachTruocKhiAnAppBarDM = 25;
   bool isContainerVisiable = false;
-
   late bool checkedHeart;
+  int soLuong = 0;
+  double soTien = 0;
 
   void hienThiContainerTimKiem() {
     setState(() {
@@ -475,7 +478,17 @@ class _itemChiTietNhaHangDuocApDungState
                                   MaterialPageRoute(
                                     builder: (context) => chiTietMonAnPage(),
                                   ),
-                                );
+                                ).then((value) {
+                                  if (value != null &&
+                                      value is List<dynamic> &&
+                                      value.length == 2) {
+                                    setState(() {
+                                      soLuong = value[0];
+                                      soTien = value[1];
+                                    });
+                                    print('sl: $soLuong - TONG: $soTien');
+                                  }
+                                });
                               },
                               child: Container(
                                 child: Row(
@@ -1031,11 +1044,11 @@ class _itemChiTietNhaHangDuocApDungState
           // search
           isContainerVisiable
               ? Container(
-                height: double.infinity,
-                color: Colors.grey.withOpacity(0.3),
-                child: Column(
-                  children: [
-                    Container(
+                  height: double.infinity,
+                  color: Colors.grey.withOpacity(0.3),
+                  child: Column(
+                    children: [
+                      Container(
                         padding: const EdgeInsets.only(
                           top: 20,
                         ),
@@ -1086,10 +1099,97 @@ class _itemChiTietNhaHangDuocApDungState
                           ],
                         ),
                       ),
+                    ],
+                  ),
+                )
+              : SizedBox(),
+
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: Visibility(
+              visible: soTien != 0,
+              maintainSize: false,
+              maintainState: true,
+              maintainAnimation: true,
+              child: Container(
+                height: 100,
+                color: Colors.white,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: 65,
+                      width: 100,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        border: Border.all(
+                          color: Colors.blue,
+                          width: 2,
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Image(
+                            image: AssetImage('images/hinh_28.png'),
+                            height: 35,
+                            width: 35,
+                            fit: BoxFit.fill,
+                            color: Colors.blue,
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            '${soLuong}',
+                            style: const TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blue,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => gioHangPage(),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        height: 65,
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.blue,
+                        ),
+                        child: Text(
+                          'Trang thanh toán ${NumberFormat("0.000").format(soTien)}đ',
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
-              )
-              : SizedBox(),
+              ),
+            ),
+          ),
         ],
       ),
     );

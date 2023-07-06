@@ -589,7 +589,11 @@ class _chiTietMonAnPageState extends State<chiTietMonAnPage> {
                       ),
                       child: TextButton(
                         onPressed: () {
-                          print('object');
+                          List<dynamic> soLuongVaSoTien = [
+                            soLuong,
+                            (17.000 * soLuong),
+                          ];
+                          Navigator.pop(context, soLuongVaSoTien);
                         },
                         child: Text(
                           'Thêm ${tienTamTinh(17.000, soLuong)} đ',
