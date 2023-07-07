@@ -151,7 +151,7 @@ class _khaoNuocXin_DealDaTangState extends State<khaoNuocXin_DealDaTang> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Image(
+                                const Image(
                                   image: AssetImage('images/hinh_72.png'),
                                   width: 25,
                                 ),
@@ -163,14 +163,14 @@ class _khaoNuocXin_DealDaTangState extends State<khaoNuocXin_DealDaTang> {
                                     children: [
                                       TextSpan(
                                         text: restaurant.danhGia.toString(),
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontSize: 20,
                                           color: Colors.black,
                                         ),
                                       ),
                                       TextSpan(
-                                        text: '(100+)',
-                                        style: TextStyle(
+                                        text: ' (${restaurant.SLDaBan}+)',
+                                        style: const TextStyle(
                                           fontSize: 18,
                                           color: Colors.grey,
                                         ),

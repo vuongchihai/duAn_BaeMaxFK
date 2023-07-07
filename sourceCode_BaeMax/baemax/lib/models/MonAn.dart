@@ -2,7 +2,7 @@ class MonAn {
   final String? IDMonAn;
   final String tenMon;
   final String hinhAnhMA;
-  final num giaTien;
+  final double giaTien;
 
   MonAn({
     this.IDMonAn,

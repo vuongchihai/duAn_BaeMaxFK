@@ -1,7 +1,6 @@
 import 'package:baemax/models/MonAn.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:scroll_date_picker/scroll_date_picker.dart';
 
 import '../pages/page_hopThu.dart';
 import '../pages/page_thongTinTaiKhoan.dart';
@@ -14,7 +13,7 @@ class main_header_widget extends StatelessWidget {
   void themMonAnVaoNhaHang(MonAn monAn, String idNhaHang) {
     FirebaseFirestore.instance
         .collection('nhaHang')
-        .doc('NH01')
+        .doc(idNhaHang)
         .collection('monAn')
         .add({
       'IDMonAn': monAn.IDMonAn,
@@ -30,13 +29,13 @@ class main_header_widget extends StatelessWidget {
 
   void themDuLieuDenFiestore() {
     MonAn monAn = MonAn(
-      IDMonAn: 'MA02',
-      tenMon: 'Cá Chiên',
-      hinhAnhMA: 'images/hinh_46,jpg',
-      giaTien: 25.000,
+      IDMonAn: 'MA13',
+      tenMon: 'Gà luộc',
+      hinhAnhMA: 'images/hinh_44.jpg',
+      giaTien: 130.000,
     );
 
-    String idNhaHang = 'NH01';
+    String idNhaHang = 'VM9YHVRPuNJQzoxttAxa';
 
     themMonAnVaoNhaHang(monAn, idNhaHang);
   }

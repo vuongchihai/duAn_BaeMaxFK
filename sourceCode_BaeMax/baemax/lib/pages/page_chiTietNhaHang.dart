@@ -1,5 +1,8 @@
+import 'package:baemax/models/MonAn.dart';
+import 'package:baemax/pages/page_chiTietCuaMonAn.dart';
 import 'package:baemax/pages/page_chiTietMonAn.dart';
 import 'package:baemax/pages/page_gioHang.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
@@ -37,6 +40,36 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
   late bool checkedHeart;
   int soLuong = 0;
   double soTien = 0;
+  List<MonAn> monAnList = [];
+
+  void layMonAnTuNhaHang(String? IDNhaHang) {
+    FirebaseFirestore.instance
+        .collection('nhaHang')
+        .doc(IDNhaHang)
+        .collection('monAn')
+        .get()
+        .then((querySnapshot) {
+      if (querySnapshot != null) {
+        List<MonAn> fetchedMonAnList = [];
+        querySnapshot.docs.forEach((document) {
+          MonAn monAn = MonAn(
+            IDMonAn: document.id,
+            tenMon: document['tenMon'],
+            hinhAnhMA: document['hinhAnhMA'],
+            giaTien: document['giaTien'].toDouble(),
+          );
+          fetchedMonAnList.add(monAn);
+        });
+        setState(() {
+          monAnList = fetchedMonAnList;
+        });
+      } else {
+        print('Không có dữ liệu món ăn');
+      }
+    }).catchError((error) {
+      print('Lỗi khi truy vấn món ăn: $error');
+    });
+  }
 
   void hienThiContainerTimKiem() {
     setState(() {
@@ -78,6 +111,10 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
         });
       }
     });
+
+    layMonAnTuNhaHang(widget.IDNhaHang);
+    print('${widget.IDNhaHang}');
+    print('$monAnList}');
   }
 
   @override
@@ -290,13 +327,14 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
                                         image: AssetImage('images/hinh_28.png'),
                                         width: 30,
                                         height: 30,
+                                        color: Colors.yellow,
                                       ),
                                       const SizedBox(
                                         width: 5,
                                       ),
                                       Text(
-                                        '4.7',
-                                        style: TextStyle(
+                                        '${widget.danhGia}',
+                                        style: const TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -305,8 +343,8 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
                                         width: 5,
                                       ),
                                       Text(
-                                        '(999+)',
-                                        style: TextStyle(
+                                        '(${widget.SLDaBan}+)',
+                                        style: const TextStyle(
                                           fontSize: 18,
                                         ),
                                       ),
@@ -317,7 +355,7 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
                                   child: Row(
                                     children: [
                                       const Image(
-                                        image: AssetImage('images/hinh_28.png'),
+                                        image: AssetImage('images/hinh_79.png'),
                                         width: 30,
                                         height: 30,
                                       ),
@@ -325,8 +363,8 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
                                         width: 5,
                                       ),
                                       Text(
-                                        '999+ đã bán',
-                                        style: TextStyle(
+                                        '${widget.SLDaBan}+ đã bán',
+                                        style: const TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -382,77 +420,77 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
                             const SizedBox(
                               height: 10,
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  width: 180,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: Image(
-                                          image:
-                                              AssetImage('images/hinh_73.jpg'),
-                                          fit: BoxFit.cover,
-                                          width: 180,
-                                          height: 150,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Container(
-                                        width: 180,
-                                        child: Text(
-                                          'Bột chiên 1 trứng',
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            color: Colors.black,
+                            Container(
+                              height: 230,
+                              child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: monAnList.length,
+                                  itemBuilder: (context, index) {
+                                    MonAn monAn = monAnList[index];
+                                    return GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                chiTietCuaMonAnPage(
+                                                 IDMonAn: monAn.IDMonAn,
+                                                 tenMon: monAn.tenMon,
+                                                 hinhAnhMA: monAn.hinhAnhMA,
+                                                 giaTien: monAn.giaTien,
+                                                ),
                                           ),
-                                          softWrap: true,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  width: 180,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: Image(
-                                          image:
-                                              AssetImage('images/hinh_73.jpg'),
-                                          fit: BoxFit.cover,
-                                          width: 180,
-                                          height: 150,
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      Container(
+                                        ).then((value){
+                                          if(value != null &&
+                                          value is List<dynamic> && value.length == 2){
+                                            setState(() {
+                                              soLuong = value[0];
+                                              soTien = value[1];
+                                            });
+                                            print('sl: $soLuong - TONG: $soTien');
+                                          }
+                                        });
+                                      },
+                                      child: Container(
                                         width: 180,
-                                        child: Text(
-                                          'Bột chiên 1 trứng',
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            color: Colors.black,
-                                          ),
-                                          softWrap: true,
+                                        margin: EdgeInsets.only(right: 20,),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              child: Image(
+                                                image:
+                                                    AssetImage(monAn.hinhAnhMA),
+                                                fit: BoxFit.cover,
+                                                width: 180,
+                                                height: 150,
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            Container(
+                                              width: 180,
+                                              child: Text(
+                                                monAn.tenMon,
+                                                style: const TextStyle(
+                                                  fontSize: 20,
+                                                  color: Colors.black,
+                                                ),
+                                                softWrap: true,
+                                                maxLines: 3,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            )
+                                    );
+                                  }),
+                            ),
                           ],
                         ),
                       ),
