@@ -435,6 +435,7 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
                                             builder: (context) =>
                                                 chiTietCuaMonAnPage(
                                                  IDMonAn: monAn.IDMonAn,
+                                                 IDNhaHang: widget.IDNhaHang,
                                                  tenMon: monAn.tenMon,
                                                  hinhAnhMA: monAn.hinhAnhMA,
                                                  giaTien: monAn.giaTien,

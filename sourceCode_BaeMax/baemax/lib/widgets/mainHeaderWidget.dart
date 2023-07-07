@@ -34,9 +34,7 @@ class main_header_widget extends StatelessWidget {
       hinhAnhMA: 'images/hinh_44.jpg',
       giaTien: 130.000,
     );
-
     String idNhaHang = 'VM9YHVRPuNJQzoxttAxa';
-
     themMonAnVaoNhaHang(monAn, idNhaHang);
   }
 

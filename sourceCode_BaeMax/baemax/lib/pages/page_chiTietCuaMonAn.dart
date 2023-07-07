@@ -1,3 +1,4 @@
+import 'package:baemax/models/gioHang.dart';
 import 'package:baemax/pages/page_loiNhanToiNhaHang.dart';
 import 'package:flutter/material.dart';
 
@@ -45,6 +46,31 @@ class _chiTietCuaMonAnPageState extends State<chiTietCuaMonAnPage> {
       setState(() {
         loiNhanTuKH = loiNhan;
       });
+    }
+  }
+
+  List<GioHang> items = [];
+  void themMonAnVaSoLuongVaoGio(String idNhaHang, String idMonAn, num soLuong) {
+    var existingItemIndex = items.indexWhere(
+      (item) => item.idNhaHang == idNhaHang && item.idMonAn == idMonAn,
+    );
+
+    if (existingItemIndex != -1) {
+      var existingItem = items[existingItemIndex];
+      existingItem.soLuongMonDuocChon += soLuong;
+
+      if (existingItem.soLuongMonDuocChon <= 0) {
+        items.removeAt(
+            existingItemIndex); // neu so luong <= 0, xo mon khoi gio hang
+      }
+    } else {
+      var gioHangItem = GioHang(
+        idMonAn: idMonAn,
+        idNhaHang: idNhaHang,
+        soLuongMonDuocChon: soLuong,
+      );
+
+      items.add(gioHangItem);
     }
   }
 
@@ -599,6 +625,8 @@ class _chiTietCuaMonAnPageState extends State<chiTietCuaMonAnPage> {
                       ),
                       child: TextButton(
                         onPressed: () {
+                          GioHang gioHang = GioHang();
+
                           List<dynamic> soLuongVaSoTien = [
                             soLuong,
                             (widget.giaTien.toDouble() * soLuong),
