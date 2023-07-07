@@ -1,9 +1,17 @@
+import 'package:baemax/models/NhaHang.dart';
+import 'package:baemax/pages/page_chiTietNhaHang.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:baemax/pages/page_chiTietDeal.dart';
 import 'package:flutter/material.dart';
 
-class khaoNuocXin_DealDaTang extends StatelessWidget {
+class khaoNuocXin_DealDaTang extends StatefulWidget {
   const khaoNuocXin_DealDaTang({super.key});
 
+  @override
+  State<khaoNuocXin_DealDaTang> createState() => _khaoNuocXin_DealDaTangState();
+}
+
+class _khaoNuocXin_DealDaTangState extends State<khaoNuocXin_DealDaTang> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -69,81 +77,116 @@ class khaoNuocXin_DealDaTang extends StatelessWidget {
           Container(
             height: 250,
             width: double.infinity,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    width: 150,
-                    height: 150,
-                    child: Column(
-                      children: [
-                        Container(
-                          height: 150,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image(
-                              image: AssetImage('images/hinh_73.jpg'),
-                              fit: BoxFit.cover,
+            child: FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
+              future: FirebaseFirestore.instance.collection('nhaHang').get(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                }
+
+                if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                }
+
+                List<NhaHang> restaurantList = snapshot.data!.docs
+                    .map((DocumentSnapshot<Map<String, dynamic>> doc) {
+                  return NhaHang.fromSnapshot(doc);
+                }).toList();
+
+                return ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: restaurantList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    var restaurant = restaurantList[index];
+
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => chiTietNhaHangPage(
+                              IDNhaHang: restaurant.IDNhaHang,
+                              tenNH: restaurant.tenNH,
+                              anhDaiDienNH: restaurant.anhDaiDienNH,
+                              diaChiNH: restaurant.diaChiNH,
+                              khoangCach: restaurant.khoangCach,
+                              danhGia: restaurant.danhGia,
+                              SLDaBan: restaurant.SLDaBan,
                             ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          'Nghiện Trà - Trà Sữa Take Away - mlem mlem',
-                          style: const TextStyle(
-                            fontSize: 20,
-                            color: Colors.black,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                        );
+                      },
+                      child: Container(
+                        width: 150,
+                        height: 150,
+                        margin: const EdgeInsets.only(right: 20),
+                        child: Column(
                           children: [
-                            Image(
-                              image: AssetImage('images/hinh_72.png'),
-                              width: 25,
+                            Container(
+                              height: 150,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image(
+                                  image: AssetImage(restaurant.anhDaiDienNH),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
                             ),
                             const SizedBox(
-                              width: 10,
+                              height: 10,
                             ),
-                            RichText(
-                              text: const TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: '4.1',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: '(100+)',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                ],
+                            Text(
+                              restaurant.tenNH,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                color: Colors.black,
                               ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Image(
+                                  image: AssetImage('images/hinh_72.png'),
+                                  width: 25,
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                RichText(
+                                  text: TextSpan(
+                                    children: [
+                                      TextSpan(
+                                        text: restaurant.danhGia.toString(),
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: '(100+)',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-              ],
+                      ),
+                    );
+                  },
+                );
+              },
             ),
           ),
         ],

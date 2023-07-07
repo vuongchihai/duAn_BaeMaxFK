@@ -4,21 +4,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 
-class itemChiTietNhaHangDuocApDung extends StatefulWidget {
-  itemChiTietNhaHangDuocApDung({
-    Key? key,
-    required this.item,
-  }) : super(key: key);
+class chiTietNhaHangPage extends StatefulWidget {
+  final String? IDNhaHang;
+  final String tenNH;
+  final String anhDaiDienNH;
+  final String diaChiNH;
+  final num khoangCach;
+  final num danhGia;
+  final num SLDaBan;
 
-  final dynamic item;
+  chiTietNhaHangPage({
+    this.IDNhaHang,
+    required this.tenNH,
+    required this.anhDaiDienNH,
+    required this.diaChiNH,
+    required this.khoangCach,
+    required this.danhGia,
+    required this.SLDaBan,
+  });
 
   @override
-  State<itemChiTietNhaHangDuocApDung> createState() =>
-      _itemChiTietNhaHangDuocApDungState();
+  State<chiTietNhaHangPage> createState() => _chiTietNhaHangPageState();
 }
 
-class _itemChiTietNhaHangDuocApDungState
-    extends State<itemChiTietNhaHangDuocApDung> {
+class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
   late ScrollController scrollController;
   late bool showAppBar;
   bool showAppBarDanhMucLoaiMonAn = false;
@@ -167,7 +176,7 @@ class _itemChiTietNhaHangDuocApDungState
                                       height: 15,
                                     ),
                                     Text(
-                                      widget.item.tenNH + 'ĐỐI TÁC CỦA BEAMAX',
+                                      widget.tenNH,
                                       style: const TextStyle(
                                         fontSize: 25,
                                         color: Colors.black,
@@ -185,7 +194,7 @@ class _itemChiTietNhaHangDuocApDungState
                                           MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                          '${widget.item.khoangCach}km',
+                                          '${widget.khoangCach}km',
                                           style: const TextStyle(
                                             fontSize: 20,
                                             color: Colors.grey,
@@ -198,7 +207,7 @@ class _itemChiTietNhaHangDuocApDungState
                                         Container(
                                           width: 280,
                                           child: Text(
-                                            widget.item.diaChiNH,
+                                            widget.diaChiNH,
                                             style: const TextStyle(
                                               fontSize: 20,
                                               color: Color.fromARGB(
@@ -808,7 +817,7 @@ class _itemChiTietNhaHangDuocApDungState
                                             Container(
                                               width: 238,
                                               child: Text(
-                                                '${widget.item.tenNH} - ${widget.item.diaChiNH}',
+                                                '${widget.tenNH} - ${widget.diaChiNH}',
                                                 // '${widget.item.tenNH}',
                                                 style: const TextStyle(
                                                   fontSize: 20,
