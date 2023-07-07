@@ -1,4 +1,7 @@
+import 'package:baemax/models/MonAn.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:scroll_date_picker/scroll_date_picker.dart';
 
 import '../pages/page_hopThu.dart';
 import '../pages/page_thongTinTaiKhoan.dart';
@@ -7,6 +10,36 @@ class main_header_widget extends StatelessWidget {
   const main_header_widget({
     super.key,
   });
+
+  void themMonAnVaoNhaHang(MonAn monAn, String idNhaHang) {
+    FirebaseFirestore.instance
+        .collection('nhaHang')
+        .doc('NH01')
+        .collection('monAn')
+        .add({
+      'IDMonAn': monAn.IDMonAn,
+      'tenMon': monAn.tenMon,
+      'hinhAnhMA': monAn.hinhAnhMA,
+      'giaTien': monAn.giaTien,
+    }).then((value) {
+      print('thêm món ăn thành công vào nhà hàng $idNhaHang');
+    }).catchError((onError) {
+      print('thêm món ăn không thành công vào nhà hàng $onError');
+    });
+  }
+
+  void themDuLieuDenFiestore() {
+    MonAn monAn = MonAn(
+      IDMonAn: 'MA02',
+      tenMon: 'Cá Chiên',
+      hinhAnhMA: 'images/hinh_46,jpg',
+      giaTien: 25.000,
+    );
+
+    String idNhaHang = 'NH01';
+
+    themMonAnVaoNhaHang(monAn, idNhaHang);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +51,6 @@ class main_header_widget extends StatelessWidget {
       width: double.infinity,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           TextButton(
             onPressed: () {},
@@ -46,6 +78,14 @@ class main_header_widget extends StatelessWidget {
           Container(
             child: Row(
               children: [
+                GestureDetector(
+                  onTap: () {
+                    themDuLieuDenFiestore();
+                  },
+                  child: Container(
+                    child: Text('data'),
+                  ),
+                ),
                 TextButton(
                   onPressed: () {
                     Navigator.push(

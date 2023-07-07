@@ -108,8 +108,9 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
                                   Container(
                                     width: double.infinity,
                                     height: 300,
-                                    child: const Image(
-                                      image: AssetImage('images/hinh_73.jpg'),
+                                    child: Image(
+                                      image: AssetImage(widget.anhDaiDienNH),
+                                      fit: BoxFit.cover,
                                     ),
                                   ),
                                   Container(
@@ -189,35 +190,42 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
                                     const SizedBox(
                                       height: 15,
                                     ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          '${widget.khoangCach}km',
-                                          style: const TextStyle(
-                                            fontSize: 20,
-                                            color: Colors.grey,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        Container(
-                                          width: 280,
-                                          child: Text(
-                                            widget.diaChiNH,
-                                            style: const TextStyle(
-                                              fontSize: 20,
-                                              color: Color.fromARGB(
-                                                  255, 110, 109, 109),
+                                    Container(
+                                      width: 300,
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            width: 140,
+                                            alignment: Alignment.centerRight,
+                                            child: Text(
+                                              '${widget.khoangCach}km',
+                                              style: const TextStyle(
+                                                fontSize: 20,
+                                                color: Colors.grey,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                             ),
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
                                           ),
-                                        )
-                                      ],
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          Expanded(
+                                            child: Container(
+                                              width: 150,
+                                              child: Text(
+                                                widget.diaChiNH,
+                                                style: const TextStyle(
+                                                  fontSize: 20,
+                                                  color: Color.fromARGB(
+                                                      255, 110, 109, 109),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -239,14 +247,14 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Container(
-                                  child: Row(
+                                  child: const Row(
                                     children: [
-                                      const Image(
+                                      Image(
                                         image: AssetImage('images/hinh_19.png'),
                                         width: 30,
                                         height: 30,
                                       ),
-                                      const SizedBox(
+                                      SizedBox(
                                         width: 10,
                                       ),
                                       Text(
@@ -498,114 +506,6 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
                                     print('sl: $soLuong - TONG: $soTien');
                                   }
                                 });
-                              },
-                              child: Container(
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Container(
-                                      width: 200,
-                                      height: 130,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            'Bột khoai môn 3 trứng',
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.black,
-                                            ),
-                                            softWrap: true,
-                                          ),
-                                          Text(
-                                            '45.000 đ',
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Image(
-                                        image: AssetImage('images/hinh_73.jpg'),
-                                        fit: BoxFit.cover,
-                                        width: 150,
-                                        height: 150,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => chiTietMonAnPage(),
-                                  ),
-                                );
-                              },
-                              child: Container(
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Container(
-                                      width: 200,
-                                      height: 130,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            'Bột khoai môn 3 trứng',
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.black,
-                                            ),
-                                            softWrap: true,
-                                          ),
-                                          Text(
-                                            '45.000 đ',
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Image(
-                                        image: AssetImage('images/hinh_73.jpg'),
-                                        fit: BoxFit.cover,
-                                        width: 150,
-                                        height: 150,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => chiTietMonAnPage(),
-                                  ),
-                                );
                               },
                               child: Container(
                                 child: Row(

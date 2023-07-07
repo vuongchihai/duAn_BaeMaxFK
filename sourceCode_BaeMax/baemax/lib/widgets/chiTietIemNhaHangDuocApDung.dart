@@ -167,7 +167,7 @@ class _itemChiTietNhaHangDuocApDungState
                                       height: 15,
                                     ),
                                     Text(
-                                      widget.item.tenNH + 'ĐỐI TÁC CỦA BEAMAX',
+                                      widget.item.tenNH,
                                       style: const TextStyle(
                                         fontSize: 25,
                                         color: Colors.black,
