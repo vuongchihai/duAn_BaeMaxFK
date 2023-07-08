@@ -11,14 +11,28 @@ import 'page_quanLyThanhToan.dart';
 import 'package:baemax/pages/page_soDiaChi.dart';
 
 class thongTinTaiKhoanPage extends StatefulWidget {
-  const thongTinTaiKhoanPage({super.key});
+  thongTinTaiKhoanPage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<thongTinTaiKhoanPage> createState() => _thongTinTaiKhoanPageState();
 }
 
 class _thongTinTaiKhoanPageState extends State<thongTinTaiKhoanPage> {
+  String nhanSDT = '';
+  String nhanMatKhau = '';
   bool kiemTraDangNhap = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (nhanSDT.isNotEmpty && nhanMatKhau.isNotEmpty) {
+      setState(() {
+        kiemTraDangNhap = true;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class nhapMatKhauPage extends StatefulWidget {
@@ -9,18 +10,27 @@ class nhapMatKhauPage extends StatefulWidget {
 }
 
 class _nhapMatKhauPageState extends State<nhapMatKhauPage> {
-  String SDTHienTai = '0949162193';
-  String SDTMoi = '';
+  String sdtVuaNhap = '';
   bool anHoacHienMatKhau = true;
+  final matKhauController = TextEditingController();
+  bool trangThaiDangNhap = false;
 
-  bool kiemTraSDTTrungNhau(String sdtHienTai, String sdtMoi) {
-    return sdtHienTai == sdtMoi;
+  Future<bool> kiemTraKhachHang(String sdt, String matKhau) async {
+    final CollectionReference khachHangs =
+        FirebaseFirestore.instance.collection('khachHang');
+
+    QuerySnapshot snapshot = await khachHangs
+        .where('sdt', isEqualTo: sdt)
+        .where('matKhau', isEqualTo: matKhau)
+        .get();
+
+    return snapshot.size > 0;
   }
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
-    SDTMoi = widget.sdtVuaNhap;
+    sdtVuaNhap = widget.sdtVuaNhap;
   }
 
   @override
@@ -52,8 +62,8 @@ class _nhapMatKhauPageState extends State<nhapMatKhauPage> {
               height: 20,
             ),
             Text(
-              'Số điện thoại dùng đăng ký là ${SDTMoi}',
-              style:const  TextStyle(
+              'Số điện thoại dùng đăng ký là $sdtVuaNhap',
+              style: const TextStyle(
                 fontSize: 20,
                 color: Color.fromARGB(255, 96, 92, 92),
               ),
@@ -65,9 +75,10 @@ class _nhapMatKhauPageState extends State<nhapMatKhauPage> {
               width: double.infinity,
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: kiemTraSDTTrungNhau(SDTHienTai, SDTMoi)
-                      ? Colors.red
-                      : Colors.blue,
+                  color: Colors.blue,
+                  // color: kiemTraSDTTrungNhau(SDTHienTai, SDTMoi)
+                  //     ? Colors.red
+                  //     : Colors.blue,
                   width: 3,
                 ),
                 borderRadius: BorderRadius.circular(10),
@@ -82,6 +93,7 @@ class _nhapMatKhauPageState extends State<nhapMatKhauPage> {
                   Container(
                     width: 290,
                     child: TextField(
+                      controller: matKhauController,
                       obscureText: anHoacHienMatKhau ? true : false,
                       decoration: const InputDecoration(
                         hintText: 'Mật khẩu',
@@ -93,7 +105,7 @@ class _nhapMatKhauPageState extends State<nhapMatKhauPage> {
                       ),
                       onChanged: (value) {
                         setState(() {
-                          SDTMoi = value;
+                          // SDTMoi = value;
                         });
                       },
                     ),
@@ -122,7 +134,7 @@ class _nhapMatKhauPageState extends State<nhapMatKhauPage> {
             const SizedBox(
               height: 10,
             ),
-            kiemTraSDTTrungNhau(SDTHienTai, SDTMoi)
+            trangThaiDangNhap
                 ? const Text(
                     'Mật khẩu của bạn không chính xác',
                     style: TextStyle(
@@ -155,10 +167,20 @@ class _nhapMatKhauPageState extends State<nhapMatKhauPage> {
                   height: 50,
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: SDTMoi.isEmpty
+                    onPressed: matKhauController.text.isEmpty
                         ? null
-                        : () {
-                            print('object');
+                        : () async {
+                            String matKhau = matKhauController.text;
+                            bool exists =
+                                await kiemTraKhachHang(sdtVuaNhap, matKhau);
+
+                            if (exists) {
+                              Navigator.of(context).popUntil(ModalRoute.withName("/thongTinTaiKhoanPage"));
+                            } else {
+                              setState(() {
+                                trangThaiDangNhap = !exists;
+                              });
+                            }
                           },
                     child: const Text(
                       'Đăng nhập',
