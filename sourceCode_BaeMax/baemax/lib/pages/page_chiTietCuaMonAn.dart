@@ -1,15 +1,18 @@
 import 'package:baemax/models/gioHang.dart';
 import 'package:baemax/pages/page_loiNhanToiNhaHang.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class chiTietCuaMonAnPage extends StatefulWidget {
   final String? IDMonAn;
+  final String? IDNhaHang;
   final String tenMon;
   final String hinhAnhMA;
   final num giaTien;
 
   chiTietCuaMonAnPage({
     this.IDMonAn,
+    this.IDNhaHang,
     required this.tenMon,
     required this.hinhAnhMA,
     required this.giaTien,
@@ -26,6 +29,43 @@ class _chiTietCuaMonAnPageState extends State<chiTietCuaMonAnPage> {
 
   double giaTien = 0;
   int soLuong = 1;
+
+  List<GioHang> gioHangItems = [];
+
+  void addToCart(GioHang gioHang, {int quantity = 1}) async {
+    try {
+      final cartRef = FirebaseFirestore.instance.collection('gioHang');
+
+      final querySnapshot =
+          await cartRef.where('idMonAn', isEqualTo: gioHang.IDMonAn).get();
+
+      if (querySnapshot.size > 0) {
+        final cartItemRef = querySnapshot.docs.first.reference;
+        await cartItemRef.update({'soLuongMonDuocChon': quantity});
+      } else {
+        final newCartItem = cartRef.doc();
+        final data = {
+          'idMonAn': gioHang.IDMonAn,
+          'IDNhaHang': gioHang.IDNhaHang,
+          'tenMon': gioHang.tenMon,
+          'hinhAnhMA': gioHang.hinhAnhMA,
+          'giaTien': gioHang.giaTien,
+          'soLuongMonDuocChon': quantity,
+        };
+        await newCartItem.set(data);
+      }
+
+      print('Thêm dữ liệu vào giỏ hàng thành công');
+    } catch (e) {
+      print('Lỗi khi thêm dữ liệu vào giỏ hàng: $e');
+    }
+  }
+
+  void xoaMonAnKhoiGioHang(int index) {
+    setState(() {
+      gioHangItems.removeAt(index);
+    });
+  }
 
   String tienTamTinh(double giaTien, int soLuong) {
     double tienTamTinh = giaTien * soLuong;
@@ -46,31 +86,6 @@ class _chiTietCuaMonAnPageState extends State<chiTietCuaMonAnPage> {
       setState(() {
         loiNhanTuKH = loiNhan;
       });
-    }
-  }
-
-  List<GioHang> items = [];
-  void themMonAnVaSoLuongVaoGio(String idNhaHang, String idMonAn, num soLuong) {
-    var existingItemIndex = items.indexWhere(
-      (item) => item.idNhaHang == idNhaHang && item.idMonAn == idMonAn,
-    );
-
-    if (existingItemIndex != -1) {
-      var existingItem = items[existingItemIndex];
-      existingItem.soLuongMonDuocChon += soLuong;
-
-      if (existingItem.soLuongMonDuocChon <= 0) {
-        items.removeAt(
-            existingItemIndex); // neu so luong <= 0, xo mon khoi gio hang
-      }
-    } else {
-      var gioHangItem = GioHang(
-        idMonAn: idMonAn,
-        idNhaHang: idNhaHang,
-        soLuongMonDuocChon: soLuong,
-      );
-
-      items.add(gioHangItem);
     }
   }
 
@@ -624,14 +639,27 @@ class _chiTietCuaMonAnPageState extends State<chiTietCuaMonAnPage> {
                         color: Colors.blue,
                       ),
                       child: TextButton(
-                        onPressed: () {
-                          GioHang gioHang = GioHang();
-
-                          List<dynamic> soLuongVaSoTien = [
+                        onPressed: () async {
+                          List<dynamic> soLuongVaIdMonAn = [
                             soLuong,
-                            (widget.giaTien.toDouble() * soLuong),
+                            widget.IDMonAn,
                           ];
-                          Navigator.pop(context, soLuongVaSoTien);
+
+                          final gioHang = GioHang(
+                              IDMonAn: widget.IDMonAn,
+                              IDNhaHang: widget.IDNhaHang,
+                              tenMon: widget.tenMon,
+                              hinhAnhMA: widget.hinhAnhMA,
+                              giaTien: widget.giaTien.toDouble(),
+                              soLuongMonDuocChon: soLuong);
+                          addToCart(gioHang, quantity: soLuong);
+                          setState(() {
+                            gioHangItems.add(gioHang);
+                          });
+
+                          print('${widget.IDNhaHang}');
+
+                          Navigator.pop(context, soLuongVaIdMonAn);
                         },
                         child: Text(
                           'Thêm ${tienTamTinh(widget.giaTien.toDouble(), soLuong)} đ',

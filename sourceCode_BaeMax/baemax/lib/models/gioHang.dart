@@ -1,11 +1,18 @@
 class GioHang {
-  final String idMonAn;
-  final String idNhaHang;
+  final String? IDMonAn;
+  final String? IDNhaHang;
+  final String tenMon;
+  final String hinhAnhMA;
+  final double giaTien;
   num soLuongMonDuocChon;
 
-  GioHang({
-    required this.idMonAn,
-    required this.idNhaHang,
-    this.soLuongMonDuocChon = 1,
-  });
+  GioHang(
+      {this.IDMonAn,
+      this.IDNhaHang,
+      required this.tenMon,
+      required this.hinhAnhMA,
+      required this.giaTien,
+      this.soLuongMonDuocChon = 1});
+
+
 }

@@ -10,6 +10,7 @@ class trangThanhToanPage extends StatefulWidget {
 
 class _trangThanhToanPageState extends State<trangThanhToanPage> {
   int _secondsRemaining = 1 * 60; // 5 minutes
+  bool _isWidgetDisposed = false;
 
   bool xacNhanDatHang = false;
 
@@ -21,9 +22,16 @@ class _trangThanhToanPageState extends State<trangThanhToanPage> {
     startTimer();
   }
 
+  @override
+  void dispose() {
+    _isWidgetDisposed = true;
+    super.dispose();
+  }
+
   void startTimer() {
     const oneSec = Duration(seconds: 1);
     _timer = Timer.periodic(oneSec, (timer) {
+      if (_isWidgetDisposed) return; // Kiểm tra widget đã bị loại bỏ chưa
       setState(() {
         if (_secondsRemaining < 1) {
           _timer.cancel();

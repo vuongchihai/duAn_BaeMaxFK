@@ -1,7 +1,7 @@
 import 'package:baemax/models/MonAn.dart';
 import 'package:baemax/pages/page_chiTietCuaMonAn.dart';
-import 'package:baemax/pages/page_chiTietMonAn.dart';
 import 'package:baemax/pages/page_gioHang.dart';
+import 'package:baemax/pages/page_trangThanhToan.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -39,7 +39,7 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
   bool isContainerVisiable = false;
   late bool checkedHeart;
   int soLuong = 0;
-  double soTien = 0;
+  late String idMonVuaDuocThem;
   List<MonAn> monAnList = [];
 
   void layMonAnTuNhaHang(String? IDNhaHang) {
@@ -75,6 +75,47 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
     setState(() {
       isContainerVisiable = true;
     });
+  }
+
+  int soLuongMonAnTrongGioHang = 0;
+  double tongTienMonAnTrongGioHang = 0;
+
+  Stream<QuerySnapshot> cartStream =
+      FirebaseFirestore.instance.collection('gioHang').snapshots();
+
+  void demSoLuongMonAnTrongGio() {
+    cartStream.listen(
+      (QuerySnapshot snapshot) {
+        int calculatedTotalQuantity = 0;
+        for (var doc in snapshot.docs) {
+          final data = doc.data() as Map<String, dynamic>;
+          final soLuong = data['soLuongMonDuocChon'] as int;
+          calculatedTotalQuantity += soLuong;
+        }
+        if (mounted) {
+          setState(() {
+            soLuongMonAnTrongGioHang = calculatedTotalQuantity;
+          });
+        }
+      },
+    );
+  }
+
+  void tongTienTrongGio(){
+    cartStream.listen((QuerySnapshot snapshot) {
+      double tongTien = 0;
+      for(var doc in snapshot.docs){
+        final data = doc.data() as Map<String, dynamic>;
+        final giaMon = data['giaTien'] as double;
+        final soLuong = data['soLuongMonDuocChon'] as int;
+        tongTien += giaMon * soLuong;
+      }
+      if(mounted){
+        setState(() {
+          tongTienMonAnTrongGioHang = tongTien;
+        });
+      }
+     });
   }
 
   @override
@@ -114,7 +155,11 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
 
     layMonAnTuNhaHang(widget.IDNhaHang);
     print('${widget.IDNhaHang}');
-    print('$monAnList}');
+
+    // fetchSelectedItemsCOunt();
+
+    demSoLuongMonAnTrongGio();
+    tongTienTrongGio();
   }
 
   @override
@@ -434,27 +479,31 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
                                           MaterialPageRoute(
                                             builder: (context) =>
                                                 chiTietCuaMonAnPage(
-                                                 IDMonAn: monAn.IDMonAn,
-                                                 IDNhaHang: widget.IDNhaHang,
-                                                 tenMon: monAn.tenMon,
-                                                 hinhAnhMA: monAn.hinhAnhMA,
-                                                 giaTien: monAn.giaTien,
-                                                ),
+                                              IDNhaHang: widget.IDNhaHang,
+                                              IDMonAn: monAn.IDMonAn,
+                                              tenMon: monAn.tenMon,
+                                              hinhAnhMA: monAn.hinhAnhMA,
+                                              giaTien: monAn.giaTien,
+                                            ),
                                           ),
-                                        ).then((value){
-                                          if(value != null &&
-                                          value is List<dynamic> && value.length == 2){
+                                        ).then((value) {
+                                          if (value != null &&
+                                              value is List<dynamic> &&
+                                              value.length == 2) {
                                             setState(() {
                                               soLuong = value[0];
-                                              soTien = value[1];
+                                              idMonVuaDuocThem = value[1];
                                             });
-                                            print('sl: $soLuong - TONG: $soTien');
+                                            print(
+                                                'sl: $soLuong - TONG: $idMonVuaDuocThem');
                                           }
                                         });
                                       },
                                       child: Container(
                                         width: 180,
-                                        margin: EdgeInsets.only(right: 20,),
+                                        margin: EdgeInsets.only(
+                                          right: 20,
+                                        ),
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -528,24 +577,7 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
                               height: 10,
                             ),
                             GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => chiTietMonAnPage(),
-                                  ),
-                                ).then((value) {
-                                  if (value != null &&
-                                      value is List<dynamic> &&
-                                      value.length == 2) {
-                                    setState(() {
-                                      soLuong = value[0];
-                                      soTien = value[1];
-                                    });
-                                    print('sl: $soLuong - TONG: $soTien');
-                                  }
-                                });
-                              },
+                              onTap: () {},
                               child: Container(
                                 child: Row(
                                   mainAxisAlignment:
@@ -701,7 +733,7 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
                                     ),
                                     GestureDetector(
                                       onTap: () {
-                                        print('đã nhấn share');
+                                        print('$soLuongMonAnTrongGioHang');
                                       },
                                       child: Container(
                                         width: 40,
@@ -832,6 +864,7 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
                         scrollDirection: Axis.horizontal,
                         children: [
                           GestureDetector(
+                            onTap: () {},
                             child: Container(
                               height: 55,
                               alignment: Alignment.center,
@@ -1057,26 +1090,26 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
             right: 0,
             bottom: 0,
             child: Visibility(
-              visible: soTien != 0,
+              visible: soLuong != 0,
               maintainSize: false,
               maintainState: true,
               maintainAnimation: true,
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => gioHangPage(),
-                    ),
-                  );
-                },
-                child: Container(
-                  height: 100,
-                  color: Colors.white,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
+              child: Container(
+                height: 100,
+                color: Colors.white,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => gioHangPage(),
+                          ),
+                        );
+                      },
+                      child: Container(
                         height: 65,
                         width: 100,
                         decoration: BoxDecoration(
@@ -1100,7 +1133,7 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
                               width: 10,
                             ),
                             Text(
-                              '${soLuong}',
+                              soLuongMonAnTrongGioHang.toString(),
                               style: const TextStyle(
                                 fontSize: 25,
                                 fontWeight: FontWeight.bold,
@@ -1110,10 +1143,20 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
                           ],
                         ),
                       ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Container(
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => trangThanhToanPage(),
+                          ),
+                        );
+                      },
+                      child: Container(
                         height: 65,
                         alignment: Alignment.center,
                         padding: const EdgeInsets.symmetric(
@@ -1124,7 +1167,7 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
                           color: Colors.blue,
                         ),
                         child: Text(
-                          'Trang thanh toán ${NumberFormat("0.000").format(soTien)}đ',
+                          'Trang thanh toán ${NumberFormat("0.000").format(tongTienMonAnTrongGioHang)}đ',
                           style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -1132,8 +1175,8 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),

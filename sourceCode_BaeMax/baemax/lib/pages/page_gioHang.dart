@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'page_trangThanhToan.dart';
@@ -11,6 +12,57 @@ class gioHangPage extends StatefulWidget {
 
 class _gioHangPageState extends State<gioHangPage> {
   int soLuong = 1;
+
+  void hienThiCacItemTrongGio() async {
+   // Truy cập collection "giỏ hàng"
+  QuerySnapshot cartSnapshot = await FirebaseFirestore.instance
+      .collection('gioHang')
+      .get();
+
+  // Lặp qua các documents trong collection "giỏ hàng"
+  for (var cartDoc in cartSnapshot.docs) {
+    // Ép kiểu "cartDoc.data()" sang kiểu "Map<String, dynamic>"
+    Map<String, dynamic>? cartData = cartDoc.data() as Map<String, dynamic>?;
+
+    if (cartData != null) {
+      // Lấy thông tin từ trường "id món ăn", "id nhà hàng" và "số lượng món ăn"
+      String? foodItemId = cartData['idMonAn'];
+      String? restaurantId = cartData['IDNhaHang'];
+      int? quantity = cartData['soLuongMonDuocChon'];
+
+      // Truy cập collection "món ăn" để lấy thông tin về "tên món" và "giá bán"
+      DocumentSnapshot? foodItemSnapshot = await FirebaseFirestore.instance
+          .collection('món ăn')
+          .doc(foodItemId)
+          .get();
+      Map<String, dynamic>? foodItemData =
+          foodItemSnapshot?.data() as Map<String, dynamic>?;
+
+      String? foodItemName = foodItemData?['tenMon'];
+      int? foodItemPrice = foodItemData?['giaTien'];
+
+      // Truy cập collection "nhà hàng" để lấy thông tin về "tên nhà hàng"
+      DocumentSnapshot? restaurantSnapshot = await FirebaseFirestore.instance
+          .collection('nhà hàng')
+          .doc(restaurantId)
+          .get();
+      Map<String, dynamic>? restaurantData =
+          restaurantSnapshot?.data() as Map<String, dynamic>?;
+
+      String? restaurantName = restaurantData?['tenNH'];
+
+      // Kiểm tra null trước khi in ra thông tin
+      if (foodItemName != null &&
+          foodItemPrice != null &&
+          restaurantName != null) {
+        print('Tên món: $foodItemName');
+        print('Số lượng: $quantity');
+        print('Giá bán: $foodItemPrice');
+        print('---');
+      }
+    }
+  }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +91,7 @@ class _gioHangPageState extends State<gioHangPage> {
         actions: [
           TextButton(
             onPressed: () {
+              hienThiCacItemTrongGio();
               print('đã nhấn xóa');
             },
             child: const Text(
