@@ -1,3 +1,4 @@
+import 'package:baemax/pages/page_dangNhap.dart';
 import 'package:baemax/pages/page_dieuKhoanChinhSach.dart';
 import 'package:baemax/pages/page_donHangCuaToi.dart';
 import 'package:baemax/pages/page_nhaHangYeuThich.dart';
@@ -9,8 +10,15 @@ import 'package:flutter/material.dart';
 import 'page_quanLyThanhToan.dart';
 import 'package:baemax/pages/page_soDiaChi.dart';
 
-class thongTinTaiKhoanPage extends StatelessWidget {
+class thongTinTaiKhoanPage extends StatefulWidget {
   const thongTinTaiKhoanPage({super.key});
+
+  @override
+  State<thongTinTaiKhoanPage> createState() => _thongTinTaiKhoanPageState();
+}
+
+class _thongTinTaiKhoanPageState extends State<thongTinTaiKhoanPage> {
+  bool kiemTraDangNhap = false;
 
   @override
   Widget build(BuildContext context) {
@@ -69,51 +77,93 @@ class thongTinTaiKhoanPage extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Row(
-                              children: [
-                                Container(
-                                  width: 65,
-                                  height: 65,
-                                  margin: const EdgeInsets.only(
-                                    right: 20,
+                            Container(
+                              width: 350,
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 85,
+                                    height: 85,
+                                    margin: const EdgeInsets.only(
+                                      right: 13,
+                                    ),
+                                    child: LayoutBuilder(
+                                      builder: (BuildContext context,
+                                          BoxConstraints constraints) {
+                                        return Stack(
+                                          alignment: Alignment.center,
+                                          children: [
+                                            Container(
+                                              width: constraints.maxWidth,
+                                              height: constraints.maxHeight,
+                                              decoration: const BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: Colors.grey,
+                                              ),
+                                            ),
+                                            //AspectRatio: điều chỉnh tỷ lệ khung hình
+                                            const AspectRatio(
+                                              // aspectRatio: 1.0,
+                                              // -> thuộc tính aspectRation: 1.0
+                                              // thiết lập tỷ lệ giữa chiều rộng và chiều cao của widget con(tính bằng cách chia chiều rộng cho chiều cao)
+                                              aspectRatio: 1.0,
+                                              child: Image(
+                                                image: AssetImage(
+                                                    'images/hinh_34.png'),
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    ),
                                   ),
-                                  child: LayoutBuilder(
-                                    builder: (BuildContext context,
-                                        BoxConstraints constraints) {
-                                      return Stack(
-                                        alignment: Alignment.center,
-                                        children: [
-                                          Container(
-                                            width: constraints.maxWidth,
-                                            height: constraints.maxHeight,
-                                            decoration: const BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: Colors.grey,
+                                  kiemTraDangNhap
+                                      ? const Text(
+                                          'Vương Chí Hải',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 23),
+                                        )
+                                      : Expanded(
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      dangNhapPage(),
+                                                ),
+                                              );
+                                            },
+                                            child: Container(
+                                              child: const Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    'Đăng nhập',
+                                                    style: TextStyle(
+                                                      fontSize: 25,
+                                                      color: Colors.blue,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    'Bao nhiêu món ngon, deals xịn đang chờ bạn kìa!',
+                                                    style: TextStyle(
+                                                      fontSize: 18,
+                                                      color: Color.fromARGB(
+                                                          255, 94, 94, 94),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
-                                          //AspectRatio: điều chỉnh tỷ lệ khung hình
-                                          const AspectRatio(
-                                            // aspectRatio: 1.0,
-                                            // -> thuộc tính aspectRation: 1.0
-                                            // thiết lập tỷ lệ giữa chiều rộng và chiều cao của widget con(tính bằng cách chia chiều rộng cho chiều cao)
-                                            aspectRatio: 1.0,
-                                            child: Image(
-                                              image: AssetImage(
-                                                  'images/hinh_34.png'),
-                                            ),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  ),
-                                ),
-                                const Text(
-                                  'Vương Chí Hải',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20),
-                                ),
-                              ],
+                                        ),
+                                ],
+                              ),
                             ),
                             const Text(
                               '>',

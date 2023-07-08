@@ -127,16 +127,26 @@ class _khaoNuocXin_DealDaTangState extends State<khaoNuocXin_DealDaTang> {
                         margin: const EdgeInsets.only(right: 20),
                         child: Column(
                           children: [
-                            Container(
-                              height: 150,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image(
-                                  image: AssetImage(restaurant.anhDaiDienNH),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
+                            restaurant.anhDaiDienNH.isNotEmpty
+                                ? Container(
+                                    height: 150,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Image(
+                                        image:
+                                            AssetImage(restaurant.anhDaiDienNH),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  )
+                                : Container(
+                                    width: 150,
+                                    height: 150,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: const Color.fromARGB(255, 230, 149, 144),
+                                    ),
+                                  ),
                             const SizedBox(
                               height: 10,
                             ),

@@ -1,19 +1,26 @@
-import 'package:baemax/pages/page_nhapMatKhau.dart';
 import 'package:flutter/material.dart';
 
-class suaThongTin_SDT_Page extends StatefulWidget {
-  const suaThongTin_SDT_Page({super.key});
+class nhapMatKhauPage extends StatefulWidget {
+  final String sdtVuaNhap;
+  nhapMatKhauPage({Key? key, required this.sdtVuaNhap}) : super(key: key);
 
   @override
-  State<suaThongTin_SDT_Page> createState() => _suaThongTin_SDT_PageState();
+  State<nhapMatKhauPage> createState() => _nhapMatKhauPageState();
 }
 
-class _suaThongTin_SDT_PageState extends State<suaThongTin_SDT_Page> {
+class _nhapMatKhauPageState extends State<nhapMatKhauPage> {
   String SDTHienTai = '0949162193';
   String SDTMoi = '';
+  bool anHoacHienMatKhau = true;
 
   bool kiemTraSDTTrungNhau(String sdtHienTai, String sdtMoi) {
     return sdtHienTai == sdtMoi;
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    SDTMoi = widget.sdtVuaNhap;
   }
 
   @override
@@ -35,7 +42,7 @@ class _suaThongTin_SDT_PageState extends State<suaThongTin_SDT_Page> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Nhập số điện thoại của bạn để tiếp túc nhé',
+              'Nhập mật khẩu',
               style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
@@ -44,9 +51,9 @@ class _suaThongTin_SDT_PageState extends State<suaThongTin_SDT_Page> {
             const SizedBox(
               height: 20,
             ),
-            const Text(
-              'Mã xác nhận sẽ được gởi qua số điện thoại này',
-              style: TextStyle(
+            Text(
+              'Số điện thoại dùng đăng ký là ${SDTMoi}',
+              style:const  TextStyle(
                 fontSize: 20,
                 color: Color.fromARGB(255, 96, 92, 92),
               ),
@@ -66,39 +73,18 @@ class _suaThongTin_SDT_PageState extends State<suaThongTin_SDT_Page> {
                 borderRadius: BorderRadius.circular(10),
               ),
               padding: const EdgeInsets.symmetric(
-                horizontal: 5,
+                horizontal: 10,
                 vertical: 5,
               ),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Image(
-                    image: AssetImage('images/hinh_57.png'),
-                    width: 40,
-                    height: 40,
-                  ),
-                  const Text(
-                    '+84 ',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.black,
-                    ),
-                  ),
-                  const Text(
-                    '|',
-                    style: TextStyle(
-                      fontSize: 28,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  SizedBox(
-                    width: 250,
+                  Container(
+                    width: 290,
                     child: TextField(
-                      keyboardType: TextInputType.number,
+                      obscureText: anHoacHienMatKhau ? true : false,
                       decoration: const InputDecoration(
-                        hintText: 'Số điện thoại',
+                        hintText: 'Mật khẩu',
                         border: InputBorder.none,
                       ),
                       style: const TextStyle(
@@ -112,6 +98,24 @@ class _suaThongTin_SDT_PageState extends State<suaThongTin_SDT_Page> {
                       },
                     ),
                   ),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        anHoacHienMatKhau = !anHoacHienMatKhau;
+                      });
+                    },
+                    child: const Text(
+                      'HIỆN',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.grey,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -120,13 +124,30 @@ class _suaThongTin_SDT_PageState extends State<suaThongTin_SDT_Page> {
             ),
             kiemTraSDTTrungNhau(SDTHienTai, SDTMoi)
                 ? const Text(
-                    'Số điện thoại đã được sử dụng',
+                    'Mật khẩu của bạn không chính xác',
                     style: TextStyle(
                       color: Colors.red,
-                      fontSize: 15,
+                      fontSize: 18,
                     ),
                   )
                 : SizedBox(),
+            const SizedBox(
+              height: 30,
+            ),
+            TextButton(
+              onPressed: () {
+                print('object');
+              },
+              child: const Text(
+                'Bạn quên mật khẩu ư?',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.black,
+                  decoration: TextDecoration.underline,
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
+            ),
             Expanded(
               child: Align(
                 alignment: Alignment.bottomCenter,
@@ -137,17 +158,10 @@ class _suaThongTin_SDT_PageState extends State<suaThongTin_SDT_Page> {
                     onPressed: SDTMoi.isEmpty
                         ? null
                         : () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => nhapMatKhauPage(
-                                  sdtVuaNhap: SDTMoi,
-                                ),
-                              ),
-                            );
+                            print('object');
                           },
                     child: const Text(
-                      'Tiếp theo',
+                      'Đăng nhập',
                       style: TextStyle(
                         fontSize: 20,
                       ),
