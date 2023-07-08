@@ -1115,12 +1115,12 @@ class _itemChiTietNhaHangDuocApDungState
               maintainAnimation: true,
               child: GestureDetector(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => gioHangPage(),
-                    ),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => gioHangPage(),
+                  //   ),
+                  // );
                 },
                 child: Container(
                   height: 100,

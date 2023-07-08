@@ -1,67 +1,70 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'page_trangThanhToan.dart';
 
 class gioHangPage extends StatefulWidget {
-  const gioHangPage({super.key});
+  gioHangPage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<gioHangPage> createState() => _gioHangPageState();
 }
 
 class _gioHangPageState extends State<gioHangPage> {
-  int soLuong = 1;
+  int thayDoiSoLuong = 1;
+  TextEditingController thayDoiSoLuongController = TextEditingController();
+  double tongTien = 0;
+  int tongSoLuongMon = 0;
+  bool kiemTraSoLuongThayDoi = false;
 
-  void hienThiCacItemTrongGio() async {
-   // Truy cập collection "giỏ hàng"
-  QuerySnapshot cartSnapshot = await FirebaseFirestore.instance
-      .collection('gioHang')
-      .get();
+  @override
+  void initState() {
+    super.initState();
 
-  // Lặp qua các documents trong collection "giỏ hàng"
-  for (var cartDoc in cartSnapshot.docs) {
-    // Ép kiểu "cartDoc.data()" sang kiểu "Map<String, dynamic>"
-    Map<String, dynamic>? cartData = cartDoc.data() as Map<String, dynamic>?;
-
-    if (cartData != null) {
-      // Lấy thông tin từ trường "id món ăn", "id nhà hàng" và "số lượng món ăn"
-      String? foodItemId = cartData['idMonAn'];
-      String? restaurantId = cartData['IDNhaHang'];
-      int? quantity = cartData['soLuongMonDuocChon'];
-
-      // Truy cập collection "món ăn" để lấy thông tin về "tên món" và "giá bán"
-      DocumentSnapshot? foodItemSnapshot = await FirebaseFirestore.instance
-          .collection('món ăn')
-          .doc(foodItemId)
-          .get();
-      Map<String, dynamic>? foodItemData =
-          foodItemSnapshot?.data() as Map<String, dynamic>?;
-
-      String? foodItemName = foodItemData?['tenMon'];
-      int? foodItemPrice = foodItemData?['giaTien'];
-
-      // Truy cập collection "nhà hàng" để lấy thông tin về "tên nhà hàng"
-      DocumentSnapshot? restaurantSnapshot = await FirebaseFirestore.instance
-          .collection('nhà hàng')
-          .doc(restaurantId)
-          .get();
-      Map<String, dynamic>? restaurantData =
-          restaurantSnapshot?.data() as Map<String, dynamic>?;
-
-      String? restaurantName = restaurantData?['tenNH'];
-
-      // Kiểm tra null trước khi in ra thông tin
-      if (foodItemName != null &&
-          foodItemPrice != null &&
-          restaurantName != null) {
-        print('Tên món: $foodItemName');
-        print('Số lượng: $quantity');
-        print('Giá bán: $foodItemPrice');
-        print('---');
-      }
-    }
+    thayDoiSoLuongController.text = thayDoiSoLuong.toString();
+    thayDoiSoLuongController.addListener(capNhatSoLuong);
+    initTongTienVaSoLuong();
   }
+
+  void initTongTienVaSoLuong() async {
+    final snapshot =
+        await FirebaseFirestore.instance.collection('gioHang').get();
+
+    final gioHangDocs = snapshot.docs;
+    tinhTongSoLuongVaTien(gioHangDocs);
+  }
+
+  void capNhatSoLuong() {
+    setState(() {
+      thayDoiSoLuong = int.parse(thayDoiSoLuongController.text);
+    });
+  }
+
+  void xoaTatCaMonAn() async {
+    QuerySnapshot snapshot =
+        await FirebaseFirestore.instance.collection('gioHang').get();
+
+    for (DocumentSnapshot doc in snapshot.docs) {
+      await doc.reference.delete();
+    }
+    print('Đã xóa tất cả các món trong giỏ hàng');
+  }
+
+  void tinhTongSoLuongVaTien(List<QueryDocumentSnapshot> gioHangDocs) {
+    tongTien = 0;
+    tongSoLuongMon = 0;
+
+    for (var doc in gioHangDocs) {
+      final data = doc.data() as Map<String, dynamic>;
+      int soLuong = data['soLuongMonDuocChon'] as int;
+      final giaMon = data['giaTien'] as double;
+
+      tongSoLuongMon += soLuong;
+      tongTien += giaMon * soLuong;
+    }
   }
 
   @override
@@ -91,7 +94,7 @@ class _gioHangPageState extends State<gioHangPage> {
         actions: [
           TextButton(
             onPressed: () {
-              hienThiCacItemTrongGio();
+              xoaTatCaMonAn();
               print('đã nhấn xóa');
             },
             child: const Text(
@@ -108,149 +111,199 @@ class _gioHangPageState extends State<gioHangPage> {
           children: [
             Container(
               height: 675,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 20,
-                      ),
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        border: Border(
-                          bottom: BorderSide(
-                            color: Colors.black,
-                            width: 0.3,
-                          ),
-                        ),
-                      ),
+              child: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('gioHang')
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    final gioHangDocs = snapshot.data!.docs;
+
+                    tinhTongSoLuongVaTien(gioHangDocs);
+                    return SingleChildScrollView(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
+                        children: gioHangDocs.map((doc) {
+                          final data = doc.data() as Map<String, dynamic>;
+                          final tenMon = data['tenMon'] as String;
+                          int soLuong = data['soLuongMonDuocChon'] as int;
+                          final giaMon = data['giaTien'] as double;
+
+                          TextEditingController soLuongController =
+                              TextEditingController(text: soLuong.toString());
+
+                          void updateSoLuongMon() async {
+                            try {
+                              await doc.reference
+                                  .update({'soLuongMonDuocChon': soLuong});
+                              print('Cập nhật số lượng món thành công');
+                            } catch (e) {
+                              print('Lỗi khi cập nhật số lượng món: $e');
+                            }
+                          }
+
+                          return Container(
                             width: double.infinity,
-                            child: Text(
-                              'Bún tươi mực thịt bầm',
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.black,
-                              ),
-                              softWrap: true,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 20,
                             ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            width: double.infinity,
-                            child: Text(
-                              'Trụng sẵn',
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.grey,
-                              ),
-                              softWrap: true,
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 25,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                '40.000đ',
-                                style: TextStyle(
-                                  fontSize: 20,
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              border: Border(
+                                bottom: BorderSide(
                                   color: Colors.black,
-                                  fontWeight: FontWeight.bold,
+                                  width: 0.3,
                                 ),
                               ),
-                              Container(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  width: double.infinity,
+                                  child: Text(
+                                    tenMon,
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      color: Colors.black,
+                                    ),
+                                    softWrap: true,
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                Container(
+                                  width: double.infinity,
+                                  child: const Text(
+                                    'Trụng sẵn',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.grey,
+                                    ),
+                                    softWrap: true,
+                                  ),
+                                ),
+                                const SizedBox(height: 25),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Container(
-                                      width: 45,
-                                      height: 45,
-                                      decoration: BoxDecoration(
-                                        color: soLuong < 2
-                                            ? const Color.fromARGB(
-                                                255, 238, 238, 238)
-                                            : const Color.fromARGB(
-                                                255, 224, 224, 224),
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: TextButton(
-                                        onPressed: soLuong < 2
-                                            ? null
-                                            : () {
-                                                setState(() {
-                                                  soLuong--;
-                                                });
-                                              },
-                                        child: const Text(
-                                          '-',
-                                          style: TextStyle(
-                                            fontSize: 30,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.blue,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 15,
-                                    ),
                                     Text(
-                                      '${soLuong}',
+                                      NumberFormat("0.000").format(giaMon),
                                       style: const TextStyle(
                                         fontSize: 20,
-                                        fontWeight: FontWeight.bold,
                                         color: Colors.black,
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                    ),
-                                    const SizedBox(
-                                      width: 15,
                                     ),
                                     Container(
-                                      width: 45,
-                                      height: 45,
-                                      decoration: BoxDecoration(
-                                        color: const Color.fromARGB(
-                                            255, 224, 224, 224),
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: TextButton(
-                                        onPressed: soLuong < 10
-                                            ? () {
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            width: 45,
+                                            height: 45,
+                                            decoration: BoxDecoration(
+                                              color: soLuong < 2
+                                                  ? const Color.fromARGB(
+                                                      255, 238, 238, 238)
+                                                  : const Color.fromARGB(
+                                                      255, 224, 224, 224),
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            child: TextButton(
+                                              onPressed: soLuong < 2
+                                                  ? null
+                                                  : () {
+                                                      setState(() {
+                                                        soLuong--;
+                                                        soLuongController.text =
+                                                            soLuong.toString();
+                                                      });
+                                                      updateSoLuongMon();
+                                                    },
+                                              child: const Text(
+                                                '-',
+                                                style: TextStyle(
+                                                  fontSize: 30,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.blue,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 15),
+                                          Container(
+                                            width: 30,
+                                            child: TextFormField(
+                                              controller: soLuongController,
+                                              keyboardType:
+                                                  TextInputType.number,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  soLuong =
+                                                      int.tryParse(value) ??
+                                                          soLuong;
+                                                });
+                                              },
+                                              onEditingComplete: () {
+                                                updateSoLuongMon();
+                                              },
+                                              decoration: const InputDecoration(
+                                                  border: InputBorder.none),
+                                              textAlign: TextAlign.center,
+                                              style: const TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 15),
+                                          Container(
+                                            width: 45,
+                                            height: 45,
+                                            decoration: BoxDecoration(
+                                              color: const Color.fromARGB(
+                                                  255, 224, 224, 224),
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            child: TextButton(
+                                              onPressed: () {
                                                 setState(() {
                                                   soLuong++;
+                                                  soLuongController.text =
+                                                      soLuong.toString();
                                                 });
-                                              }
-                                            : null,
-                                        child: const Text(
-                                          '+',
-                                          style: TextStyle(
-                                            fontSize: 30,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.blue,
+                                                updateSoLuongMon();
+                                              },
+                                              child: const Text(
+                                                '+',
+                                                style: TextStyle(
+                                                  fontSize: 30,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.blue,
+                                                ),
+                                              ),
+                                            ),
                                           ),
-                                        ),
+                                        ],
                                       ),
                                     ),
                                   ],
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
+                              ],
+                            ),
+                          );
+                        }).toList(),
                       ),
-                    ),
-                  ],
-                ),
+                    );
+                  } else if (snapshot.hasError) {
+                    return const Text('Đã xảy ra lỗi');
+                  } else {
+                    return const CircularProgressIndicator();
+                  }
+                },
               ),
             ),
             Expanded(
@@ -283,15 +336,36 @@ class _gioHangPageState extends State<gioHangPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          '1 Món',
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        StreamBuilder<QuerySnapshot>(
+                          stream: FirebaseFirestore.instance
+                              .collection('gioHang')
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              final gioHangDocs = snapshot.data!.docs;
+                              tinhTongSoLuongVaTien(gioHangDocs);
+
+                              return Text(
+                                tongSoLuongMon.toString(),
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              );
+                            } else {
+                              return const Text(
+                                '0',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              );
+                            }
+                          },
                         ),
-                        Text(
+                        const Text(
                           'Trang thanh toán',
                           style: TextStyle(
                             fontSize: 20,
@@ -299,13 +373,34 @@ class _gioHangPageState extends State<gioHangPage> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Text(
-                          '40.000đ',
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        StreamBuilder<QuerySnapshot>(
+                          stream: FirebaseFirestore.instance
+                              .collection('gioHang')
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              final gioHangDocs = snapshot.data!.docs;
+                              tinhTongSoLuongVaTien(gioHangDocs);
+
+                              return Text(
+                                NumberFormat("0.000").format(tongTien),
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              );
+                            } else {
+                              return const Text(
+                                '0.000',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              );
+                            }
+                          },
                         ),
                       ],
                     ),
