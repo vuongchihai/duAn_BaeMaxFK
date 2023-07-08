@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:baemax/models/MonAn.dart';
 import 'package:baemax/pages/page_chiTietCuaMonAn.dart';
 import 'package:baemax/pages/page_gioHang.dart';
@@ -6,6 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
+import 'package:tiengviet/tiengviet.dart';
 
 class chiTietNhaHangPage extends StatefulWidget {
   final String? IDNhaHang;
@@ -101,21 +104,38 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
     );
   }
 
-  void tongTienTrongGio(){
+  void tongTienTrongGio() {
     cartStream.listen((QuerySnapshot snapshot) {
       double tongTien = 0;
-      for(var doc in snapshot.docs){
+      for (var doc in snapshot.docs) {
         final data = doc.data() as Map<String, dynamic>;
         final giaMon = data['giaTien'] as double;
         final soLuong = data['soLuongMonDuocChon'] as int;
         tongTien += giaMon * soLuong;
       }
-      if(mounted){
+      if (mounted) {
         setState(() {
           tongTienMonAnTrongGioHang = tongTien;
         });
       }
-     });
+    });
+  }
+
+  List<Map<String, dynamic>> searchResult = [];
+
+  void timKiemMonAnTrongNhaHang(String query) async {
+    final uppercaseQuery = TiengViet.parse(query).toUpperCase();
+
+    final result = await FirebaseFirestore.instance
+        .collection('nhaHang')
+        .doc(widget.IDNhaHang)
+        .collection('monAn')
+        .orderBy('tenMon')
+        .startAt([uppercaseQuery]).endAt([uppercaseQuery + '\uf8ff']).get();
+
+    setState(() {
+      searchResult = result.docs.map((doc) => doc.data()).toList();
+    });
   }
 
   @override
@@ -155,8 +175,6 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
 
     layMonAnTuNhaHang(widget.IDNhaHang);
     print('${widget.IDNhaHang}');
-
-    // fetchSelectedItemsCOunt();
 
     demSoLuongMonAnTrongGio();
     tongTienTrongGio();
@@ -1045,8 +1063,8 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
                             ),
                             Container(
                               width: 300,
-                              child: const TextField(
-                                decoration: InputDecoration(
+                              child: TextField(
+                                decoration: const InputDecoration(
                                   hintText: 'Tìm trong thực đơn',
                                   hintStyle: TextStyle(
                                     fontSize: 19,
@@ -1055,9 +1073,12 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
                                     borderSide: BorderSide.none,
                                   ),
                                 ),
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 20,
                                 ),
+                                onChanged: (query) {
+                                  timKiemMonAnTrongNhaHang(query);
+                                },
                               ),
                             ),
                             Container(
@@ -1078,6 +1099,77 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
                               ),
                             ),
                           ],
+                        ),
+                      ),
+                      Expanded(
+                        child: Container(
+                          color: Colors.white,
+                          child: ListView.builder(
+                            itemCount: searchResult.length,
+                            itemBuilder: ((context, index) {
+                              return Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 10),
+                                margin: const EdgeInsets.only(
+                                  bottom: 10,
+                                ),
+                                decoration: const BoxDecoration(
+                                    border: Border(
+                                  bottom: BorderSide(
+                                      color: Colors.grey, width: 0.8),
+                                )),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            width: 250,
+                                            child: Text(
+                                              '${searchResult[index]['tenMon']}',
+                                              style: const TextStyle(
+                                                fontSize: 20,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                              softWrap: true,
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 30,
+                                          ),
+                                          Text(
+                                            NumberFormat('0.000').format(
+                                                searchResult[index]['giaTien']),
+                                            style: const TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Container(
+                                      width: 110,
+                                      height: 110,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Image(
+                                          image: AssetImage(
+                                              searchResult[index]['hinhAnhMA']),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }),
+                          ),
                         ),
                       ),
                     ],

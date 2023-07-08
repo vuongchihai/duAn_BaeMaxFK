@@ -62,8 +62,12 @@ class _khaoNuocXin_DealDaTangState extends State<khaoNuocXin_DealDaTang> {
                   ),
                   Expanded(
                     child: Container(
+                      height: 55,
+                      alignment: Alignment.topCenter,
                       child: const Image(
-                        image: AssetImage('images/hinh_50.png'),
+                        image: AssetImage('images/hinh_82.png'),
+                        width: 25,
+                        height: 25,
                       ),
                     ),
                   ),
