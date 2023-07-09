@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:baemax/models/khachHang.dart';
-import 'package:baemax/pages/page_thongTinTaiKhoan.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -35,11 +34,11 @@ class _nhapMatKhauPageState extends State<nhapMatKhauPage> {
 
     // Lấy ngẫu nhiên 3 chữ cái từ danh sách letters
     List<String> randomLetters =
-        List.generate(3, (index) => letters[random.nextInt(letters.length)]);
+        List.generate(5, (index) => letters[random.nextInt(letters.length)]);
 
     // Lấy ngẫu nhiên 3 số từ danh sách numbers
     List<String> randomNumbers =
-        List.generate(3, (index) => numbers[random.nextInt(numbers.length)]);
+        List.generate(5, (index) => numbers[random.nextInt(numbers.length)]);
 
     // Kết hợp chữ cái và số ngẫu nhiên thành một chuỗi
     String randomString = randomLetters.join('') + randomNumbers.join('');
@@ -68,7 +67,7 @@ class _nhapMatKhauPageState extends State<nhapMatKhauPage> {
     KhachHang khachHang = KhachHang(
         idKH: RandomIDKhachHang(),
         email: '',
-        gioiTinh: 1,
+        gioiTinh: 3,
         hoTen: '',
         matKhau: matKhauController.text,
         ngaySinh: '',
@@ -109,14 +108,15 @@ class _nhapMatKhauPageState extends State<nhapMatKhauPage> {
       final customer = KhachHang.fromSnapshot(snapshot.docs[0]);
       final user = Provider.of<User>(context, listen: false);
       user.updateInfo(customer.sdt, customer.matKhau);
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => thongTinTaiKhoanPage(
-            fromLogin: true,
-          ),
-        ),
-      );
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (context) => thongTinTaiKhoanPage(
+      //       fromLogin: true,
+      //     ),
+      //   ),
+      // );
+      Navigator.popUntil(context, (route) => route.settings.name == '/');
     } else {
       setState(() {
         trangThaiDangNhap = false;
@@ -268,6 +268,7 @@ class _nhapMatKhauPageState extends State<nhapMatKhauPage> {
                         ? null
                         : () async {
                             taoTaiKhoanVaDangNhap(context);
+
                           },
                     child: const Text(
                       'Đăng nhập',

@@ -2,11 +2,14 @@ import 'package:baemax/pages/page_chonGioiTinh.dart';
 import 'package:baemax/pages/page_chonNgaySinh.dart';
 import 'package:baemax/pages/page_chonNgheNghiep.dart';
 import 'package:baemax/pages/page_suaThongTin_SDT.dart';
+import 'package:baemax/pages/page_suaThongTin_SDT_2.dart';
 import 'package:baemax/pages/page_suaThongTin_Ten.dart';
 import 'package:baemax/pages/page_thayDoiMatKhau.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../models/User.dart';
 import 'page_thayDoiEmail.dart';
 import 'page_xoaTaiKhoan.dart';
 
@@ -36,6 +39,7 @@ class _thongTinChiTietTaiKhoanPageState
   void initState() {
     super.initState();
     nhanKeySoDienThoaiNguoiDung = widget.keySoDienNguoiDung;
+
     fetchDataFromFirebase();
   }
 
@@ -66,7 +70,14 @@ class _thongTinChiTietTaiKhoanPageState
   }
 
   String kiemTraGioiTinh(int gt) {
-    return gt == 1 ? 'Nam' : 'Nữ';
+    if (gt == 0) {
+      return 'Nữ';
+    } else if (gt == 1) {
+      return 'Nam';
+    } else if (gt == 2) {
+      return 'Khác';
+    }
+    return '-Chọn-';
   }
 
   @override
@@ -176,9 +187,13 @@ class _thongTinChiTietTaiKhoanPageState
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => suaThongTin_Ten_Page(),
+                                builder: (context) => suaThongTin_Ten_Page(
+                                  idCuaNguoiDung: idNguoiDung,
+                                  tenCuaNguoiDung: ten,
+                                ),
                               ),
                             );
+                            print('${idNguoiDung}');
                           },
                           child: const Image(
                             image: AssetImage('images/hinh_32.png'),
@@ -233,7 +248,10 @@ class _thongTinChiTietTaiKhoanPageState
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => suaThongTin_SDT_Page(),
+                                builder: (context) => suaTT_SDT_Page_2(
+                                  idCuaNguoiDung: idNguoiDung,
+                                  sdtCuaNguoiDung: sdt,
+                                ),
                               ),
                             );
                           },
@@ -277,7 +295,9 @@ class _thongTinChiTietTaiKhoanPageState
                               height: 10,
                             ),
                             Text(
-                              email.isEmpty ? 'ví dụ: baemax0711@gmail.com' : email,
+                              email.isEmpty
+                                  ? 'ví dụ: baemax0711@gmail.com'
+                                  : email,
                               style: const TextStyle(
                                 fontSize: 20,
                                 color: Colors.black,
@@ -290,7 +310,10 @@ class _thongTinChiTietTaiKhoanPageState
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => thayDoiEmailPage(),
+                                builder: (context) => thayDoiEmailPage(
+                                  idCuaNguoiDung: idNguoiDung,
+                                  emailCuaNguoiDung: email,
+                                ),
                               ),
                             );
                           },
@@ -349,7 +372,9 @@ class _thongTinChiTietTaiKhoanPageState
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => chonGioiTinhPage(),
+                                builder: (context) => chonGioiTinhPage(
+                                  idCuaNguoiDung: idNguoiDung,
+                                ),
                               ),
                             );
                           },
@@ -399,7 +424,9 @@ class _thongTinChiTietTaiKhoanPageState
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => chonNgaySinhPage(),
+                                builder: (context) => chonNgaySinhPage(
+                                  idCuaNguoiDung: idNguoiDung,
+                                ),
                               ),
                             );
                           },
@@ -456,7 +483,9 @@ class _thongTinChiTietTaiKhoanPageState
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => chonNgheNghiepPage(),
+                                builder: (context) => chonNgheNghiepPage(
+                                  idCuaNguoiDung: idNguoiDung,
+                                ),
                               ),
                             );
                           },
@@ -509,7 +538,9 @@ class _thongTinChiTietTaiKhoanPageState
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => doiMatKhauPage(),
+                            builder: (context) => doiMatKhauPage(
+                              idCuaNguoiDung: idNguoiDung,
+                            ),
                           ),
                         );
                       },
@@ -548,7 +579,9 @@ class _thongTinChiTietTaiKhoanPageState
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => xoaTaiKhoanPage(),
+                            builder: (context) => xoaTaiKhoanPage(
+                              idCuaNguoiDung: idNguoiDung,
+                            ),
                           ),
                         );
                       },
@@ -577,7 +610,9 @@ class _thongTinChiTietTaiKhoanPageState
                   children: [
                     GestureDetector(
                       onTap: () {
-                        print('da click');
+                        final user = Provider.of<User>(context, listen: false);
+                        user.clearInfo();
+                        Navigator.popUntil(context, (route) => route.settings.name == '/');
                       },
                       child: const Text(
                         'Thoát ra',

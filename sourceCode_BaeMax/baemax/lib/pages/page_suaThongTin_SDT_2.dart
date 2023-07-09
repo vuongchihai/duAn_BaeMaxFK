@@ -1,18 +1,60 @@
-import 'package:baemax/pages/page_nhapMatKhau.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class suaThongTin_SDT_Page extends StatefulWidget {
-  const suaThongTin_SDT_Page({super.key});
+class suaTT_SDT_Page_2 extends StatefulWidget {
+  final String idCuaNguoiDung;
+  final String sdtCuaNguoiDung;
+  suaTT_SDT_Page_2({
+    Key? key,
+    required this.idCuaNguoiDung,
+    required this.sdtCuaNguoiDung,
+  }) : super(key: key);
 
   @override
-  State<suaThongTin_SDT_Page> createState() => _suaThongTin_SDT_PageState();
+  State<suaTT_SDT_Page_2> createState() => _suaTT_SDT_Page_2State();
 }
 
-class _suaThongTin_SDT_PageState extends State<suaThongTin_SDT_Page> {
+class _suaTT_SDT_Page_2State extends State<suaTT_SDT_Page_2> {
+  String SDTHienTai = '';
   String SDTMoi = '';
+  String IDnguoiDung = '';
 
   bool kiemTraSDTTrungNhau(String sdtHienTai, String sdtMoi) {
     return sdtHienTai == sdtMoi;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    SDTHienTai = widget.sdtCuaNguoiDung;
+    IDnguoiDung = widget.idCuaNguoiDung;
+  }
+
+  Future<void> capNhatSDTNguoiDungTheoID(String newUserNumberPhone) async {
+    try {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('khachHang')
+          .where('idKH', isEqualTo: IDnguoiDung)
+          .limit(1)
+          .get();
+
+      if (snapshot.size > 0) {
+        final khachHangID = snapshot.docs[0].id;
+        await FirebaseFirestore.instance
+            .collection('khachHang')
+            .doc(khachHangID)
+            .update({'sdt': newUserNumberPhone});
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Số điện thoại đã được cập nhật thành công.'),
+        ));
+      }
+    } catch (e) {
+      print('Loi cap nhat ten: $e');
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Đã xảy ra lỗi khi cập nhật Số điện thoại.'),
+      ));
+    }
   }
 
   @override
@@ -57,7 +99,9 @@ class _suaThongTin_SDT_PageState extends State<suaThongTin_SDT_Page> {
               width: double.infinity,
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: Colors.blue,
+                  color: kiemTraSDTTrungNhau(SDTHienTai, SDTMoi)
+                      ? Colors.red
+                      : Colors.blue,
                   width: 3,
                 ),
                 borderRadius: BorderRadius.circular(10),
@@ -115,13 +159,15 @@ class _suaThongTin_SDT_PageState extends State<suaThongTin_SDT_Page> {
             const SizedBox(
               height: 10,
             ),
-            const Text(
-              'Số điện thoại đã được sử dụng',
-              style: TextStyle(
-                color: Colors.red,
-                fontSize: 15,
-              ),
-            ),
+            kiemTraSDTTrungNhau(SDTHienTai, SDTMoi)
+                ? const Text(
+                    'Số điện thoại đã được sử dụng',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 15,
+                    ),
+                  )
+                : SizedBox(),
             Expanded(
               child: Align(
                 alignment: Alignment.bottomCenter,
@@ -131,15 +177,16 @@ class _suaThongTin_SDT_PageState extends State<suaThongTin_SDT_Page> {
                   child: ElevatedButton(
                     onPressed: SDTMoi.isEmpty
                         ? null
-                        : () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => nhapMatKhauPage(
-                                  sdtVuaNhap: SDTMoi,
-                                ),
-                              ),
-                            );
+                        : () async {
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => nhapMatKhauPage(
+                            //       sdtVuaNhap: SDTMoi,
+                            //     ),
+                            //   ),
+                            // );
+                            capNhatSDTNguoiDungTheoID(SDTMoi);
                           },
                     child: const Text(
                       'Tiếp theo',

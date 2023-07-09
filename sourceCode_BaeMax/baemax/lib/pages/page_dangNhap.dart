@@ -8,8 +8,9 @@ class dangNhapPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        iconTheme: IconThemeData(
+        elevation: 0,
+        backgroundColor: Colors.blue,
+        iconTheme: const IconThemeData(
           color: Colors.black,
           size: 30,
         ),
@@ -179,7 +180,7 @@ class dangNhapPage extends StatelessWidget {
                   Container(
                     width: 70,
                     height: 70,
-                    child: const Image(image: AssetImage('images/hinh_56.png')),
+                    child: const Image(image: AssetImage('images/hinh_84.png')),
                   ),
                 ],
               ),

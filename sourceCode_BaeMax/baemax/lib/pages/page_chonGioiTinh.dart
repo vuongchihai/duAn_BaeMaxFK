@@ -1,7 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class chonGioiTinhPage extends StatefulWidget {
-  const chonGioiTinhPage({super.key});
+  final String idCuaNguoiDung;
+  chonGioiTinhPage({
+    Key? key,
+    required this.idCuaNguoiDung,
+  }) : super(key: key);
 
   @override
   State<chonGioiTinhPage> createState() => _chonGioiTinhPageState();
@@ -9,6 +14,40 @@ class chonGioiTinhPage extends StatefulWidget {
 
 class _chonGioiTinhPageState extends State<chonGioiTinhPage> {
   int gioiTinhDuocChon = -1;
+  String IDnguoiDung = '';
+
+  @override
+  void initState() {
+    super.initState();
+    IDnguoiDung = widget.idCuaNguoiDung;
+  }
+
+  Future<void> capNhatGioiTinhNguoiDungTheoID(int newUserGioiTinh) async {
+    try {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('khachHang')
+          .where('idKH', isEqualTo: IDnguoiDung)
+          .limit(1)
+          .get();
+
+      if (snapshot.size > 0) {
+        final khachHangID = snapshot.docs[0].id;
+        await FirebaseFirestore.instance
+            .collection('khachHang')
+            .doc(khachHangID)
+            .update({'gioiTinh': newUserGioiTinh});
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Giới tính đã được cập nhật thành công.'),
+        ));
+      }
+    } catch (e) {
+      print('Loi cap nhat ten: $e');
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Đã xảy ra lỗi khi cập nhật Giới tính.'),
+      ));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +96,7 @@ class _chonGioiTinhPageState extends State<chonGioiTinhPage> {
             GestureDetector(
               onTap: () {
                 setState(() {
-                  gioiTinhDuocChon = 0;
+                  gioiTinhDuocChon = 1;
                 });
               },
               child: Row(
@@ -68,13 +107,52 @@ class _chonGioiTinhPageState extends State<chonGioiTinhPage> {
                     style: TextStyle(
                       fontSize: 20,
                       color: Colors.black,
-                      fontWeight: gioiTinhDuocChon == 0
+                      fontWeight: gioiTinhDuocChon == 1
                           ? FontWeight.bold
                           : FontWeight.normal,
                     ),
                   ),
                   SizedBox(
                     width: 286,
+                    height: 25,
+                    child: Container(
+                      color: Colors.transparent,
+                    ),
+                  ),
+                  Icon(
+                    Icons.check,
+                    color: gioiTinhDuocChon == 1
+                        ? Colors.blue
+                        : Colors.transparent,
+                    size: 35,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  gioiTinhDuocChon = 0;
+                });
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Nữ',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.black,
+                      fontWeight: gioiTinhDuocChon == 0
+                          ? FontWeight.bold
+                          : FontWeight.normal,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 300,
                     height: 25,
                     child: Container(
                       color: Colors.transparent,
@@ -91,7 +169,7 @@ class _chonGioiTinhPageState extends State<chonGioiTinhPage> {
               ),
             ),
             const SizedBox(
-              height: 15,
+              height: 20,
             ),
             GestureDetector(
               onTap: () {
@@ -103,7 +181,7 @@ class _chonGioiTinhPageState extends State<chonGioiTinhPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Nữ',
+                    'Khác',
                     style: TextStyle(
                       fontSize: 20,
                       color: Colors.black,
@@ -113,7 +191,7 @@ class _chonGioiTinhPageState extends State<chonGioiTinhPage> {
                     ),
                   ),
                   SizedBox(
-                    width: 300,
+                    width: 285,
                     height: 25,
                     child: Container(
                       color: Colors.transparent,
@@ -129,45 +207,6 @@ class _chonGioiTinhPageState extends State<chonGioiTinhPage> {
                 ],
               ),
             ),
-            const SizedBox(
-              height: 20,
-            ),
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  gioiTinhDuocChon = 3;
-                });
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Khác',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.black,
-                      fontWeight: gioiTinhDuocChon == 3
-                          ? FontWeight.bold
-                          : FontWeight.normal,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 285,
-                    height: 25,
-                    child: Container(
-                      color: Colors.transparent,
-                    ),
-                  ),
-                  Icon(
-                    Icons.check,
-                    color: gioiTinhDuocChon == 3
-                        ? Colors.blue
-                        : Colors.transparent,
-                    size: 35,
-                  ),
-                ],
-              ),
-            ),
             Expanded(
               child: Align(
                 alignment: Alignment.bottomCenter,
@@ -175,7 +214,11 @@ class _chonGioiTinhPageState extends State<chonGioiTinhPage> {
                   height: 50,
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: gioiTinhDuocChon == -1 ? null : () {},
+                    onPressed: gioiTinhDuocChon == -1
+                        ? null
+                        : () async {
+                            capNhatGioiTinhNguoiDungTheoID(gioiTinhDuocChon);
+                          },
                     child: const Text(
                       'Lưu',
                       style: TextStyle(

@@ -1,7 +1,66 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class xoaTaiKhoanPage extends StatelessWidget {
-  const xoaTaiKhoanPage({super.key});
+import '../models/User.dart';
+
+class xoaTaiKhoanPage extends StatefulWidget {
+  final String idCuaNguoiDung;
+  const xoaTaiKhoanPage({
+    Key? key,
+    required this.idCuaNguoiDung,
+  }) : super(key: key);
+
+  @override
+  State<xoaTaiKhoanPage> createState() => _xoaTaiKhoanPageState();
+}
+
+class _xoaTaiKhoanPageState extends State<xoaTaiKhoanPage> {
+  String IDnguoiDung = '';
+  bool _isDisposed = false; // Thêm biến này
+
+  @override
+  void initState() {
+    super.initState();
+    IDnguoiDung = widget.idCuaNguoiDung;
+  }
+
+  @override
+  void dispose() {
+    _isDisposed =
+        true; // Đặt biến _isDisposed thành true trong phương thức dispose()
+    super.dispose();
+  }
+
+  Future<void> xoaNguoiDungTheoID(String idNguoiDung) async {
+    try {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('khachHang')
+          .where('idKH', isEqualTo: idNguoiDung)
+          .limit(1)
+          .get();
+
+      if (snapshot.size > 0) {
+        final khachHangID = snapshot.docs[0].id;
+        await FirebaseFirestore.instance
+            .collection('khachHang')
+            .doc(khachHangID)
+            .delete();
+
+        if (!_isDisposed) {
+          // Kiểm tra _isDisposed trước khi thao tác với context
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text('Người dùng đã được xóa thành công.'),
+          ));
+        }
+      }
+    } catch (e) {
+      print('Loi cap nhat ten: $e');
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Đã xảy ra lỗi khi xóa người dùng.'),
+      ));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,8 +143,7 @@ class xoaTaiKhoanPage extends StatelessWidget {
                     text: const TextSpan(
                       children: <TextSpan>[
                         TextSpan(
-                          text:
-                              'Sau khi xóa tài khoản, bạn sẽ ',
+                          text: 'Sau khi xóa tài khoản, bạn sẽ ',
                           style: TextStyle(
                             color: Color.fromARGB(255, 98, 98, 98),
                             fontSize: 20,
@@ -147,8 +205,12 @@ class xoaTaiKhoanPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: TextButton(
-                      onPressed: () {
-                        print('object');
+                      onPressed: () async {
+                        xoaNguoiDungTheoID(IDnguoiDung);
+                        final user = Provider.of<User>(context, listen: false);
+                        user.clearInfo();
+                        Navigator.popUntil(
+                            context, (route) => route.settings.name == '/');
                       },
                       child: const Text(
                         'Xóa tài khoản này',

@@ -1,9 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:scroll_date_picker/scroll_date_picker.dart';
 
 class chonNgaySinhPage extends StatefulWidget {
-  const chonNgaySinhPage({Key? key}) : super(key: key);
+  final String idCuaNguoiDung;
+
+  const chonNgaySinhPage({
+    Key? key,
+    required this.idCuaNguoiDung,
+  }) : super(key: key);
 
   @override
   _chonNgaySinhPageState createState() => _chonNgaySinhPageState();
@@ -13,6 +19,41 @@ class _chonNgaySinhPageState extends State<chonNgaySinhPage> {
   DateTime _selectedDate = DateTime.now();
 
   final DateFormat _dateFormat = DateFormat('dd/MM/yyyy');
+
+  String IDnguoiDung = '';
+
+ @override
+  void initState() {
+    super.initState();
+    IDnguoiDung = widget.idCuaNguoiDung;
+  }
+
+    Future<void> capNhatNgaySinhNguoiDungTheoID(String newUserNgaySinh) async {
+    try {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('khachHang')
+          .where('idKH', isEqualTo: IDnguoiDung)
+          .limit(1)
+          .get();
+
+      if (snapshot.size > 0) {
+        final khachHangID = snapshot.docs[0].id;
+        await FirebaseFirestore.instance
+            .collection('khachHang')
+            .doc(khachHangID)
+            .update({'ngaySinh': newUserNgaySinh});
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Ngày sinh đã được cập nhật thành công.'),
+        ));
+      }
+    } catch (e) {
+      print('Loi cap nhat ten: $e');
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Đã xảy ra lỗi khi cập nhật ngày sinh.'),
+      ));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,8 +130,8 @@ class _chonNgaySinhPageState extends State<chonNgaySinhPage> {
                   height: 50,
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {
-                      print('da lcik ne');
+                    onPressed: ()async{
+                     capNhatNgaySinhNguoiDungTheoID(_dateFormat.format(_selectedDate));
                     },
                     child: const Text(
                       'Lưu',

@@ -1,7 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class doiMatKhauPage extends StatefulWidget {
-  const doiMatKhauPage({super.key});
+  final String idCuaNguoiDung;
+
+  doiMatKhauPage({
+    Key? key,
+    required this.idCuaNguoiDung,
+  }) : super(key: key);
 
   @override
   State<doiMatKhauPage> createState() => _doiMatKhauPageState();
@@ -12,6 +18,41 @@ class _doiMatKhauPageState extends State<doiMatKhauPage> {
   String xacNhanMatKhauMoi = '';
   bool hienThiThongBaoLoi_doDai = false;
   bool hienThiThongBaoLoi_trungKhopMatKhau = false;
+
+  String IDnguoiDung = '';
+
+  @override
+  void initState() {
+    super.initState();
+    IDnguoiDung = widget.idCuaNguoiDung;
+  }
+
+  Future<void> capNhatMatKhauNguoiDungTheoID(String newUserMatKhau) async {
+    try {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('khachHang')
+          .where('idKH', isEqualTo: IDnguoiDung)
+          .limit(1)
+          .get();
+
+      if (snapshot.size > 0) {
+        final khachHangID = snapshot.docs[0].id;
+        await FirebaseFirestore.instance
+            .collection('khachHang')
+            .doc(khachHangID)
+            .update({'matKhau': newUserMatKhau});
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Mật khẩu đã được cập nhật thành công.'),
+        ));
+      }
+    } catch (e) {
+      print('Loi cap nhat ten: $e');
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Đã xảy ra lỗi khi cập nhật mật khẩu.'),
+      ));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -150,8 +191,8 @@ class _doiMatKhauPageState extends State<doiMatKhauPage> {
                     onPressed:
                         matKhauMoi != xacNhanMatKhauMoi || matKhauMoi.isEmpty
                             ? null
-                            : () {
-                                print('da lcik ne');
+                            : () async {
+                                capNhatMatKhauNguoiDungTheoID(matKhauMoi);
                               },
                     child: const Text(
                       'Lưu',

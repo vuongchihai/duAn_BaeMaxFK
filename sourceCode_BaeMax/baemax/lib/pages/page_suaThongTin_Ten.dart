@@ -1,14 +1,54 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class suaThongTin_Ten_Page extends StatefulWidget {
-  const suaThongTin_Ten_Page({super.key});
+  final String idCuaNguoiDung;
+  final String tenCuaNguoiDung;
+  suaThongTin_Ten_Page({Key? key, required this.idCuaNguoiDung, required this.tenCuaNguoiDung})
+      : super(key: key);
 
   @override
   State<suaThongTin_Ten_Page> createState() => _suaThongTin_Ten_PageState();
 }
 
 class _suaThongTin_Ten_PageState extends State<suaThongTin_Ten_Page> {
-  String ten = 'Vương Chí Hải';
+  String ten = '';
+  String IDnguoiDung = '';
+
+  @override
+  void initState() {
+    super.initState();
+    IDnguoiDung = widget.idCuaNguoiDung;
+    ten = widget.tenCuaNguoiDung;
+  }
+
+  Future<void> capNhatTenNguoiDungTheoID(String newUserName) async {
+    try {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('khachHang')
+          .where('idKH', isEqualTo: IDnguoiDung)
+          .limit(1)
+          .get();
+
+      if (snapshot.size > 0) {
+        final khachHangID = snapshot.docs[0].id;
+        await FirebaseFirestore.instance
+            .collection('khachHang')
+            .doc(khachHangID)
+            .update({'hoTen': newUserName});
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Tên người dùng đã được cập nhật thành công.'),
+        ));
+      }
+    } catch (e) {
+      print('Loi cap nhat ten: $e');
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Đã xảy ra lỗi khi cập nhật tên người dùng.'),
+      ));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,7 +108,7 @@ class _suaThongTin_Ten_PageState extends State<suaThongTin_Ten_Page> {
               onChanged: (value) {
                 setState(
                   () {
-                    ten = value.isEmpty ? '' : value;
+                   ten = value;
                   },
                 );
               },
@@ -98,7 +138,7 @@ class _suaThongTin_Ten_PageState extends State<suaThongTin_Ten_Page> {
                     onPressed: ten.isEmpty
                         ? null
                         : () {
-                            print('da lcik ne');
+                            capNhatTenNguoiDungTheoID(ten);
                           },
                     child: const Text(
                       'Lưu',

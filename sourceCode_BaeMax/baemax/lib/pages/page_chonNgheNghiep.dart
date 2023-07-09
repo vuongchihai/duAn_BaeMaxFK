@@ -1,7 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class chonNgheNghiepPage extends StatefulWidget {
-  const chonNgheNghiepPage({super.key});
+  final String idCuaNguoiDung;
+
+  chonNgheNghiepPage({
+    Key? key,
+    required this.idCuaNguoiDung,
+  }) : super(key: key);
 
   @override
   State<chonNgheNghiepPage> createState() => _chonNgheNghiepPageState();
@@ -9,6 +15,43 @@ class chonNgheNghiepPage extends StatefulWidget {
 
 class _chonNgheNghiepPageState extends State<chonNgheNghiepPage> {
   int ngheNghiepDuocChon = -1;
+  String chonNgheNghiep = '';
+
+  String IDnguoiDung = '';
+
+  @override
+  void initState() {
+    super.initState();
+    IDnguoiDung = widget.idCuaNguoiDung;
+  }
+
+    Future<void> capNhatNgheNghiepNguoiDungTheoID(String newUserNgheNghiep) async {
+    try {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('khachHang')
+          .where('idKH', isEqualTo: IDnguoiDung)
+          .limit(1)
+          .get();
+
+      if (snapshot.size > 0) {
+        final khachHangID = snapshot.docs[0].id;
+        await FirebaseFirestore.instance
+            .collection('khachHang')
+            .doc(khachHangID)
+            .update({'ngheNghiep': newUserNgheNghiep});
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Nghề nghiệp đã được cập nhật thành công.'),
+        ));
+      }
+    } catch (e) {
+      print('Loi cap nhat ten: $e');
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Đã xảy ra lỗi khi cập nhật nghề nghiệp.'),
+      ));
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +100,7 @@ class _chonNgheNghiepPageState extends State<chonNgheNghiepPage> {
               onTap: () {
                 setState(() {
                   ngheNghiepDuocChon = 0;
+                  chonNgheNghiep = 'Nhân viên văn phòng';
                 });
               },
               child: Row(
@@ -110,6 +154,7 @@ class _chonNgheNghiepPageState extends State<chonNgheNghiepPage> {
               onTap: () {
                 setState(() {
                   ngheNghiepDuocChon = 1;
+                  chonNgheNghiep = 'Nội trợ';
                 });
               },
               child: Row(
@@ -163,6 +208,7 @@ class _chonNgheNghiepPageState extends State<chonNgheNghiepPage> {
               onTap: () {
                 setState(() {
                   ngheNghiepDuocChon = 2;
+                  chonNgheNghiep = 'Học sinh, sinh viên';
                 });
               },
               child: Row(
@@ -216,6 +262,7 @@ class _chonNgheNghiepPageState extends State<chonNgheNghiepPage> {
               onTap: () {
                 setState(() {
                   ngheNghiepDuocChon = 3;
+                  chonNgheNghiep = 'Làm tự do';
                 });
               },
               child: Row(
@@ -269,6 +316,7 @@ class _chonNgheNghiepPageState extends State<chonNgheNghiepPage> {
               onTap: () {
                 setState(() {
                   ngheNghiepDuocChon = 4;
+                  chonNgheNghiep = 'Công nhân';
                 });
               },
               child: Row(
@@ -322,6 +370,7 @@ class _chonNgheNghiepPageState extends State<chonNgheNghiepPage> {
               onTap: () {
                 setState(() {
                   ngheNghiepDuocChon = 5;
+                  chonNgheNghiep = 'Khác';
                 });
               },
               child: Row(
@@ -368,7 +417,6 @@ class _chonNgheNghiepPageState extends State<chonNgheNghiepPage> {
             const SizedBox(
               height: 15,
             ),
-            
             Expanded(
               child: Align(
                 alignment: Alignment.bottomCenter,
@@ -376,7 +424,12 @@ class _chonNgheNghiepPageState extends State<chonNgheNghiepPage> {
                   height: 50,
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: ngheNghiepDuocChon == -1 ? null : () {},
+                    onPressed: ngheNghiepDuocChon == -1
+                        ? null
+                        : () {
+                            print('$chonNgheNghiep');
+                            capNhatNgheNghiepNguoiDungTheoID(chonNgheNghiep);
+                          },
                     child: const Text(
                       'Lưu',
                       style: TextStyle(

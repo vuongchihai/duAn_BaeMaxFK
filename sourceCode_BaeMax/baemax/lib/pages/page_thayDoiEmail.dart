@@ -1,15 +1,57 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class thayDoiEmailPage extends StatefulWidget {
-  const thayDoiEmailPage({super.key});
+    final String idCuaNguoiDung;
+  final String emailCuaNguoiDung;
+  const thayDoiEmailPage({Key? key,
+    required this.idCuaNguoiDung,
+    required this.emailCuaNguoiDung,
+  }) : super(key: key);
 
   @override
   State<thayDoiEmailPage> createState() => _thayDoiEmailPageState();
 }
 
 class _thayDoiEmailPageState extends State<thayDoiEmailPage> {
-  String emailHienTai = 'vuongchihai0711@gmail.com';
+  String emailHienTai = '';
   String thongBaoLoi = '';
+    String IDnguoiDung = '';
+
+    
+  @override
+  void initState() {
+    super.initState();
+    emailHienTai = widget.emailCuaNguoiDung;
+    IDnguoiDung = widget.idCuaNguoiDung;
+  }
+
+    Future<void> capNhatEmailNguoiDungTheoID(String newUserEmail) async {
+    try {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('khachHang')
+          .where('idKH', isEqualTo: IDnguoiDung)
+          .limit(1)
+          .get();
+
+      if (snapshot.size > 0) {
+        final khachHangID = snapshot.docs[0].id;
+        await FirebaseFirestore.instance
+            .collection('khachHang')
+            .doc(khachHangID)
+            .update({'email': newUserEmail});
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Email đã được cập nhật thành công.'),
+        ));
+      }
+    } catch (e) {
+      print('Loi cap nhat ten: $e');
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Đã xảy ra lỗi khi cập nhật Email.'),
+      ));
+    }
+  }
 
   bool validateEmail(String input) {
     String emailPattern =
@@ -127,6 +169,7 @@ class _thayDoiEmailPageState extends State<thayDoiEmailPage> {
                               } else {
                                 thongBaoLoi = '';
                                 // xu ly luu email
+                                capNhatEmailNguoiDungTheoID(emailHienTai);
                               }
                             });
                           },
