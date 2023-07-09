@@ -103,7 +103,7 @@ class main_header_widget extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => thongTinTaiKhoanPage(),
+                        builder: (context) => thongTinTaiKhoanPage(fromLogin: false),
                       ),
                     );
                   },

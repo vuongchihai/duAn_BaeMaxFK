@@ -1,5 +1,11 @@
+import 'package:baemax/models/khachHang.dart';
+import 'package:baemax/pages/page_thongTinTaiKhoan.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../main.dart';
+import '../models/User.dart';
 
 class nhapMatKhauPage extends StatefulWidget {
   final String sdtVuaNhap;
@@ -12,19 +18,32 @@ class nhapMatKhauPage extends StatefulWidget {
 class _nhapMatKhauPageState extends State<nhapMatKhauPage> {
   String sdtVuaNhap = '';
   bool anHoacHienMatKhau = true;
-  final matKhauController = TextEditingController();
+  final TextEditingController matKhauController = TextEditingController();
   bool trangThaiDangNhap = false;
 
-  Future<bool> kiemTraKhachHang(String sdt, String matKhau) async {
-    final CollectionReference khachHangs =
-        FirebaseFirestore.instance.collection('khachHang');
+  void dangNhap(BuildContext context) async {
+    final String phoneNumber = sdtVuaNhap;
+    final String password = matKhauController.text;
 
-    QuerySnapshot snapshot = await khachHangs
-        .where('sdt', isEqualTo: sdt)
-        .where('matKhau', isEqualTo: matKhau)
+    final QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection('khachHang')
+        .where('sdt', isEqualTo: phoneNumber)
+        .where('matKhau', isEqualTo: password)
+        .limit(1)
         .get();
 
-    return snapshot.size > 0;
+    if (snapshot.size > 0) {
+      final customer = KhachHang.fromSnapshot(snapshot.docs[0]);
+      final user = Provider.of<User>(context, listen: false);
+      user.updateInfo(customer.sdt, customer.matKhau);
+      Navigator.push(context, MaterialPageRoute(builder: (context) => thongTinTaiKhoanPage(
+        fromLogin: true,
+      )));
+    } else {
+      setState(() {
+        trangThaiDangNhap = false;
+      });
+    }
   }
 
   @override
@@ -170,17 +189,7 @@ class _nhapMatKhauPageState extends State<nhapMatKhauPage> {
                     onPressed: matKhauController.text.isEmpty
                         ? null
                         : () async {
-                            String matKhau = matKhauController.text;
-                            bool exists =
-                                await kiemTraKhachHang(sdtVuaNhap, matKhau);
-
-                            if (exists) {
-                              Navigator.of(context).popUntil(ModalRoute.withName("/thongTinTaiKhoanPage"));
-                            } else {
-                              setState(() {
-                                trangThaiDangNhap = !exists;
-                              });
-                            }
+                            dangNhap(context);
                           },
                     child: const Text(
                       'Đăng nhập',

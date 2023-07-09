@@ -6,13 +6,17 @@ import 'package:baemax/pages/page_thongTinChiTietTaiKhoan.dart';
 import 'package:baemax/pages/page_viCoupon.dart';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../models/User.dart';
 import 'page_quanLyThanhToan.dart';
 import 'package:baemax/pages/page_soDiaChi.dart';
 
 class thongTinTaiKhoanPage extends StatefulWidget {
+  final bool fromLogin;
   thongTinTaiKhoanPage({
     Key? key,
+    required this.fromLogin,
   }) : super(key: key);
 
   @override
@@ -20,22 +24,18 @@ class thongTinTaiKhoanPage extends StatefulWidget {
 }
 
 class _thongTinTaiKhoanPageState extends State<thongTinTaiKhoanPage> {
-  String nhanSDT = '';
-  String nhanMatKhau = '';
   bool kiemTraDangNhap = false;
 
   @override
   void initState() {
     super.initState();
-    if (nhanSDT.isNotEmpty && nhanMatKhau.isNotEmpty) {
-      setState(() {
-        kiemTraDangNhap = true;
-      });
-    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<User>(context);
+    final phoneNumber = user.phoneNumber;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -130,6 +130,12 @@ class _thongTinTaiKhoanPageState extends State<thongTinTaiKhoanPage> {
                                         );
                                       },
                                     ),
+                                  ),
+                                  Text(
+                                    user.phoneNumber,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 23),
                                   ),
                                   kiemTraDangNhap
                                       ? const Text(

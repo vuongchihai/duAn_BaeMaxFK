@@ -1,7 +1,9 @@
 import 'package:baemax/widgets/dealDaTang_KhaoNuocXin.dart';
 import 'package:baemax/widgets/dealdDaTan_KhaoMonAn.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import 'models/User.dart';
 import 'widgets/mainCarouselSukienWidget.dart';
 import 'widgets/mainHeaderWidget.dart';
 import 'widgets/mainLuaChonTheoLoaiWidget.dart';
@@ -23,20 +25,25 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        color: Colors.grey,
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              main_header_widget(),
-              main_search_widget(),
-              main_carousel_suKien_widget(),
-              main_luaChonTheoLoai_widget(),
-              khaoNuocXin_DealDaTang(),
-              khaoMonAn_DealDaTang(),
-            ],
+    return ChangeNotifierProvider(
+      create: (_) => User(),
+      child: MaterialApp(
+        home: Scaffold(
+          body: Container(
+            color: Colors.grey,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  main_header_widget(),
+                  main_search_widget(),
+                  main_carousel_suKien_widget(),
+                  main_luaChonTheoLoai_widget(),
+                  khaoNuocXin_DealDaTang(),
+                  khaoMonAn_DealDaTang(),
+                ],
+              ),
+            ),
           ),
         ),
       ),
