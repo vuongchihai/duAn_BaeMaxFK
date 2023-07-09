@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../main.dart';
 import '../models/User.dart';
 
 class nhapMatKhauPage extends StatefulWidget {
@@ -19,7 +18,7 @@ class _nhapMatKhauPageState extends State<nhapMatKhauPage> {
   String sdtVuaNhap = '';
   bool anHoacHienMatKhau = true;
   final TextEditingController matKhauController = TextEditingController();
-  bool trangThaiDangNhap = false;
+  bool trangThaiDangNhap = true;
 
   void dangNhap(BuildContext context) async {
     final String phoneNumber = sdtVuaNhap;
@@ -36,9 +35,14 @@ class _nhapMatKhauPageState extends State<nhapMatKhauPage> {
       final customer = KhachHang.fromSnapshot(snapshot.docs[0]);
       final user = Provider.of<User>(context, listen: false);
       user.updateInfo(customer.sdt, customer.matKhau);
-      Navigator.push(context, MaterialPageRoute(builder: (context) => thongTinTaiKhoanPage(
-        fromLogin: true,
-      )));
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => thongTinTaiKhoanPage(
+            fromLogin: true,
+          ),
+        ),
+      );
     } else {
       setState(() {
         trangThaiDangNhap = false;
@@ -153,7 +157,7 @@ class _nhapMatKhauPageState extends State<nhapMatKhauPage> {
             const SizedBox(
               height: 10,
             ),
-            trangThaiDangNhap
+            !trangThaiDangNhap
                 ? const Text(
                     'Mật khẩu của bạn không chính xác',
                     style: TextStyle(

@@ -24,8 +24,6 @@ class thongTinTaiKhoanPage extends StatefulWidget {
 }
 
 class _thongTinTaiKhoanPageState extends State<thongTinTaiKhoanPage> {
-  bool kiemTraDangNhap = false;
-
   @override
   void initState() {
     super.initState();
@@ -79,7 +77,9 @@ class _thongTinTaiKhoanPageState extends State<thongTinTaiKhoanPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => thongTinChiTietTaiKhoanPage(),
+                            builder: (context) => thongTinChiTietTaiKhoanPage(
+                              keySoDienNguoiDung: user.phoneNumber,
+                            ),
                           ),
                         );
                       },
@@ -131,16 +131,10 @@ class _thongTinTaiKhoanPageState extends State<thongTinTaiKhoanPage> {
                                       },
                                     ),
                                   ),
-                                  Text(
-                                    user.phoneNumber,
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 23),
-                                  ),
-                                  kiemTraDangNhap
-                                      ? const Text(
-                                          'Vương Chí Hải',
-                                          style: TextStyle(
+                                  user.phoneNumber.isNotEmpty
+                                      ? Text(
+                                          user.phoneNumber,
+                                          style: const TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 23),
                                         )

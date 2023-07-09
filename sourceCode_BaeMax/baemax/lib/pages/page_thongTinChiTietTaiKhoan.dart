@@ -4,13 +4,31 @@ import 'package:baemax/pages/page_chonNgheNghiep.dart';
 import 'package:baemax/pages/page_suaThongTin_SDT.dart';
 import 'package:baemax/pages/page_suaThongTin_Ten.dart';
 import 'package:baemax/pages/page_thayDoiMatKhau.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'page_thayDoiEmail.dart';
 import 'page_xoaTaiKhoan.dart';
 
-class thongTinChiTietTaiKhoanPage extends StatelessWidget {
-  const thongTinChiTietTaiKhoanPage({super.key});
+class thongTinChiTietTaiKhoanPage extends StatefulWidget {
+  final String keySoDienNguoiDung;
+  thongTinChiTietTaiKhoanPage({Key? key, required this.keySoDienNguoiDung})
+      : super(key: key);
+
+  @override
+  State<thongTinChiTietTaiKhoanPage> createState() =>
+      _thongTinChiTietTaiKhoanPageState();
+}
+
+class _thongTinChiTietTaiKhoanPageState
+    extends State<thongTinChiTietTaiKhoanPage> {
+  late String nhanKeySoDienThoaiNguoiDung;
+
+  @override
+  void initState() {
+    super.initState();
+    nhanKeySoDienThoaiNguoiDung = widget.keySoDienNguoiDung;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -148,10 +166,10 @@ class thongTinChiTietTaiKhoanPage extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Column(
+                        Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               'Số điện thoại',
                               style: TextStyle(
                                 fontSize: 20,
@@ -159,12 +177,12 @@ class thongTinChiTietTaiKhoanPage extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             Text(
-                              '0949162193',
-                              style: TextStyle(
+                              nhanKeySoDienThoaiNguoiDung,
+                              style: const TextStyle(
                                 fontSize: 20,
                                 color: Colors.black,
                               ),
@@ -448,11 +466,11 @@ class thongTinChiTietTaiKhoanPage extends StatelessWidget {
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => doiMatKhauPage(),
-                              ),
-                            );
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => doiMatKhauPage(),
+                          ),
+                        );
                       },
                       child: const Text(
                         '>',
@@ -487,11 +505,11 @@ class thongTinChiTietTaiKhoanPage extends StatelessWidget {
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => xoaTaiKhoanPage(),
-                              ),
-                            );
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => xoaTaiKhoanPage(),
+                          ),
+                        );
                       },
                       child: const Text(
                         '>',
