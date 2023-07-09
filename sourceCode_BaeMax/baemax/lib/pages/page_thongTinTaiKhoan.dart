@@ -1,9 +1,12 @@
+import 'package:baemax/pages/page_DSnhaHangYeuThich.dart';
 import 'package:baemax/pages/page_dangNhap.dart';
 import 'package:baemax/pages/page_dieuKhoanChinhSach.dart';
 import 'package:baemax/pages/page_donHangCuaToi.dart';
 import 'package:baemax/pages/page_nhaHangYeuThich.dart';
+import 'package:baemax/pages/page_suaDiaChi.dart';
 import 'package:baemax/pages/page_thongTinChiTietTaiKhoan.dart';
 import 'package:baemax/pages/page_viCoupon.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -27,6 +30,13 @@ class _thongTinTaiKhoanPageState extends State<thongTinTaiKhoanPage> {
   @override
   void initState() {
     super.initState();
+  }
+
+  List<String> nhaHangIds = []; // Khởi tạo danh sách rỗng
+
+  void handleRemove(String idNhaHang) {
+    // Xóa nhà hàng có idNhaHang khỏi danh sách nhaHangIds
+    nhaHangIds.remove(idNhaHang);
   }
 
   @override
@@ -239,12 +249,40 @@ class _thongTinTaiKhoanPageState extends State<thongTinTaiKhoanPage> {
                             flex: 1,
                             child: GestureDetector(
                               onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => nhaHangYeuThichPage(),
-                                  ),
-                                );
+                                FirebaseFirestore.instance
+                                    .collection('khachHang')
+                                    .where('sdt', isEqualTo: phoneNumber)
+                                    .get()
+                                    .then((QuerySnapshot snapshot) {
+                                  if (snapshot.size > 0) {
+                                    String khachHangId = snapshot.docs[0].id;
+                                    List<dynamic>? nhaHangIdsData =
+                                        (snapshot.docs[0].data() as Map<String,
+                                                dynamic>)['nhaHangIds']
+                                            as List<dynamic>?;
+                                    nhaHangIds = nhaHangIdsData
+                                            ?.map((id) => id.toString())
+                                            .toList() ??
+                                        [];
+
+                                    // Chuyển hướng đến FavoriteRestaurantWidget và truyền danh sách nhaHangIds
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            FavoriteRestaurantWidget(
+                                                nhaHangIds: nhaHangIds,
+                                                IDCuaKhachHang: khachHangId,),
+                                      ),
+                                    );
+                                  } else {
+                                    print(
+                                        'Không tìm thấy tài liệu KhachHang với số điện thoại $phoneNumber');
+                                  }
+                                }).catchError((onError) {
+                                  print(
+                                      'Lỗi khi tìm tài liệu KhachHang: $onError');
+                                });
                               },
                               child: Container(
                                 decoration: BoxDecoration(

@@ -268,7 +268,6 @@ class _nhapMatKhauPageState extends State<nhapMatKhauPage> {
                         ? null
                         : () async {
                             taoTaiKhoanVaDangNhap(context);
-
                           },
                     child: const Text(
                       'Đăng nhập',

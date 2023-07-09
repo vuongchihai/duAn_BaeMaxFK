@@ -149,6 +149,9 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
     iconColor = Colors.white;
     checkedHeart = false;
 
+    khachHangCollection = firestore.collection('khachHang');
+    nhaHangCollection = firestore.collection('nhaHang');
+
     scrollController.addListener(() {
       if (scrollController.offset > 0 &&
           scrollController.position.userScrollDirection ==
@@ -183,57 +186,27 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
     tongTienTrongGio();
   }
 
-  String phoneNumber = '';
-  void themNhaHangVaoDanhSachYeuThich() {
-    if (checkedHeart) {
-      FirebaseFirestore.instance
-          .collection('khachHang')
-          .doc(phoneNumber)
-          .collection('nhaHangYeuThich')
-          .add({'IDNhaHangYeuThich': widget.IDNhaHang}).then((value) {
-        print(
-            'Thêm nhà hàng vào danh sách nhà hàng yêu thích THÀNH CÔNG ${widget.IDNhaHang}');
-      }).catchError((onError) {
-        print(
-            'Thêm nhà hàng vào danh sách nhà hàng yêu thích KHÔNG thành công $onError');
-      });
-    }
-  }
-
-  // String idKhachHang = timIDKhachHangTheoSDT(phoneNumber);
-
-  Future<String?> timIDKhachHangTheoSDT(String sdt) async{
-    try{
-      final snapshot = await FirebaseFirestore.instance
-      .collection('khachHang')
-      .where('sdt', isEqualTo: sdt)
-      .limit(1)
-      .get();
-
-      if(snapshot.size > 0){
-        return snapshot.docs[0].id;
-      }
-      else{
-        return '';
-      }
-    }
-    catch(e){
-      print('Không tìm thấy id của khách hàng, Lỗi: $e');
-      return '';
-    }
-  }
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  late CollectionReference khachHangCollection;
+  late CollectionReference nhaHangCollection;
 
   @override
   void dispose() {
     scrollController.dispose();
-    themNhaHangVaoDanhSachYeuThich();
+    // Thực hiện cập nhật lên Firestore khi thoát widget
+    khachHangCollection.get().then((snapshot) {
+      for (var doc in snapshot.docs) {
+        doc.reference.update({'nhaHang': FieldValue.delete()});
+      }
+    });
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
-    phoneNumber = user.phoneNumber;
+    String phoneNumber = user.phoneNumber;
+
     return Scaffold(
       body: Stack(
         children: [
@@ -767,12 +740,62 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
                                       width: 15,
                                     ),
                                     GestureDetector(
-                                      onTap: () {
+                                      onTap: () async {
                                         print('đã nhấn tym');
                                         setState(() {
                                           checkedHeart = !checkedHeart;
                                         });
                                         print('${widget.IDNhaHang}');
+                                        if (checkedHeart) {
+                                          FirebaseFirestore.instance
+                                              .collection('khachHang')
+                                              .where('sdt',
+                                                  isEqualTo: phoneNumber)
+                                              .get()
+                                              .then((QuerySnapshot snapshot) {
+                                            if (snapshot.size > 0) {
+                                              String khachHangId = snapshot
+                                                  .docs[0]
+                                                  .id; // Lấy ID của tài liệu KhachHang
+                                              List<dynamic> nhaHangIds =
+                                                  (snapshot.docs[0].data()
+                                                              as Map<String,
+                                                                  dynamic>)[
+                                                          'nhaHangIds'] ??
+                                                      [];
+
+                                              if (!nhaHangIds
+                                                  .contains(widget.IDNhaHang)) {
+                                                // Nếu ID nhà hàng chưa tồn tại trong danh sách
+                                                nhaHangIds.add(widget
+                                                    .IDNhaHang); // Thêm ID nhà hàng vào danh sách
+
+                                                // Cập nhật tài liệu KhachHang với danh sách mới
+                                                FirebaseFirestore.instance
+                                                    .collection('khachHang')
+                                                    .doc(khachHangId)
+                                                    .update({
+                                                  'nhaHangIds': nhaHangIds
+                                                }).then((value) {
+                                                  print(
+                                                      'Thêm ID nhà hàng thành công vào KhachHang $khachHangId');
+                                                }).catchError((onError) {
+                                                  print(
+                                                      'Thêm ID nhà hàng không thành công vào KhachHang $onError');
+                                                });
+                                              } else {
+                                                print(
+                                                    'ID nhà hàng đã tồn tại trong KhachHang $khachHangId');
+                                              }
+                                            } else {
+                                              print(
+                                                  'Không tìm thấy tài liệu KhachHang với số điện thoại $phoneNumber');
+                                            }
+                                          }).catchError((onError) {
+                                            print(
+                                                'Lỗi khi tìm tài liệu KhachHang: $onError');
+                                          });
+                                        }
                                       },
                                       child: Container(
                                         width: 40,
