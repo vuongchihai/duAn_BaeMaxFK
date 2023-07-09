@@ -8,7 +8,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:tiengviet/tiengviet.dart';
+
+import '../models/User.dart';
 
 class chiTietNhaHangPage extends StatefulWidget {
   final String? IDNhaHang;
@@ -180,14 +183,57 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
     tongTienTrongGio();
   }
 
+  String phoneNumber = '';
+  void themNhaHangVaoDanhSachYeuThich() {
+    if (checkedHeart) {
+      FirebaseFirestore.instance
+          .collection('khachHang')
+          .doc(phoneNumber)
+          .collection('nhaHangYeuThich')
+          .add({'IDNhaHangYeuThich': widget.IDNhaHang}).then((value) {
+        print(
+            'Thêm nhà hàng vào danh sách nhà hàng yêu thích THÀNH CÔNG ${widget.IDNhaHang}');
+      }).catchError((onError) {
+        print(
+            'Thêm nhà hàng vào danh sách nhà hàng yêu thích KHÔNG thành công $onError');
+      });
+    }
+  }
+
+  // String idKhachHang = timIDKhachHangTheoSDT(phoneNumber);
+
+  Future<String?> timIDKhachHangTheoSDT(String sdt) async{
+    try{
+      final snapshot = await FirebaseFirestore.instance
+      .collection('khachHang')
+      .where('sdt', isEqualTo: sdt)
+      .limit(1)
+      .get();
+
+      if(snapshot.size > 0){
+        return snapshot.docs[0].id;
+      }
+      else{
+        return '';
+      }
+    }
+    catch(e){
+      print('Không tìm thấy id của khách hàng, Lỗi: $e');
+      return '';
+    }
+  }
+
   @override
   void dispose() {
     scrollController.dispose();
+    themNhaHangVaoDanhSachYeuThich();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<User>(context);
+    phoneNumber = user.phoneNumber;
     return Scaffold(
       body: Stack(
         children: [
@@ -726,6 +772,7 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
                                         setState(() {
                                           checkedHeart = !checkedHeart;
                                         });
+                                        print('${widget.IDNhaHang}');
                                       },
                                       child: Container(
                                         width: 40,
