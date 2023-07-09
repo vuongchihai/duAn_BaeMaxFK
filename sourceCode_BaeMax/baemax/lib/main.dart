@@ -28,6 +28,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) => User(),
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         home: Scaffold(
           body: Container(
             color: Colors.grey,

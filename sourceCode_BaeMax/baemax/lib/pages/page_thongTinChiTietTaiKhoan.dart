@@ -24,10 +24,49 @@ class _thongTinChiTietTaiKhoanPageState
     extends State<thongTinChiTietTaiKhoanPage> {
   late String nhanKeySoDienThoaiNguoiDung;
 
+  String idNguoiDung = '';
+  String ten = '';
+  String sdt = '';
+  String email = '';
+  int gioiTinh = 1;
+  String ngaySinh = '';
+  String ngheNhiep = '';
+
   @override
   void initState() {
     super.initState();
     nhanKeySoDienThoaiNguoiDung = widget.keySoDienNguoiDung;
+    fetchDataFromFirebase();
+  }
+
+  Future<void> fetchDataFromFirebase() async {
+    try {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('khachHang')
+          .where('sdt', isEqualTo: nhanKeySoDienThoaiNguoiDung)
+          .limit(1)
+          .get();
+
+      if (snapshot.size > 0) {
+        final nguoiDungData = snapshot.docs[0].data();
+        setState(() {
+          idNguoiDung = nguoiDungData['idKH'];
+          ten = nguoiDungData['hoTen'];
+          sdt = nguoiDungData['sdt'];
+          email = nguoiDungData['email'];
+          gioiTinh = nguoiDungData['gioiTinh'];
+          ngaySinh = nguoiDungData['ngaySinh'];
+          ngheNhiep = nguoiDungData['ngheNghiep'];
+        });
+        print('tim thay khach hang');
+      }
+    } catch (e) {
+      print('Error fetching data from Firebase: $e');
+    }
+  }
+
+  String kiemTraGioiTinh(int gt) {
+    return gt == 1 ? 'Nam' : 'Nữ';
   }
 
   @override
@@ -109,10 +148,10 @@ class _thongTinChiTietTaiKhoanPageState
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Column(
+                        Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               'Tên',
                               style: TextStyle(
                                 fontSize: 20,
@@ -120,12 +159,12 @@ class _thongTinChiTietTaiKhoanPageState
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             Text(
-                              'Vương Chí Hải',
-                              style: TextStyle(
+                              ten.isEmpty ? '' : ten,
+                              style: const TextStyle(
                                 fontSize: 20,
                                 color: Colors.black,
                               ),
@@ -181,7 +220,7 @@ class _thongTinChiTietTaiKhoanPageState
                               height: 10,
                             ),
                             Text(
-                              nhanKeySoDienThoaiNguoiDung,
+                              sdt,
                               style: const TextStyle(
                                 fontSize: 20,
                                 color: Colors.black,
@@ -223,10 +262,10 @@ class _thongTinChiTietTaiKhoanPageState
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Column(
+                        Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               'Địa chỉ Email',
                               style: TextStyle(
                                 fontSize: 20,
@@ -234,12 +273,12 @@ class _thongTinChiTietTaiKhoanPageState
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             Text(
-                              'vuongchihai0711@gmail.com',
-                              style: TextStyle(
+                              email.isEmpty ? 'ví dụ: baemax0711@gmail.com' : email,
+                              style: const TextStyle(
                                 fontSize: 20,
                                 color: Colors.black,
                               ),
@@ -280,10 +319,10 @@ class _thongTinChiTietTaiKhoanPageState
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Column(
+                        Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               'Giới tính',
                               style: TextStyle(
                                 fontSize: 20,
@@ -291,12 +330,14 @@ class _thongTinChiTietTaiKhoanPageState
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             Text(
-                              '-Chọn-',
-                              style: TextStyle(
+                              gioiTinh.toString().isNotEmpty
+                                  ? kiemTraGioiTinh(gioiTinh)
+                                  : '-Chọn-',
+                              style: const TextStyle(
                                 fontSize: 20,
                                 color: Colors.black,
                               ),
@@ -330,10 +371,10 @@ class _thongTinChiTietTaiKhoanPageState
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Column(
+                        Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               'Ngày sinh',
                               style: TextStyle(
                                 fontSize: 20,
@@ -341,12 +382,12 @@ class _thongTinChiTietTaiKhoanPageState
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             Text(
-                              'DD/MM/YYYY',
-                              style: TextStyle(
+                              ngaySinh.isEmpty ? 'DD/MM/YYYY' : ngaySinh,
+                              style: const TextStyle(
                                 fontSize: 20,
                                 color: Colors.black,
                               ),
@@ -387,10 +428,10 @@ class _thongTinChiTietTaiKhoanPageState
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Column(
+                        Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               'Nghề nghiệp',
                               style: TextStyle(
                                 fontSize: 20,
@@ -398,12 +439,12 @@ class _thongTinChiTietTaiKhoanPageState
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             Text(
-                              '-Chọn-',
-                              style: TextStyle(
+                              ngheNhiep.isEmpty ? '-Chọn-' : ngheNhiep,
+                              style: const TextStyle(
                                 fontSize: 20,
                                 color: Colors.black,
                               ),

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:baemax/models/khachHang.dart';
 import 'package:baemax/pages/page_thongTinTaiKhoan.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -19,6 +21,78 @@ class _nhapMatKhauPageState extends State<nhapMatKhauPage> {
   bool anHoacHienMatKhau = true;
   final TextEditingController matKhauController = TextEditingController();
   bool trangThaiDangNhap = true;
+
+  String RandomIDKhachHang() {
+    // Tạo danh sách các ký tự từ A đến Z
+    List<String> letters = List.generate(
+        26, (index) => String.fromCharCode('A'.codeUnitAt(0) + index));
+
+    // Tạo danh sách các số từ 0 đến 9
+    List<String> numbers = List.generate(10, (index) => index.toString());
+
+    // Sử dụng hàm random trong thư viện dart:math
+    Random random = Random();
+
+    // Lấy ngẫu nhiên 3 chữ cái từ danh sách letters
+    List<String> randomLetters =
+        List.generate(3, (index) => letters[random.nextInt(letters.length)]);
+
+    // Lấy ngẫu nhiên 3 số từ danh sách numbers
+    List<String> randomNumbers =
+        List.generate(3, (index) => numbers[random.nextInt(numbers.length)]);
+
+    // Kết hợp chữ cái và số ngẫu nhiên thành một chuỗi
+    String randomString = randomLetters.join('') + randomNumbers.join('');
+
+    return randomString;
+  }
+
+  void taoTaiKhoan(KhachHang khachHang) {
+    FirebaseFirestore.instance.collection('khachHang').add({
+      'idKH': khachHang.idKH,
+      'email': khachHang.email,
+      'gioiTinh': khachHang.gioiTinh,
+      'hoTen': khachHang.hoTen,
+      'matKhau': khachHang.matKhau,
+      'ngaySinh': khachHang.ngaySinh,
+      'ngheNghiep': khachHang.ngheNghiep,
+      'sdt': khachHang.sdt,
+    }).then((value) {
+      print('Tạo tài khoản thành công');
+    }).then((Error) {
+      print('Tạo tài khoản không thành công $Error');
+    });
+  }
+
+  void themDuTaiKhoanVuaTaoVaoFirestore() {
+    KhachHang khachHang = KhachHang(
+        idKH: RandomIDKhachHang(),
+        email: '',
+        gioiTinh: 1,
+        hoTen: '',
+        matKhau: matKhauController.text,
+        ngaySinh: '',
+        ngheNghiep: '',
+        sdt: sdtVuaNhap);
+    taoTaiKhoan(khachHang);
+  }
+
+  void taoTaiKhoanVaDangNhap(BuildContext context) async {
+    String sdtKhachHang = sdtVuaNhap;
+
+    final QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection('khachHang')
+        .where('sdt', isEqualTo: sdtKhachHang)
+        .limit(1)
+        .get();
+
+    if (snapshot.size > 0) {
+      dangNhap(context);
+    } else {
+      themDuTaiKhoanVuaTaoVaoFirestore();
+      dangNhap(context);
+    }
+  }
 
   void dangNhap(BuildContext context) async {
     final String phoneNumber = sdtVuaNhap;
@@ -193,7 +267,7 @@ class _nhapMatKhauPageState extends State<nhapMatKhauPage> {
                     onPressed: matKhauController.text.isEmpty
                         ? null
                         : () async {
-                            dangNhap(context);
+                            taoTaiKhoanVaDangNhap(context);
                           },
                     child: const Text(
                       'Đăng nhập',
