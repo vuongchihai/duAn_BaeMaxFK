@@ -484,7 +484,27 @@ class _thongTinTaiKhoanPageState extends State<thongTinTaiKhoanPage> {
                         vertical: 10,
                       ),
                       child: GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('Xin lỗi bạn nhiều'),
+                                content: const Text(
+                                  'BaeMax đang phát triển tính năng này. Bạn vui lòng quay lại sau.',
+                                ),
+                                actions: [
+                                  TextButton(
+                                    child: Text('OK'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
                         child: const Row(
                           children: [
                             Image(
@@ -535,7 +555,27 @@ class _thongTinTaiKhoanPageState extends State<thongTinTaiKhoanPage> {
                         ),
                       ),
                       child: GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('Xin lỗi bạn nhiều'),
+                                content: const Text(
+                                  'BaeMax đang phát triển tính năng này. Bạn vui lòng quay lại sau.',
+                                ),
+                                actions: [
+                                  TextButton(
+                                    child: Text('OK'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
                         child: const Row(
                           children: [
                             Image(
@@ -569,7 +609,27 @@ class _thongTinTaiKhoanPageState extends State<thongTinTaiKhoanPage> {
                         ),
                       ),
                       child: GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('Xin lỗi bạn nhiều'),
+                                content: const Text(
+                                  'BaeMax đang phát triển tính năng này. Bạn vui lòng quay lại sau.',
+                                ),
+                                actions: [
+                                  TextButton(
+                                    child: Text('OK'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
                         child: const Row(
                           children: [
                             Image(
@@ -603,7 +663,27 @@ class _thongTinTaiKhoanPageState extends State<thongTinTaiKhoanPage> {
                         ),
                       ),
                       child: GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('Bạn cần hỗ trợ hả'),
+                                content: const Text(
+                                  'Bạn vui lòng gọi vào 0949162193 hoặc gửi Email đến vuongchihai0711@gmail.com',
+                                ),
+                                actions: [
+                                  TextButton(
+                                    child: Text('OK'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
                         child: const Row(
                           children: [
                             Image(
@@ -633,11 +713,30 @@ class _thongTinTaiKhoanPageState extends State<thongTinTaiKhoanPage> {
                       ),
                       child: GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => dieuKhoanChinhSachPage(),
-                            ),
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) => dieuKhoanChinhSachPage(),
+                          //   ),
+                          // );
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('Thông báo'),
+                                content: const Text(
+                                  'Bạn đừng quy phạm pháp luật là được. Hãy là 1 công dân tốt',
+                                ),
+                                actions: [
+                                  TextButton(
+                                    child: Text('OK'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
                           );
                         },
                         child: const Row(

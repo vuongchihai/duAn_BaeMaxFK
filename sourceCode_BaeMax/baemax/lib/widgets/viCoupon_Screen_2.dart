@@ -50,22 +50,22 @@ class _SubScreen_2State extends State<SubScreen_2> {
         color: const Color.fromARGB(255, 240, 238, 238),
         width: double.infinity,
         height: double.infinity,
-        child: SingleChildScrollView(
-          child: Column(
-            children: itemsPhieuKMs
-                .map((item) => Column(
-                      children: [
-                        ItemPhieuKMViCoupon(
-                          item: item,
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                      ],
-                    ))
-                .toList(),
-          ),
-        ),
+        // child: SingleChildScrollView(
+        //   child: Column(
+        //     children: itemsPhieuKMs
+        //         .map((item) => Column(
+        //               children: [
+        //                 ItemPhieuKMViCoupon(
+        //                   item: item,
+        //                 ),
+        //                 const SizedBox(
+        //                   height: 15,
+        //                 ),
+        //               ],
+        //             ))
+        //         .toList(),
+        //   ),
+        // ),
       ),
     );
   }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../pages/page_danhSachNhaHangDuocApDung.dart';
+
 class main_luaChonTheoLoai_widget extends StatelessWidget {
   const main_luaChonTheoLoai_widget({
     super.key,
@@ -19,7 +21,12 @@ class main_luaChonTheoLoai_widget extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: () {
-                  print('da nhan');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => nhaHangDuocApDungGiamGiaPage(),
+                    ),
+                  );
                 },
                 child: Container(
                   width: 88,
@@ -47,7 +54,12 @@ class main_luaChonTheoLoai_widget extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  print('da nhan');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => nhaHangDuocApDungGiamGiaPage(),
+                    ),
+                  );
                 },
                 child: Container(
                   width: 88,
@@ -75,7 +87,12 @@ class main_luaChonTheoLoai_widget extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  print('da nhan');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => nhaHangDuocApDungGiamGiaPage(),
+                    ),
+                  );
                 },
                 child: Container(
                   width: 88,
@@ -103,7 +120,12 @@ class main_luaChonTheoLoai_widget extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  print('da nhan');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => nhaHangDuocApDungGiamGiaPage(),
+                    ),
+                  );
                 },
                 child: Container(
                   width: 88,
@@ -136,7 +158,12 @@ class main_luaChonTheoLoai_widget extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: () {
-                  print('da nhan');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => nhaHangDuocApDungGiamGiaPage(),
+                    ),
+                  );
                 },
                 child: Container(
                   width: 88,
@@ -164,7 +191,12 @@ class main_luaChonTheoLoai_widget extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  print('da nhan');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => nhaHangDuocApDungGiamGiaPage(),
+                    ),
+                  );
                 },
                 child: Container(
                   width: 88,
@@ -192,7 +224,12 @@ class main_luaChonTheoLoai_widget extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  print('da nhan');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => nhaHangDuocApDungGiamGiaPage(),
+                    ),
+                  );
                 },
                 child: Container(
                   width: 88,
@@ -220,7 +257,12 @@ class main_luaChonTheoLoai_widget extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  print('da nhan');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => nhaHangDuocApDungGiamGiaPage(),
+                    ),
+                  );
                 },
                 child: Container(
                   width: 88,
@@ -253,7 +295,12 @@ class main_luaChonTheoLoai_widget extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: () {
-                  print('da nhan');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => nhaHangDuocApDungGiamGiaPage(),
+                    ),
+                  );
                 },
                 child: Container(
                   width: 88,
@@ -281,7 +328,12 @@ class main_luaChonTheoLoai_widget extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  print('da nhan');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => nhaHangDuocApDungGiamGiaPage(),
+                    ),
+                  );
                 },
                 child: Container(
                   width: 88,
@@ -309,7 +361,12 @@ class main_luaChonTheoLoai_widget extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  print('da nhan');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => nhaHangDuocApDungGiamGiaPage(),
+                    ),
+                  );
                 },
                 child: Container(
                   width: 88,
@@ -337,7 +394,12 @@ class main_luaChonTheoLoai_widget extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  print('da nhan');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => nhaHangDuocApDungGiamGiaPage(),
+                    ),
+                  );
                 },
                 child: Container(
                   width: 88,
@@ -370,7 +432,12 @@ class main_luaChonTheoLoai_widget extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: () {
-                  print('da nhan');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => nhaHangDuocApDungGiamGiaPage(),
+                    ),
+                  );
                 },
                 child: Container(
                   width: 88,
@@ -398,7 +465,12 @@ class main_luaChonTheoLoai_widget extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  print('da nhan');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => nhaHangDuocApDungGiamGiaPage(),
+                    ),
+                  );
                 },
                 child: Container(
                   width: 88,
@@ -426,7 +498,12 @@ class main_luaChonTheoLoai_widget extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  print('da nhan');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => nhaHangDuocApDungGiamGiaPage(),
+                    ),
+                  );
                 },
                 child: Container(
                   width: 88,
@@ -454,7 +531,12 @@ class main_luaChonTheoLoai_widget extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  print('da nhan');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => nhaHangDuocApDungGiamGiaPage(),
+                    ),
+                  );
                 },
                 child: Container(
                   width: 88,

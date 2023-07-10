@@ -152,7 +152,7 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
         .doc(widget.IDNhaHang)
         .collection('monAn')
         .orderBy('tenMon')
-        .startAt([uppercaseQuery]).endAt([uppercaseQuery + '\uf8ff']).get();
+        .startAt([uppercaseQuery]).get();
 
     setState(() {
       searchResult = result.docs.map((doc) => doc.data()).toList();
@@ -796,6 +796,8 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
                                 );
                               },
                             ),
+                         
+                         
                           ],
                         ),
                       )

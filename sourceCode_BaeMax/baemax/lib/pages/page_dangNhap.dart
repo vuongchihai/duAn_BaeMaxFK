@@ -179,21 +179,42 @@ class dangNhapPage extends StatelessWidget {
                     const SizedBox(
                       height: 15,
                     ),
-                    Container(
-                      width: 40,
-                      height: 40,
-                      child: const Image(image: AssetImage('images/hinh_84.png')),
+                    GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('Xin lỗi bạn nhiều'),
+                              content: const Text(
+                                'BaeMax đang phát triển tính năng này. Bạn vui lòng quay lại sau.',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                ),
+                              ),
+                              actions: [
+                                TextButton(
+                                  child: Text('OK'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        child: const Image(
+                            image: AssetImage('images/hinh_84.png')),
+                      ),
                     ),
-                  
-                  
-                  
                   ],
                 ),
               ),
             ),
-          
-          
-          
           ],
         ),
       ),

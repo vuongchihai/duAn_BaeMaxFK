@@ -610,9 +610,35 @@ class _thongTinChiTietTaiKhoanPageState
                   children: [
                     GestureDetector(
                       onTap: () {
-                        final user = Provider.of<User>(context, listen: false);
-                        user.clearInfo();
-                        Navigator.popUntil(context, (route) => route.settings.name == '/');
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('Thoát ra hả'),
+                              content: const  Text(
+                                  'Bạn có chắc chắn muốn thoát ra thiệt hong? (hichic)'),
+                              actions: [
+                                TextButton(
+                                  child: Text('Yes'),
+                                  onPressed: () {
+                                    final user = Provider.of<User>(context,
+                                        listen: false);
+                                    user.clearInfo();
+                                    Navigator.popUntil(context,
+                                        (route) => route.settings.name == '/');
+                                  },
+                                ),
+                                TextButton(
+                                  child: Text('No'),
+                                  onPressed: () {
+                                    // Xử lý khi nhấn No
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
                       },
                       child: const Text(
                         'Thoát ra',

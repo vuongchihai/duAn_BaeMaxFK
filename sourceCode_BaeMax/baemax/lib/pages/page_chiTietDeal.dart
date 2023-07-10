@@ -1,8 +1,13 @@
 import 'package:baemax/modal/nhaHang.dart';
+import 'package:baemax/pages/page_chiTietNhaHang.dart';
 import 'package:baemax/widgets/listNhaHang_chiTietNhaHang.dart';
 import 'package:baemax/widgets/listNhaHang_danhMucVaCuaHang.dart';
 import 'package:baemax/widgets/listNhaHang_sapXep.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+import '../models/NhaHang.dart';
 
 class chiTietDealPage extends StatefulWidget {
   const chiTietDealPage({super.key});
@@ -86,6 +91,7 @@ class _chiTietDealPageState extends State<chiTietDealPage> {
   int soLuongDMCHDuocChon = 0;
   String chonDanhMucCuaHang = '';
   String viTriDanhMucCuaHangDuocCho = '';
+  bool sapXep = false;
 
   void capNhatChonDanhMucCuaHang(String value, String viTri) {
     setState(() {
@@ -126,6 +132,8 @@ class _chiTietDealPageState extends State<chiTietDealPage> {
 
     return ketQuaTimKiem;
   }
+
+  List<QueryDocumentSnapshot>? documents; // Danh sách documents
 
   @override
   Widget build(BuildContext context) {
@@ -211,7 +219,8 @@ class _chiTietDealPageState extends State<chiTietDealPage> {
                       ).then((value) {
                         if (value != null) {
                           setState(() {
-                            selectedSortStyle = value.toString();
+                            // selectedSortStyle = value.toString();
+                            sapXep = value;
                           });
                         }
                       });
@@ -429,32 +438,208 @@ class _chiTietDealPageState extends State<chiTietDealPage> {
             const SizedBox(
               height: 20,
             ),
-            Container(
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.only(
-                left: 10,
-              ),
-              child: Text(
-                '${ketQuaTimKiem.length} nhà hàng tìm thấy',
-                style: const TextStyle(
-                  fontSize: 20,
-                  color: const Color.fromARGB(255, 66, 66, 66),
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
+            StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('nhaHang')
+                  .orderBy('khoangCach', descending: sapXep)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return CircularProgressIndicator();
+                }
+
+                // Lấy danh sách documents từ snapshot
+                List<QueryDocumentSnapshot> documents = snapshot.data!.docs;
+
+                return ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: documents.length,
+                  itemBuilder: (context, index) {
+                    // Lấy dữ liệu của món ăn từ document
+                    Map<String, dynamic> foodData =
+                        documents[index].data() as Map<String, dynamic>;
+
+                    // Trích xuất tên và giá của món ăn
+                    String IDNhaHang = documents![index].id;
+                    String tenNH = foodData['tenNH'];
+                    String anhDaiDienNH = foodData['anhDaiDienNH'];
+                    String diaChiNH = foodData['diaChiNH'];
+                    num khoangCach = foodData['khoangCach'];
+                    num danhGia = foodData['danhGia'];
+                    num SLDaBan = foodData['SLDaBan'];
+
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => chiTietNhaHangPage(
+                              IDNhaHang: IDNhaHang,
+                              tenNH: tenNH,
+                              anhDaiDienNH: anhDaiDienNH,
+                              diaChiNH: diaChiNH,
+                              khoangCach: khoangCach,
+                              danhGia: danhGia,
+                              SLDaBan: SLDaBan,
+                            ),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 20,
+                        ),
+                        decoration: const BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(
+                              color: Colors.black,
+                              width: 1.0,
+                            ),
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 120,
+                              height: 125,
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Image(
+                                      image: AssetImage(anhDaiDienNH),
+                                      fit: BoxFit.cover,
+                                      width: 100,
+                                      height: 105,
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: 0,
+                                    left: 0,
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 5,
+                                        vertical: 5,
+                                      ),
+                                      decoration: const BoxDecoration(
+                                        color: Colors.orange,
+                                        borderRadius: BorderRadius.only(
+                                          bottomRight: Radius.circular(10),
+                                        ),
+                                      ),
+                                      child: const Text(
+                                        'PROMO',
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Container(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: 220,
+                                    child: Row(
+                                      children: [
+                                        const Image(
+                                          image:
+                                              AssetImage('images/hinh_78.png'),
+                                          width: 25,
+                                          height: 25,
+                                        ),
+                                        const SizedBox(
+                                          width: 8,
+                                        ),
+                                        Flexible(
+                                          child: Container(
+                                            width: 250,
+                                            child: Text(
+                                              tenNH,
+                                              style: const TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                              softWrap: true,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Container(
+                                    width: 220,
+                                    child: Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.star,
+                                          color: Colors.yellow,
+                                          size: 27,
+                                        ),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text.rich(
+                                          TextSpan(
+                                            children: [
+                                              TextSpan(
+                                                text: '$danhGia ',
+                                                style: const TextStyle(
+                                                  fontSize: 20,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                              TextSpan(
+                                                text: ' ($SLDaBan+)',
+                                                // text: SLDaBan.toString(),
+                                                style: const TextStyle(
+                                                  fontSize: 20,
+                                                  color: Colors.grey,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text(
+                                          '· $khoangCach km',
+                                          style: const TextStyle(
+                                            fontSize: 20,
+                                            color:
+                                                Color.fromARGB(255, 72, 72, 72),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: ketQuaTimKiem
-                  .map((item) => Flexible(
-                        fit: FlexFit.loose,
-                        child: dsNhaHang(item: item),
-                      ))
-                  .toList(),
-            )
           ],
         ),
       ),

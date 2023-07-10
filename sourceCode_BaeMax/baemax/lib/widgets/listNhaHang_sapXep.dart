@@ -9,6 +9,7 @@ class sapXepListNhaHang extends StatefulWidget {
 
 class _sapXepListNhaHangState extends State<sapXepListNhaHang> {
   String sort = '';
+  bool kieuSapXep = false;
 
   @override
   Widget build(BuildContext context) {
@@ -48,48 +49,50 @@ class _sapXepListNhaHangState extends State<sapXepListNhaHang> {
                 setState(() {
                   sort = value.toString();
                   print(sort);
+                  kieuSapXep = false;
                 });
-                Navigator.pop(context, value);
+                Navigator.pop(context, kieuSapXep);
               },
             ),
             RadioListTile(
               title: const Text(
-                'Đánh giá tốt',
+                'Xa nhất',
                 style: TextStyle(
                   fontSize: 20,
                   color: Colors.black,
                 ),
               ),
-              value: 'Đánh giá tốt',
+              value: 'Xa nhất',
               groupValue: sort,
               controlAffinity: ListTileControlAffinity.trailing,
               onChanged: (value) {
                 setState(() {
                   sort = value.toString();
                   print(sort);
+                  kieuSapXep = true;
                 });
-                Navigator.pop(context, value);
+                Navigator.pop(context, kieuSapXep);
               },
             ),
-            RadioListTile(
-              title: const Text(
-                'Phổ biến',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.black,
-                ),
-              ),
-              value: 'Phổ biến',
-              groupValue: sort,
-              controlAffinity: ListTileControlAffinity.trailing,
-              onChanged: (value) {
-                setState(() {
-                  sort = value.toString();
-                  print(sort);
-                });
-                Navigator.pop(context, value);
-              },
-            ),
+            // RadioListTile(
+            //   title: const Text(
+            //     'Phổ biến',
+            //     style: TextStyle(
+            //       fontSize: 20,
+            //       color: Colors.black,
+            //     ),
+            //   ),
+            //   value: 'Phổ biến',
+            //   groupValue: sort,
+            //   controlAffinity: ListTileControlAffinity.trailing,
+            //   onChanged: (value) {
+            //     setState(() {
+            //       sort = value.toString();
+            //       print(sort);
+            //     });
+            //     Navigator.pop(context, value);
+            //   },
+            // ),
           ],
         ),
       ),

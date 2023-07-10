@@ -115,13 +115,13 @@ class _suaThongTin_SDT_PageState extends State<suaThongTin_SDT_Page> {
             const SizedBox(
               height: 10,
             ),
-            const Text(
-              'Số điện thoại đã được sử dụng',
-              style: TextStyle(
-                color: Colors.red,
-                fontSize: 15,
-              ),
-            ),
+            // const Text(
+            //   'Số điện thoại đã được sử dụng',
+            //   style: TextStyle(
+            //     color: Colors.red,
+            //     fontSize: 15,
+            //   ),
+            // ),
             Expanded(
               child: Align(
                 alignment: Alignment.bottomCenter,
