@@ -5,7 +5,9 @@ import 'package:intl/intl.dart';
 
 class trangThanhToanPage extends StatefulWidget {
   final String IDCuaKhachHang;
-  trangThanhToanPage({Key? key, required this.IDCuaKhachHang})
+  final String IDCuaNhaHang;
+  trangThanhToanPage(
+      {Key? key, required this.IDCuaKhachHang, required this.IDCuaNhaHang})
       : super(key: key);
 
   @override
@@ -21,13 +23,19 @@ class _trangThanhToanPageState extends State<trangThanhToanPage> {
   late Timer _timer;
 
   String idKhachHang = '';
+  String idNhaHang = '';
   int tongSoLuongMon = 0;
+  num khoangCachNH = 0;
+  num tienTamTinh = 0;
+  num tienGiamGiaSuKienToanServer = 4.000;
+
   @override
   void initState() {
     super.initState();
     startTimer();
     setState(() {
       idKhachHang = widget.IDCuaKhachHang ?? '';
+      idNhaHang = widget.IDCuaNhaHang ?? '';
     });
   }
 
@@ -225,7 +233,7 @@ class _trangThanhToanPageState extends State<trangThanhToanPage> {
                                               data['giaTien'] as double;
 
                                           return Container(
-                                            decoration: BoxDecoration(
+                                            decoration: const BoxDecoration(
                                               border: Border(
                                                 bottom: BorderSide(
                                                   color: Colors.grey,
@@ -400,35 +408,37 @@ class _trangThanhToanPageState extends State<trangThanhToanPage> {
                                       },
                                     ),
                                     StreamBuilder<QuerySnapshot>(
-                          stream: FirebaseFirestore.instance
-                              .collection('khachHang')
-                              .doc(idKhachHang)
-                              .collection('gioHang')
-                              .snapshots(),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              final gioHangDocs = snapshot.data!.docs;
-                              tinhTongSoLuongVaTien(gioHangDocs);
+                                      stream: FirebaseFirestore.instance
+                                          .collection('khachHang')
+                                          .doc(idKhachHang)
+                                          .collection('gioHang')
+                                          .snapshots(),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.hasData) {
+                                          final gioHangDocs =
+                                              snapshot.data!.docs;
+                                          tinhTongSoLuongVaTien(gioHangDocs);
+                                          tienTamTinh = tongTien;
 
-                              return Text(
-                                '${NumberFormat("0.000").format(tongTien)}đ',
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.black,
-                                ),
-                              );
-                            } else {
-                              return const Text(
-                                '0.000',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              );
-                            }
-                          },
-                        ),
+                                          return Text(
+                                            '${NumberFormat("0.000").format(tongTien)}đ',
+                                            style: const TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.black,
+                                            ),
+                                          );
+                                        } else {
+                                          return const Text(
+                                            '0.000',
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          );
+                                        }
+                                      },
+                                    ),
                                   ],
                                 ),
                               ),
@@ -440,30 +450,64 @@ class _trangThanhToanPageState extends State<trangThanhToanPage> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    RichText(
-                                      text: TextSpan(
-                                        children: [
-                                          TextSpan(
-                                            text: 'Phí áp dụng: ',
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                          TextSpan(
-                                            text: '0.2km',
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ],
+                                    Container(
+                                      child: StreamBuilder<DocumentSnapshot>(
+                                        stream: FirebaseFirestore.instance
+                                            .collection('nhaHang')
+                                            .doc(idNhaHang)
+                                            .snapshots(),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.hasData &&
+                                              snapshot.data!.exists) {
+                                            final restaurantData =
+                                                snapshot.data!.data()
+                                                    as Map<String, dynamic>;
+
+                                            if (restaurantData
+                                                .containsKey('khoangCach')) {
+                                              final khoangCach =
+                                                  restaurantData['khoangCach']
+                                                      as num;
+
+                                              khoangCachNH = khoangCach;
+                                              // Gán địa chỉ vào Text widget
+                                              return RichText(
+                                                text: TextSpan(
+                                                  children: [
+                                                    const TextSpan(
+                                                      text: 'Phí áp dụng: ',
+                                                      style: TextStyle(
+                                                        fontSize: 20,
+                                                        color: Colors.black,
+                                                      ),
+                                                    ),
+                                                    TextSpan(
+                                                      text: '${khoangCach}km',
+                                                      style: const TextStyle(
+                                                        fontSize: 20,
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            } else {
+                                              return const Text(
+                                                  'Trường dữ liệu "diaChi" không tồn tại');
+                                            }
+                                          } else if (snapshot.hasError) {
+                                            return Text('Đã xảy ra lỗi');
+                                          } else {
+                                            return CircularProgressIndicator();
+                                          }
+                                        },
                                       ),
                                     ),
                                     Text(
-                                      '18.000đ',
-                                      style: TextStyle(
+                                      '${NumberFormat("0.000").format(khoangCachNH * 5.000)}đ',
+                                      style: const TextStyle(
                                         fontSize: 20,
                                         color: Colors.black,
                                       ),
@@ -472,14 +516,29 @@ class _trangThanhToanPageState extends State<trangThanhToanPage> {
                                 ),
                               ),
                               const SizedBox(
+                                height: 5,
+                              ),
+                              Container(
+                                padding: EdgeInsets.symmetric(horizontal: 3),
+                                alignment: Alignment.centerLeft,
+                                child: Transform(
+                                  transform: Matrix4.skewX(
+                                      -0.3), // Điều chỉnh độ nghiêng theo trục X (tùy chỉnh giá trị tại đây)
+                                  child: const Text(
+                                    '(Với 1km là 5.000đ)',
+                                    style: TextStyle(fontSize: 18),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
                                 height: 10,
                               ),
                               Container(
-                                child: Row(
+                                child:Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
+                                     const Text(
                                       'Mùa hè sôi động, khao',
                                       style: TextStyle(
                                         fontSize: 20,
@@ -487,8 +546,8 @@ class _trangThanhToanPageState extends State<trangThanhToanPage> {
                                       ),
                                     ),
                                     Text(
-                                      '- 4.000đ',
-                                      style: TextStyle(
+                                      '- ${NumberFormat("0.000").format(tienGiamGiaSuKienToanServer)}đ',
+                                      style: const  TextStyle(
                                         fontSize: 20,
                                         color: Colors.red,
                                       ),
@@ -591,8 +650,10 @@ class _trangThanhToanPageState extends State<trangThanhToanPage> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        '185.000đ',
-                                        style: TextStyle(
+                                        NumberFormat("0.000").format(
+                                            ((khoangCachNH * 5.000) +
+                                                tienTamTinh)),
+                                        style: const TextStyle(
                                           fontSize: 20,
                                           decoration:
                                               TextDecoration.lineThrough,
@@ -603,8 +664,10 @@ class _trangThanhToanPageState extends State<trangThanhToanPage> {
                                         height: 10,
                                       ),
                                       Text(
-                                        '185.000đ',
-                                        style: TextStyle(
+                                        NumberFormat("0.000").format(
+                                            (((khoangCachNH * 5.000) +
+                                                tienTamTinh))- tienGiamGiaSuKienToanServer),
+                                        style: const TextStyle(
                                           fontSize: 25,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.black,
@@ -619,6 +682,7 @@ class _trangThanhToanPageState extends State<trangThanhToanPage> {
                                   setState(() {
                                     xacNhanDatHang = true;
                                   });
+                                  print('${widget.IDCuaNhaHang}');
                                 },
                                 child: Container(
                                   width: 245,

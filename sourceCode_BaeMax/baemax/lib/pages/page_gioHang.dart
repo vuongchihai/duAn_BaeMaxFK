@@ -6,7 +6,10 @@ import 'page_trangThanhToan.dart';
 
 class gioHangPage extends StatefulWidget {
   final String IDCuaKhachHang;
-  gioHangPage({Key? key, required this.IDCuaKhachHang}) : super(key: key);
+  final String IDCuaNhaHang;
+  gioHangPage(
+      {Key? key, required this.IDCuaKhachHang, required this.IDCuaNhaHang})
+      : super(key: key);
 
   @override
   State<gioHangPage> createState() => _gioHangPageState();
@@ -19,12 +22,14 @@ class _gioHangPageState extends State<gioHangPage> {
   int tongSoLuongMon = 0;
   bool kiemTraSoLuongThayDoi = false;
   String idKhachHang = '';
+  String idNhaHang = '';
 
   @override
   void initState() {
     super.initState();
     setState(() {
       idKhachHang = widget.IDCuaKhachHang ?? '';
+      idNhaHang = widget.IDCuaNhaHang ?? '';
     });
 
     thayDoiSoLuongController.text = thayDoiSoLuong.toString();
@@ -322,7 +327,8 @@ class _gioHangPageState extends State<gioHangPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => trangThanhToanPage(IDCuaKhachHang: idKhachHang),
+                      builder: (context) =>
+                          trangThanhToanPage(IDCuaKhachHang: idKhachHang, IDCuaNhaHang: idNhaHang),
                     ),
                   );
                 },

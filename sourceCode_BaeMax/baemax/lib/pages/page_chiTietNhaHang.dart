@@ -1297,7 +1297,7 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
                           context,
                           MaterialPageRoute(
                             builder: (context) =>
-                                gioHangPage(IDCuaKhachHang: idUser!),
+                                gioHangPage(IDCuaKhachHang: idUser!, IDCuaNhaHang: widget.IDNhaHang!)
                           ),
                         );
                       },
@@ -1344,7 +1344,7 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => trangThanhToanPage(IDCuaKhachHang: idUser!),
+                            builder: (context) => trangThanhToanPage(IDCuaKhachHang: idUser!, IDCuaNhaHang: widget.IDNhaHang!),
                           ),
                         );
                         printSL();
