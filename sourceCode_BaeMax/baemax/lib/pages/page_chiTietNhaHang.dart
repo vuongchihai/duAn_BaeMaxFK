@@ -585,16 +585,40 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
                                               height: 10,
                                             ),
                                             Container(
-                                              width: 180,
-                                              child: Text(
-                                                monAn.tenMon,
-                                                style: const TextStyle(
-                                                  fontSize: 20,
-                                                  color: Colors.black,
-                                                ),
-                                                softWrap: true,
-                                                maxLines: 3,
-                                                overflow: TextOverflow.ellipsis,
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Container(
+                                                    width: 180,
+                                                    child: Text(
+                                                      monAn.tenMon,
+                                                      style: const TextStyle(
+                                                        fontSize: 20,
+                                                        color: Colors.black,
+                                                      ),
+                                                      softWrap: true,
+                                                      maxLines: 2,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    width: 180,
+                                                    child: Text(
+                                                      '${NumberFormat("0.000").format(monAn.giaTien)}đ',
+                                                      style: const TextStyle(
+                                                        fontSize: 20,
+                                                        color: Colors.black,
+                                                      ),
+                                                      softWrap: true,
+                                                      maxLines: 3,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ),
                                           ],
@@ -619,7 +643,7 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Thập cẩm/ Mixed',
+                                  'Tất cả các món',
                                   style: TextStyle(
                                       fontSize: 25,
                                       fontWeight: FontWeight.bold,
@@ -629,7 +653,7 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
                                   width: 10,
                                 ),
                                 Image(
-                                  image: AssetImage('images/hinh_19.png'),
+                                  image: AssetImage('images/hinh_8.png'),
                                   width: 30,
                                   height: 30,
                                 ),
@@ -638,6 +662,41 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
                             const SizedBox(
                               height: 10,
                             ),
+                            Container(
+                                child: StreamBuilder<DocumentSnapshot>(
+                              stream: FirebaseFirestore.instance
+                                  .collection('nhaHang')
+                                  .doc()
+                                  .snapshots(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasError) {
+                                  return Text('Lỗi: ${snapshot.error}');
+                                }
+
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return CircularProgressIndicator();
+                                }
+
+                                if (!snapshot.hasData) {
+                                  return Text('Không có dữ liệu');
+                                }
+                                // Lấy thông tin nhà hàng từ tài liệu snapshot
+                                Map<String, dynamic>? nhaHangData =
+                                    snapshot.data!.data()
+                                        as Map<String, dynamic>?;
+
+                                if (nhaHangData == null) {
+                                  return Text('Dữ liệu nhà hàng không hợp lệ');
+                                }
+
+                                // num slDaBan = nhaHangData['SLDaBan'] ?? 0;
+                                // String hinhAnh =
+                                //     nhaHangData['anhDaiDienNH'] ?? '';
+                                // String diaChi = nhaHangData['diaChiNH'] ?? '';
+                                return Column();
+                              },
+                            )),
                             GestureDetector(
                               onTap: () {},
                               child: Container(

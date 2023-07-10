@@ -126,6 +126,7 @@ class _khaoNuocXin_DealDaTangState extends State<khaoNuocXin_DealDaTang> {
                         height: 150,
                         margin: const EdgeInsets.only(right: 20),
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             restaurant.anhDaiDienNH.isNotEmpty
                                 ? Container(

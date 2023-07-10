@@ -190,14 +190,6 @@ class _FavoriteRestaurantWidgetState extends State<FavoriteRestaurantWidget> {
                                               color: Colors.black,
                                             ),
                                           ),
-                                          const Text(
-                                            'Cơm gà xối mỡ, Cơm đùi gà góc tư',
-                                            style: TextStyle(
-                                              fontSize: 15,
-                                              color: Color.fromARGB(
-                                                  255, 98, 98, 98),
-                                            ),
-                                          ),
                                           const SizedBox(
                                             height: 10,
                                           ),
@@ -255,7 +247,7 @@ class _FavoriteRestaurantWidgetState extends State<FavoriteRestaurantWidget> {
                                     Column(
                                       children: [
                                         const SizedBox(
-                                          height: 50,
+                                          height: 20,
                                         ),
                                         GestureDetector(
                                           onTap: () {

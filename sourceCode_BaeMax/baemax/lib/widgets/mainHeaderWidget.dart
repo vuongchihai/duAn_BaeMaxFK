@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:baemax/models/MonAn.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +11,31 @@ class main_header_widget extends StatelessWidget {
   const main_header_widget({
     super.key,
   });
+
+    String RandomIDMonAn() {
+    // Tạo danh sách các ký tự từ A đến Z
+    List<String> letters = List.generate(
+        26, (index) => String.fromCharCode('A'.codeUnitAt(0) + index));
+
+    // Tạo danh sách các số từ 0 đến 9
+    List<String> numbers = List.generate(10, (index) => index.toString());
+
+    // Sử dụng hàm random trong thư viện dart:math
+    Random random = Random();
+
+    // Lấy ngẫu nhiên 3 chữ cái từ danh sách letters
+    List<String> randomLetters =
+        List.generate(5, (index) => letters[random.nextInt(letters.length)]);
+
+    // Lấy ngẫu nhiên 3 số từ danh sách numbers
+    List<String> randomNumbers =
+        List.generate(5, (index) => numbers[random.nextInt(numbers.length)]);
+
+    // Kết hợp chữ cái và số ngẫu nhiên thành một chuỗi
+    String randomString = randomLetters.join('') + randomNumbers.join('');
+
+    return randomString;
+  }
 
   void themMonAnVaoNhaHang(MonAn monAn, String idNhaHang) {
     FirebaseFirestore.instance
@@ -29,12 +56,12 @@ class main_header_widget extends StatelessWidget {
 
   void themDuLieuDenFiestore() {
     MonAn monAn = MonAn(
-      IDMonAn: 'MA13',
-      tenMon: 'Gà luộc',
-      hinhAnhMA: 'images/hinh_44.jpg',
-      giaTien: 130.000,
+      IDMonAn: RandomIDMonAn(),
+      tenMon: 'Hồng trà sữa (vị truyền thống) trân châu',
+      hinhAnhMA: 'images/hinh_100.jpg',
+      giaTien: 34.000,
     );
-    String idNhaHang = 'VM9YHVRPuNJQzoxttAxa';
+    String idNhaHang = 't0vLbONEuOY2regsBTGo';
     themMonAnVaoNhaHang(monAn, idNhaHang);
   }
 
