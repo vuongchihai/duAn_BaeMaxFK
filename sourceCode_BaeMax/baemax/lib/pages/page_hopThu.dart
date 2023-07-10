@@ -50,7 +50,7 @@ class hopThuPage extends StatelessWidget {
                   height: 10,
                 ),
                 Text(
-                  'BAEMAX sẽ sớm trở lại, đừng khóc nhé!',
+                  'BAEMAX sẽ sớm trở lại, lợi hại hơn xưa!',
                   style: TextStyle(
                     fontSize: 20,
                   ),

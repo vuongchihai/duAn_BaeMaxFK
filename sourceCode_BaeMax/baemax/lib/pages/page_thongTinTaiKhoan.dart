@@ -210,12 +210,21 @@ class _thongTinTaiKhoanPageState extends State<thongTinTaiKhoanPage> {
                             flex: 1,
                             child: GestureDetector(
                               onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => donHangCuaToiPage(),
-                                  ),
-                                );
+                                if (phoneNumber.isEmpty) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => dangNhapPage(),
+                                    ),
+                                  );
+                                } else {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => donHangCuaToiPage(),
+                                    ),
+                                  );
+                                }
                               },
                               child: Container(
                                 decoration: BoxDecoration(
@@ -271,13 +280,20 @@ class _thongTinTaiKhoanPageState extends State<thongTinTaiKhoanPage> {
                                       MaterialPageRoute(
                                         builder: (context) =>
                                             FavoriteRestaurantWidget(
-                                                nhaHangIds: nhaHangIds,
-                                                IDCuaKhachHang: khachHangId,),
+                                          nhaHangIds: nhaHangIds,
+                                          IDCuaKhachHang: khachHangId,
+                                        ),
                                       ),
                                     );
                                   } else {
                                     print(
                                         'Không tìm thấy tài liệu KhachHang với số điện thoại $phoneNumber');
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => dangNhapPage(),
+                                      ),
+                                    );
                                   }
                                 }).catchError((onError) {
                                   print(
@@ -316,12 +332,21 @@ class _thongTinTaiKhoanPageState extends State<thongTinTaiKhoanPage> {
                             flex: 1,
                             child: GestureDetector(
                               onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => SoDiaChiPage(),
-                                  ),
-                                );
+                                if (phoneNumber.isEmpty) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => dangNhapPage(),
+                                    ),
+                                  );
+                                } else {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => SoDiaChiPage(),
+                                    ),
+                                  );
+                                }
                               },
                               child: Container(
                                 decoration: BoxDecoration(

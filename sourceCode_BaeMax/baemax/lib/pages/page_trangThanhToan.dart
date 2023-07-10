@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+
+import '../widgets/chiTietIemNhaHangDuocApDung.dart';
 
 class trangThanhToanPage extends StatefulWidget {
   final String IDCuaKhachHang;
@@ -197,6 +200,7 @@ class _trangThanhToanPageState extends State<trangThanhToanPage> {
                         ),
                         Container(
                           color: Colors.white,
+                          width: double.infinity,
                           padding: const EdgeInsets.symmetric(
                             vertical: 20,
                             horizontal: 10,
@@ -310,8 +314,21 @@ class _trangThanhToanPageState extends State<trangThanhToanPage> {
                                                         ),
                                                         IconButton(
                                                           onPressed: () {
-                                                            print(
-                                                                'nhấn xóa món ăn');
+                                                            // Xóa món ăn và cập nhật Firestore
+                                                            doc.reference
+                                                                .delete()
+                                                                .then((_) {
+                                                              Fluttertoast
+                                                                  .showToast(
+                                                                      msg:
+                                                                          'Xóa món ăn thành công');
+                                                            }).catchError(
+                                                                    (error) {
+                                                              Fluttertoast
+                                                                  .showToast(
+                                                                      msg:
+                                                                          'Lỗi khi xóa món ăn: $error');
+                                                            });
                                                           },
                                                           icon: const Icon(
                                                             Icons.close,
@@ -534,11 +551,11 @@ class _trangThanhToanPageState extends State<trangThanhToanPage> {
                                 height: 10,
                               ),
                               Container(
-                                child:Row(
+                                child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                     const Text(
+                                    const Text(
                                       'Mùa hè sôi động, khao',
                                       style: TextStyle(
                                         fontSize: 20,
@@ -547,7 +564,7 @@ class _trangThanhToanPageState extends State<trangThanhToanPage> {
                                     ),
                                     Text(
                                       '- ${NumberFormat("0.000").format(tienGiamGiaSuKienToanServer)}đ',
-                                      style: const  TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 20,
                                         color: Colors.red,
                                       ),
@@ -666,7 +683,8 @@ class _trangThanhToanPageState extends State<trangThanhToanPage> {
                                       Text(
                                         NumberFormat("0.000").format(
                                             (((khoangCachNH * 5.000) +
-                                                tienTamTinh))- tienGiamGiaSuKienToanServer),
+                                                    tienTamTinh)) -
+                                                tienGiamGiaSuKienToanServer),
                                         style: const TextStyle(
                                           fontSize: 25,
                                           fontWeight: FontWeight.bold,

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:baemax/models/MonAn.dart';
 import 'package:baemax/pages/page_chiTietCuaMonAn.dart';
+import 'package:baemax/pages/page_dangNhap.dart';
 import 'package:baemax/pages/page_gioHang.dart';
 import 'package:baemax/pages/page_trangThanhToan.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -87,11 +88,6 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
 
   String? idUser;
 
-  // Stream<QuerySnapshot> cartStream = FirebaseFirestore.instance
-  //     .collection('khachHang')
-  //     .doc(idUser)
-  //     .collection('gioHang')
-  //     .snapshots();
   int soLuongMonAnTrongGioHang = 0;
 
   Future<int> demSoLuongMonAnTrongGio() async {
@@ -1296,9 +1292,9 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                gioHangPage(IDCuaKhachHang: idUser!, IDCuaNhaHang: widget.IDNhaHang!)
-                          ),
+                              builder: (context) => gioHangPage(
+                                  IDCuaKhachHang: idUser!,
+                                  IDCuaNhaHang: widget.IDNhaHang!)),
                         );
                       },
                       child: Container(
@@ -1341,13 +1337,24 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => trangThanhToanPage(IDCuaKhachHang: idUser!, IDCuaNhaHang: widget.IDNhaHang!),
-                          ),
-                        );
-                        printSL();
+                        if (phoneNumber.isEmpty) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => dangNhapPage(),
+                            ),
+                          );
+                        } else {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => trangThanhToanPage(
+                                  IDCuaKhachHang: idUser!,
+                                  IDCuaNhaHang: widget.IDNhaHang!),
+                            ),
+                          );
+                          printSL();
+                        }
                       },
                       child: Container(
                         height: 65,
