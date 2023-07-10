@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:baemax/modal/monAn.dart';
 import 'package:baemax/models/MonAn.dart';
 import 'package:baemax/pages/page_chiTietCuaMonAn.dart';
 import 'package:baemax/pages/page_dangNhap.dart';
@@ -336,16 +337,20 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
                                     Container(
                                       width: 300,
                                       child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
-                                          Container(
-                                            width: 140,
-                                            alignment: Alignment.centerRight,
-                                            child: Text(
-                                              '${widget.khoangCach}km',
-                                              style: const TextStyle(
-                                                fontSize: 20,
-                                                color: Colors.grey,
-                                                fontWeight: FontWeight.bold,
+                                          Expanded(
+                                            child: Container(
+                                              // width: 140,
+                                              alignment: Alignment.centerRight,
+                                              child: Text(
+                                                '${widget.khoangCach}km',
+                                                style: const TextStyle(
+                                                  fontSize: 20,
+                                                  color: Colors.grey,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -563,7 +568,7 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
                                       },
                                       child: Container(
                                         width: 180,
-                                        margin: EdgeInsets.only(
+                                        margin: const EdgeInsets.only(
                                           right: 20,
                                         ),
                                         child: Column(
@@ -645,9 +650,10 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
                                 Text(
                                   'Tất cả các món',
                                   style: TextStyle(
-                                      fontSize: 25,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black),
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
                                 ),
                                 SizedBox(
                                   width: 10,
@@ -662,91 +668,137 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
                             const SizedBox(
                               height: 10,
                             ),
-                            Container(
-                                child: StreamBuilder<DocumentSnapshot>(
+                            StreamBuilder<QuerySnapshot>(
                               stream: FirebaseFirestore.instance
                                   .collection('nhaHang')
-                                  .doc()
+                                  .doc(widget.IDNhaHang)
+                                  .collection('monAn')
                                   .snapshots(),
                               builder: (context, snapshot) {
-                                if (snapshot.hasError) {
-                                  return Text('Lỗi: ${snapshot.error}');
-                                }
-
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
+                                if (!snapshot.hasData) {
                                   return CircularProgressIndicator();
                                 }
 
-                                if (!snapshot.hasData) {
-                                  return Text('Không có dữ liệu');
-                                }
-                                // Lấy thông tin nhà hàng từ tài liệu snapshot
-                                Map<String, dynamic>? nhaHangData =
-                                    snapshot.data!.data()
-                                        as Map<String, dynamic>?;
+                                // Lấy danh sách documents từ snapshot
+                                List<QueryDocumentSnapshot> documents =
+                                    snapshot.data!.docs;
 
-                                if (nhaHangData == null) {
-                                  return Text('Dữ liệu nhà hàng không hợp lệ');
-                                }
+                                return ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  itemCount: documents.length,
+                                  itemBuilder: (context, index) {
+                                    // Lấy dữ liệu của món ăn từ document
+                                    Map<String, dynamic> foodData =
+                                        documents[index].data()
+                                            as Map<String, dynamic>;
 
-                                // num slDaBan = nhaHangData['SLDaBan'] ?? 0;
-                                // String hinhAnh =
-                                //     nhaHangData['anhDaiDienNH'] ?? '';
-                                // String diaChi = nhaHangData['diaChiNH'] ?? '';
-                                return Column();
+                                    // Trích xuất tên và giá của món ăn
+                                    String idMon = foodData['IDMonAn'];
+                                    String tenMon = foodData['tenMon'];
+                                    String hinhAnhMon = foodData['hinhAnhMA'];
+                                    num giaTien = foodData['giaTien'];
+
+                                    return GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                chiTietCuaMonAnPage(
+                                              IDNhaHang: widget.IDNhaHang,
+                                              IDMonAn: idMon,
+                                              tenMon: tenMon,
+                                              hinhAnhMA: hinhAnhMon,
+                                              giaTien: giaTien,
+                                            ),
+                                          ),
+                                        ).then((value) {
+                                          if (value != null &&
+                                              value is List<dynamic> &&
+                                              value.length == 3) {
+                                            setState(() {
+                                              soLuong = value[0];
+                                              idMonVuaDuocThem = value[1];
+                                              idUser = value[2];
+                                            });
+                                            print(
+                                                'sl: $soLuong - ID USER: $idUser');
+                                          }
+                                        });
+                                      },
+                                      child: Container(
+                                        width: 180,
+                                        margin: const EdgeInsets.only(
+                                          bottom: 30,
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Container(
+                                              height: 150,
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Container(
+                                                    width: 180,
+                                                    child: Text(
+                                                      tenMon,
+                                                      style: const TextStyle(
+                                                        fontSize: 20,
+                                                        color: Colors.black,
+                                                      ),
+                                                      softWrap: true,
+                                                      maxLines: 2,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    width: 180,
+                                                    child: Text(
+                                                      '${NumberFormat("0.000").format(giaTien)}đ',
+                                                      style: const TextStyle(
+                                                        fontSize: 20,
+                                                        color: Colors.black,
+                                                      ),
+                                                      softWrap: true,
+                                                      maxLines: 3,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+
+                                            ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              child: Image(
+                                                image: AssetImage(hinhAnhMon),
+                                                fit: BoxFit.cover,
+                                                width: 180,
+                                                height: 150,
+                                              ),
+                                            ),
+                                            // const SizedBox(
+                                            //   height: 10,
+                                            // ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
                               },
-                            )),
-                            GestureDetector(
-                              onTap: () {},
-                              child: Container(
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Container(
-                                      width: 200,
-                                      height: 130,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            'Bột khoai môn 3 trứng',
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.black,
-                                            ),
-                                            softWrap: true,
-                                          ),
-                                          Text(
-                                            '45.000 đ',
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Image(
-                                        image: AssetImage('images/hinh_73.jpg'),
-                                        fit: BoxFit.cover,
-                                        width: 150,
-                                        height: 150,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
                             ),
                           ],
                         ),
-                      ),
+                      )
                     ],
                   ),
                 ),
@@ -1010,187 +1062,187 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
                   ),
                 ),
                 // appbar + search
-                Expanded(
-                  child: AnimatedOpacity(
-                    opacity: showAppBarDanhMucLoaiMonAn ? 1.0 : 0.0,
-                    duration: const Duration(milliseconds: 300),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
-                            blurRadius: 5, // làm mềm
-                            spreadRadius: 0, // mở rộng
-                            offset: const Offset(
-                              0, // di chuyển sang phải theo chiều ngang
-                              5.0, // dieu chuyển xuống dưới theo chiều dọc
-                            ),
-                          ),
-                        ],
-                      ),
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        children: [
-                          GestureDetector(
-                            onTap: () {},
-                            child: Container(
-                              height: 55,
-                              alignment: Alignment.center,
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 5,
-                                horizontal: 15,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Color.fromARGB(255, 163, 240, 225),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Text(
-                                'Món hot',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: Color.fromARGB(255, 1, 106, 78),
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          GestureDetector(
-                            child: Container(
-                              height: 55,
-                              alignment: Alignment.center,
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 5,
-                                horizontal: 15,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.transparent,
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: const Text(
-                                'Milk tea',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          GestureDetector(
-                            child: Container(
-                              height: 55,
-                              alignment: Alignment.center,
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 5,
-                                horizontal: 15,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.transparent,
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: const Text(
-                                'Milk',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          GestureDetector(
-                            child: Container(
-                              height: 55,
-                              alignment: Alignment.center,
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 5,
-                                horizontal: 15,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.transparent,
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: const Text(
-                                'Tea',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          GestureDetector(
-                            child: Container(
-                              height: 55,
-                              alignment: Alignment.center,
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 5,
-                                horizontal: 15,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.transparent,
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: const Text(
-                                'Special drinks',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          GestureDetector(
-                            child: Container(
-                              height: 55,
-                              alignment: Alignment.center,
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 5,
-                                horizontal: 15,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.transparent,
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: const Text(
-                                'Soda',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                // Expanded(
+                //   child: AnimatedOpacity(
+                //     opacity: showAppBarDanhMucLoaiMonAn ? 1.0 : 0.0,
+                //     duration: const Duration(milliseconds: 300),
+                //     child: Container(
+                //       padding: const EdgeInsets.symmetric(
+                //         vertical: 8,
+                //       ),
+                //       decoration: BoxDecoration(
+                //         color: Colors.white,
+                //         boxShadow: [
+                //           BoxShadow(
+                //             color: Colors.black.withOpacity(0.2),
+                //             blurRadius: 5, // làm mềm
+                //             spreadRadius: 0, // mở rộng
+                //             offset: const Offset(
+                //               0, // di chuyển sang phải theo chiều ngang
+                //               5.0, // dieu chuyển xuống dưới theo chiều dọc
+                //             ),
+                //           ),
+                //         ],
+                //       ),
+                //       child: ListView(
+                //         scrollDirection: Axis.horizontal,
+                //         children: [
+                //           GestureDetector(
+                //             onTap: () {},
+                //             child: Container(
+                //               height: 55,
+                //               alignment: Alignment.center,
+                //               padding: const EdgeInsets.symmetric(
+                //                 vertical: 5,
+                //                 horizontal: 15,
+                //               ),
+                //               decoration: BoxDecoration(
+                //                 color: Color.fromARGB(255, 163, 240, 225),
+                //                 borderRadius: BorderRadius.circular(20),
+                //               ),
+                //               child: Text(
+                //                 'Món hot',
+                //                 style: TextStyle(
+                //                   fontSize: 20,
+                //                   color: Color.fromARGB(255, 1, 106, 78),
+                //                   fontWeight: FontWeight.w500,
+                //                 ),
+                //               ),
+                //             ),
+                //           ),
+                //           const SizedBox(
+                //             width: 5,
+                //           ),
+                //           GestureDetector(
+                //             child: Container(
+                //               height: 55,
+                //               alignment: Alignment.center,
+                //               padding: const EdgeInsets.symmetric(
+                //                 vertical: 5,
+                //                 horizontal: 15,
+                //               ),
+                //               decoration: BoxDecoration(
+                //                 color: Colors.transparent,
+                //                 borderRadius: BorderRadius.circular(20),
+                //               ),
+                //               child: const Text(
+                //                 'Milk tea',
+                //                 style: TextStyle(
+                //                   fontSize: 20,
+                //                   color: Colors.black,
+                //                   fontWeight: FontWeight.w500,
+                //                 ),
+                //               ),
+                //             ),
+                //           ),
+                //           const SizedBox(
+                //             width: 5,
+                //           ),
+                //           GestureDetector(
+                //             child: Container(
+                //               height: 55,
+                //               alignment: Alignment.center,
+                //               padding: const EdgeInsets.symmetric(
+                //                 vertical: 5,
+                //                 horizontal: 15,
+                //               ),
+                //               decoration: BoxDecoration(
+                //                 color: Colors.transparent,
+                //                 borderRadius: BorderRadius.circular(20),
+                //               ),
+                //               child: const Text(
+                //                 'Milk',
+                //                 style: TextStyle(
+                //                   fontSize: 20,
+                //                   color: Colors.black,
+                //                   fontWeight: FontWeight.w500,
+                //                 ),
+                //               ),
+                //             ),
+                //           ),
+                //           const SizedBox(
+                //             width: 5,
+                //           ),
+                //           GestureDetector(
+                //             child: Container(
+                //               height: 55,
+                //               alignment: Alignment.center,
+                //               padding: const EdgeInsets.symmetric(
+                //                 vertical: 5,
+                //                 horizontal: 15,
+                //               ),
+                //               decoration: BoxDecoration(
+                //                 color: Colors.transparent,
+                //                 borderRadius: BorderRadius.circular(20),
+                //               ),
+                //               child: const Text(
+                //                 'Tea',
+                //                 style: TextStyle(
+                //                   fontSize: 20,
+                //                   color: Colors.black,
+                //                   fontWeight: FontWeight.w500,
+                //                 ),
+                //               ),
+                //             ),
+                //           ),
+                //           const SizedBox(
+                //             width: 5,
+                //           ),
+                //           GestureDetector(
+                //             child: Container(
+                //               height: 55,
+                //               alignment: Alignment.center,
+                //               padding: const EdgeInsets.symmetric(
+                //                 vertical: 5,
+                //                 horizontal: 15,
+                //               ),
+                //               decoration: BoxDecoration(
+                //                 color: Colors.transparent,
+                //                 borderRadius: BorderRadius.circular(20),
+                //               ),
+                //               child: const Text(
+                //                 'Special drinks',
+                //                 style: TextStyle(
+                //                   fontSize: 20,
+                //                   color: Colors.black,
+                //                   fontWeight: FontWeight.w500,
+                //                 ),
+                //               ),
+                //             ),
+                //           ),
+                //           const SizedBox(
+                //             width: 5,
+                //           ),
+                //           GestureDetector(
+                //             child: Container(
+                //               height: 55,
+                //               alignment: Alignment.center,
+                //               padding: const EdgeInsets.symmetric(
+                //                 vertical: 5,
+                //                 horizontal: 15,
+                //               ),
+                //               decoration: BoxDecoration(
+                //                 color: Colors.transparent,
+                //                 borderRadius: BorderRadius.circular(20),
+                //               ),
+                //               child: const Text(
+                //                 'Soda',
+                //                 style: TextStyle(
+                //                   fontSize: 20,
+                //                   color: Colors.black,
+                //                   fontWeight: FontWeight.w500,
+                //                 ),
+                //               ),
+                //             ),
+                //           ),
+                //           const SizedBox(
+                //             width: 5,
+                //           ),
+                //         ],
+                //       ),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),
@@ -1348,13 +1400,22 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => gioHangPage(
-                                  IDCuaKhachHang: idUser!,
-                                  IDCuaNhaHang: widget.IDNhaHang!)),
-                        );
+                        if (phoneNumber.isEmpty) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => dangNhapPage(),
+                            ),
+                          );
+                        } else {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => gioHangPage(
+                                    IDCuaKhachHang: idUser!,
+                                    IDCuaNhaHang: widget.IDNhaHang!)),
+                          );
+                        }
                       },
                       child: Container(
                         height: 65,

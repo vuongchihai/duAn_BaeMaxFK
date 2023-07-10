@@ -285,326 +285,328 @@ class _chiTietCuaMonAnPageState extends State<chiTietCuaMonAnPage> {
                         ],
                       ),
                     ),
-                    Container(
-                      child: Column(
-                        children: [
-                          Container(
-                            color: Color.fromARGB(255, 230, 230, 230),
-                            width: double.infinity,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 18,
-                              vertical: 25,
-                            ),
-                            child: const Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Chọn mức đường',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Text(
-                                  'Chọn ít nhất 1 mục',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    color: Colors.red,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            child: Column(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    border: Border(
-                                      bottom: BorderSide(
-                                        color: Colors.grey,
-                                        width: 1,
-                                      ),
-                                    ),
-                                  ),
-                                  child: RadioListTile(
-                                    title: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: const [
-                                        Text(
-                                          '0% đường',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 20,
-                                          ),
-                                        ),
-                                        Text(
-                                          '0đ',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 20,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    value: '0duong',
-                                    groupValue: chonMucDuong,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        chonMucDuong = value.toString();
-                                      });
-                                    },
-                                  ),
-                                ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    border: Border(
-                                      bottom: BorderSide(
-                                        color: Colors.grey,
-                                        width: 1,
-                                      ),
-                                    ),
-                                  ),
-                                  child: RadioListTile(
-                                    title: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: const [
-                                        Text(
-                                          '50% đường',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 20,
-                                          ),
-                                        ),
-                                        Text(
-                                          '0đ',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 20,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    value: '50duong',
-                                    groupValue: chonMucDuong,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        chonMucDuong = value.toString();
-                                      });
-                                    },
-                                  ),
-                                ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    border: Border(
-                                      bottom: BorderSide(
-                                        color: Colors.grey,
-                                        width: 1,
-                                      ),
-                                    ),
-                                  ),
-                                  child: RadioListTile(
-                                    title: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: const [
-                                        Text(
-                                          '100% đường',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 20,
-                                          ),
-                                        ),
-                                        Text(
-                                          '0đ',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 20,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    value: '100duong',
-                                    groupValue: chonMucDuong,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        chonMucDuong = value.toString();
-                                      });
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      child: Column(
-                        children: [
-                          Container(
-                            color: Color.fromARGB(255, 230, 230, 230),
-                            width: double.infinity,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 18,
-                              vertical: 25,
-                            ),
-                            child: const Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Chọn mức đá',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Text(
-                                  'Chọn ít nhất 1 mục',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    color: Colors.red,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            child: Column(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    border: Border(
-                                      bottom: BorderSide(
-                                        color: Colors.grey,
-                                        width: 1,
-                                      ),
-                                    ),
-                                  ),
-                                  child: RadioListTile(
-                                    title: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: const [
-                                        Text(
-                                          '0% đá',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 20,
-                                          ),
-                                        ),
-                                        Text(
-                                          '0đ',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 20,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    value: '0da',
-                                    groupValue: chonMucDa,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        chonMucDa = value.toString();
-                                      });
-                                    },
-                                  ),
-                                ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    border: Border(
-                                      bottom: BorderSide(
-                                        color: Colors.grey,
-                                        width: 1,
-                                      ),
-                                    ),
-                                  ),
-                                  child: RadioListTile(
-                                    title: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: const [
-                                        Text(
-                                          '50% đá',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 20,
-                                          ),
-                                        ),
-                                        Text(
-                                          '0đ',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 20,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    value: '50da',
-                                    groupValue: chonMucDa,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        chonMucDa = value.toString();
-                                      });
-                                    },
-                                  ),
-                                ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    border: Border(
-                                      bottom: BorderSide(
-                                        color: Colors.grey,
-                                        width: 1,
-                                      ),
-                                    ),
-                                  ),
-                                  child: RadioListTile(
-                                    title: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: const [
-                                        Text(
-                                          '100% đá',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 20,
-                                          ),
-                                        ),
-                                        Text(
-                                          '0đ',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 20,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    value: '100da',
-                                    groupValue: chonMucDa,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        chonMucDa = value.toString();
-                                      });
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    // Container(
+                    //   child: Column(
+                    //     children: [
+                    //       Container(
+                    //         color: Color.fromARGB(255, 230, 230, 230),
+                    //         width: double.infinity,
+                    //         padding: const EdgeInsets.symmetric(
+                    //           horizontal: 18,
+                    //           vertical: 25,
+                    //         ),
+                    //         child: const Column(
+                    //           crossAxisAlignment: CrossAxisAlignment.start,
+                    //           children: [
+                    //             Text(
+                    //               'Chọn mức đường',
+                    //               style: TextStyle(
+                    //                 fontSize: 20,
+                    //                 color: Colors.black,
+                    //                 fontWeight: FontWeight.w500,
+                    //               ),
+                    //             ),
+                    //             SizedBox(
+                    //               height: 10,
+                    //             ),
+                    //             Text(
+                    //               'Chọn ít nhất 1 mục',
+                    //               style: TextStyle(
+                    //                 fontSize: 20,
+                    //                 color: Colors.red,
+                    //               ),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       ),
+                    //       Container(
+                    //         child: Column(
+                    //           children: [
+                    //             Container(
+                    //               decoration: BoxDecoration(
+                    //                 border: Border(
+                    //                   bottom: BorderSide(
+                    //                     color: Colors.grey,
+                    //                     width: 1,
+                    //                   ),
+                    //                 ),
+                    //               ),
+                    //               child: RadioListTile(
+                    //                 title: Row(
+                    //                   mainAxisAlignment:
+                    //                       MainAxisAlignment.spaceBetween,
+                    //                   children: const [
+                    //                     Text(
+                    //                       '0% đường',
+                    //                       style: TextStyle(
+                    //                         color: Colors.black,
+                    //                         fontSize: 20,
+                    //                       ),
+                    //                     ),
+                    //                     Text(
+                    //                       '0đ',
+                    //                       style: TextStyle(
+                    //                         color: Colors.black,
+                    //                         fontSize: 20,
+                    //                       ),
+                    //                     ),
+                    //                   ],
+                    //                 ),
+                    //                 value: '0duong',
+                    //                 groupValue: chonMucDuong,
+                    //                 onChanged: (value) {
+                    //                   setState(() {
+                    //                     chonMucDuong = value.toString();
+                    //                   });
+                    //                 },
+                    //               ),
+                    //             ),
+                    //             Container(
+                    //               decoration: BoxDecoration(
+                    //                 border: Border(
+                    //                   bottom: BorderSide(
+                    //                     color: Colors.grey,
+                    //                     width: 1,
+                    //                   ),
+                    //                 ),
+                    //               ),
+                    //               child: RadioListTile(
+                    //                 title: Row(
+                    //                   mainAxisAlignment:
+                    //                       MainAxisAlignment.spaceBetween,
+                    //                   children: const [
+                    //                     Text(
+                    //                       '50% đường',
+                    //                       style: TextStyle(
+                    //                         color: Colors.black,
+                    //                         fontSize: 20,
+                    //                       ),
+                    //                     ),
+                    //                     Text(
+                    //                       '0đ',
+                    //                       style: TextStyle(
+                    //                         color: Colors.black,
+                    //                         fontSize: 20,
+                    //                       ),
+                    //                     ),
+                    //                   ],
+                    //                 ),
+                    //                 value: '50duong',
+                    //                 groupValue: chonMucDuong,
+                    //                 onChanged: (value) {
+                    //                   setState(() {
+                    //                     chonMucDuong = value.toString();
+                    //                   });
+                    //                 },
+                    //               ),
+                    //             ),
+                    //             Container(
+                    //               decoration: BoxDecoration(
+                    //                 border: Border(
+                    //                   bottom: BorderSide(
+                    //                     color: Colors.grey,
+                    //                     width: 1,
+                    //                   ),
+                    //                 ),
+                    //               ),
+                    //               child: RadioListTile(
+                    //                 title: Row(
+                    //                   mainAxisAlignment:
+                    //                       MainAxisAlignment.spaceBetween,
+                    //                   children: const [
+                    //                     Text(
+                    //                       '100% đường',
+                    //                       style: TextStyle(
+                    //                         color: Colors.black,
+                    //                         fontSize: 20,
+                    //                       ),
+                    //                     ),
+                    //                     Text(
+                    //                       '0đ',
+                    //                       style: TextStyle(
+                    //                         color: Colors.black,
+                    //                         fontSize: 20,
+                    //                       ),
+                    //                     ),
+                    //                   ],
+                    //                 ),
+                    //                 value: '100duong',
+                    //                 groupValue: chonMucDuong,
+                    //                 onChanged: (value) {
+                    //                   setState(() {
+                    //                     chonMucDuong = value.toString();
+                    //                   });
+                    //                 },
+                    //               ),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
+                    // Container(
+                    //   child: Column(
+                    //     children: [
+                    //       Container(
+                    //         color: Color.fromARGB(255, 230, 230, 230),
+                    //         width: double.infinity,
+                    //         padding: const EdgeInsets.symmetric(
+                    //           horizontal: 18,
+                    //           vertical: 25,
+                    //         ),
+                    //         child: const Column(
+                    //           crossAxisAlignment: CrossAxisAlignment.start,
+                    //           children: [
+                    //             Text(
+                    //               'Chọn mức đá',
+                    //               style: TextStyle(
+                    //                 fontSize: 20,
+                    //                 color: Colors.black,
+                    //                 fontWeight: FontWeight.w500,
+                    //               ),
+                    //             ),
+                    //             SizedBox(
+                    //               height: 10,
+                    //             ),
+                    //             Text(
+                    //               'Chọn ít nhất 1 mục',
+                    //               style: TextStyle(
+                    //                 fontSize: 20,
+                    //                 color: Colors.red,
+                    //               ),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       ),
+                    //       Container(
+                    //         child: Column(
+                    //           children: [
+                    //             Container(
+                    //               decoration: BoxDecoration(
+                    //                 border: Border(
+                    //                   bottom: BorderSide(
+                    //                     color: Colors.grey,
+                    //                     width: 1,
+                    //                   ),
+                    //                 ),
+                    //               ),
+                    //               child: RadioListTile(
+                    //                 title: Row(
+                    //                   mainAxisAlignment:
+                    //                       MainAxisAlignment.spaceBetween,
+                    //                   children: const [
+                    //                     Text(
+                    //                       '0% đá',
+                    //                       style: TextStyle(
+                    //                         color: Colors.black,
+                    //                         fontSize: 20,
+                    //                       ),
+                    //                     ),
+                    //                     Text(
+                    //                       '0đ',
+                    //                       style: TextStyle(
+                    //                         color: Colors.black,
+                    //                         fontSize: 20,
+                    //                       ),
+                    //                     ),
+                    //                   ],
+                    //                 ),
+                    //                 value: '0da',
+                    //                 groupValue: chonMucDa,
+                    //                 onChanged: (value) {
+                    //                   setState(() {
+                    //                     chonMucDa = value.toString();
+                    //                   });
+                    //                 },
+                    //               ),
+                    //             ),
+                    //             Container(
+                    //               decoration: BoxDecoration(
+                    //                 border: Border(
+                    //                   bottom: BorderSide(
+                    //                     color: Colors.grey,
+                    //                     width: 1,
+                    //                   ),
+                    //                 ),
+                    //               ),
+                    //               child: RadioListTile(
+                    //                 title: Row(
+                    //                   mainAxisAlignment:
+                    //                       MainAxisAlignment.spaceBetween,
+                    //                   children: const [
+                    //                     Text(
+                    //                       '50% đá',
+                    //                       style: TextStyle(
+                    //                         color: Colors.black,
+                    //                         fontSize: 20,
+                    //                       ),
+                    //                     ),
+                    //                     Text(
+                    //                       '0đ',
+                    //                       style: TextStyle(
+                    //                         color: Colors.black,
+                    //                         fontSize: 20,
+                    //                       ),
+                    //                     ),
+                    //                   ],
+                    //                 ),
+                    //                 value: '50da',
+                    //                 groupValue: chonMucDa,
+                    //                 onChanged: (value) {
+                    //                   setState(() {
+                    //                     chonMucDa = value.toString();
+                    //                   });
+                    //                 },
+                    //               ),
+                    //             ),
+                    //             Container(
+                    //               decoration: BoxDecoration(
+                    //                 border: Border(
+                    //                   bottom: BorderSide(
+                    //                     color: Colors.grey,
+                    //                     width: 1,
+                    //                   ),
+                    //                 ),
+                    //               ),
+                    //               child: RadioListTile(
+                    //                 title: Row(
+                    //                   mainAxisAlignment:
+                    //                       MainAxisAlignment.spaceBetween,
+                    //                   children: const [
+                    //                     Text(
+                    //                       '100% đá',
+                    //                       style: TextStyle(
+                    //                         color: Colors.black,
+                    //                         fontSize: 20,
+                    //                       ),
+                    //                     ),
+                    //                     Text(
+                    //                       '0đ',
+                    //                       style: TextStyle(
+                    //                         color: Colors.black,
+                    //                         fontSize: 20,
+                    //                       ),
+                    //                     ),
+                    //                   ],
+                    //                 ),
+                    //                 value: '100da',
+                    //                 groupValue: chonMucDa,
+                    //                 onChanged: (value) {
+                    //                   setState(() {
+                    //                     chonMucDa = value.toString();
+                    //                   });
+                    //                 },
+                    //               ),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
+                  
+                  
                   ],
                 ),
               ),

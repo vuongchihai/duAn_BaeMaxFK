@@ -25,11 +25,11 @@ class main_header_widget extends StatelessWidget {
 
     // Lấy ngẫu nhiên 3 chữ cái từ danh sách letters
     List<String> randomLetters =
-        List.generate(5, (index) => letters[random.nextInt(letters.length)]);
+        List.generate(10, (index) => letters[random.nextInt(letters.length)]);
 
     // Lấy ngẫu nhiên 3 số từ danh sách numbers
     List<String> randomNumbers =
-        List.generate(5, (index) => numbers[random.nextInt(numbers.length)]);
+        List.generate(10, (index) => numbers[random.nextInt(numbers.length)]);
 
     // Kết hợp chữ cái và số ngẫu nhiên thành một chuỗi
     String randomString = randomLetters.join('') + randomNumbers.join('');
@@ -57,11 +57,11 @@ class main_header_widget extends StatelessWidget {
   void themDuLieuDenFiestore() {
     MonAn monAn = MonAn(
       IDMonAn: RandomIDMonAn(),
-      tenMon: 'Hồng trà sữa (vị truyền thống) trân châu',
-      hinhAnhMA: 'images/hinh_100.jpg',
-      giaTien: 34.000,
+      tenMon: 'Bia Pilsner Urquell',
+      hinhAnhMA: 'images/hinh_149.jpg',
+      giaTien: 60.000,
     );
-    String idNhaHang = 't0vLbONEuOY2regsBTGo';
+    String idNhaHang = 'aaLBkCzoHUc6F2HLWomE';
     themMonAnVaoNhaHang(monAn, idNhaHang);
   }
 
@@ -102,14 +102,14 @@ class main_header_widget extends StatelessWidget {
           Container(
             child: Row(
               children: [
-                GestureDetector(
-                  onTap: () {
-                    themDuLieuDenFiestore();
-                  },
-                  child: Container(
-                    child: Text('data'),
-                  ),
-                ),
+                // GestureDetector(
+                //   onTap: () {
+                //     themDuLieuDenFiestore();
+                //   },
+                //   child: Container(
+                //     child: Text('data'),
+                //   ),
+                // ),
                 TextButton(
                   onPressed: () {
                     Navigator.push(

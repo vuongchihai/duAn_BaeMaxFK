@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
                   main_carousel_suKien_widget(),
                   main_luaChonTheoLoai_widget(),
                   khaoNuocXin_DealDaTang(),
-                  khaoMonAn_DealDaTang(),
+                  // khaoMonAn_DealDaTang(),
                 ],
               ),
             ),
