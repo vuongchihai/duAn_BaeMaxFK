@@ -83,31 +83,50 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
     });
   }
 
-  int soLuongMonAnTrongGioHang = 0;
   double tongTienMonAnTrongGioHang = 0;
 
-  Stream<QuerySnapshot> cartStream =
-      FirebaseFirestore.instance.collection('gioHang').snapshots();
+  String? idUser;
 
-  void demSoLuongMonAnTrongGio() {
+  // Stream<QuerySnapshot> cartStream = FirebaseFirestore.instance
+  //     .collection('khachHang')
+  //     .doc(idUser)
+  //     .collection('gioHang')
+  //     .snapshots();
+  int soLuongMonAnTrongGioHang = 0;
+
+  Future<int> demSoLuongMonAnTrongGio() async {
+    int calculatedTotalQuantity = 0;
+    Stream<QuerySnapshot> cartStream = FirebaseFirestore.instance
+        .collection('khachHang')
+        .doc(idUser)
+        .collection('gioHang')
+        .snapshots();
     cartStream.listen(
       (QuerySnapshot snapshot) {
-        int calculatedTotalQuantity = 0;
+        int slReset = 0;
         for (var doc in snapshot.docs) {
           final data = doc.data() as Map<String, dynamic>;
           final soLuong = data['soLuongMonDuocChon'] as int;
-          calculatedTotalQuantity += soLuong;
+          slReset += soLuong;
         }
         if (mounted) {
           setState(() {
-            soLuongMonAnTrongGioHang = calculatedTotalQuantity;
+            soLuongMonAnTrongGioHang = slReset;
+            calculatedTotalQuantity = slReset;
           });
         }
       },
     );
+    return calculatedTotalQuantity;
   }
 
-  void tongTienTrongGio() {
+  Future<double> tongTienTrongGio() async {
+    double tong = 0;
+    Stream<QuerySnapshot> cartStream = FirebaseFirestore.instance
+        .collection('khachHang')
+        .doc(idUser)
+        .collection('gioHang')
+        .snapshots();
     cartStream.listen((QuerySnapshot snapshot) {
       double tongTien = 0;
       for (var doc in snapshot.docs) {
@@ -119,9 +138,11 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
       if (mounted) {
         setState(() {
           tongTienMonAnTrongGioHang = tongTien;
+          tong = tongTien;
         });
       }
     });
+    return tong;
   }
 
   List<Map<String, dynamic>> searchResult = [];
@@ -180,10 +201,16 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
     });
 
     layMonAnTuNhaHang(widget.IDNhaHang);
-    print('${widget.IDNhaHang}');
 
-    demSoLuongMonAnTrongGio();
-    tongTienTrongGio();
+    printSL();
+    // demSoLuongMonAnTrongGio();
+    //  tongTienTrongGio();
+  }
+
+  void printSL() async {
+    int sl = await demSoLuongMonAnTrongGio();
+    double tongTien = await tongTienTrongGio();
+    print('$sl');
   }
 
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -193,6 +220,7 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
   @override
   void dispose() {
     scrollController.dispose();
+    soLuongMonAnTrongGioHang = 0;
     // Thực hiện cập nhật lên Firestore khi thoát widget
     khachHangCollection.get().then((snapshot) {
       for (var doc in snapshot.docs) {
@@ -526,13 +554,14 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
                                         ).then((value) {
                                           if (value != null &&
                                               value is List<dynamic> &&
-                                              value.length == 2) {
+                                              value.length == 3) {
                                             setState(() {
                                               soLuong = value[0];
                                               idMonVuaDuocThem = value[1];
+                                              idUser = value[2];
                                             });
                                             print(
-                                                'sl: $soLuong - TONG: $idMonVuaDuocThem');
+                                                'sl: $soLuong - ID USER: $idUser');
                                           }
                                         });
                                       },
@@ -1267,7 +1296,8 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => gioHangPage(),
+                            builder: (context) =>
+                                gioHangPage(IDCuaKhachHang: idUser!),
                           ),
                         );
                       },
@@ -1314,9 +1344,10 @@ class _chiTietNhaHangPageState extends State<chiTietNhaHangPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => trangThanhToanPage(),
+                            builder: (context) => trangThanhToanPage(IDCuaKhachHang: idUser!),
                           ),
                         );
+                        printSL();
                       },
                       child: Container(
                         height: 65,

@@ -2,6 +2,9 @@ import 'package:baemax/models/gioHang.dart';
 import 'package:baemax/pages/page_loiNhanToiNhaHang.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../models/User.dart';
 
 class chiTietCuaMonAnPage extends StatefulWidget {
   final String? IDMonAn;
@@ -33,32 +36,91 @@ class _chiTietCuaMonAnPageState extends State<chiTietCuaMonAnPage> {
   List<GioHang> gioHangItems = [];
 
   void addToCart(GioHang gioHang, {int quantity = 1}) async {
-    try {
-      final cartRef = FirebaseFirestore.instance.collection('gioHang');
+    if (phoneNumber.isNotEmpty) {
+      try {
+        QuerySnapshot snapshot = await FirebaseFirestore.instance
+            .collection('khachHang')
+            .where('sdt', isEqualTo: phoneNumber)
+            .get();
 
-      final querySnapshot =
-          await cartRef.where('idMonAn', isEqualTo: gioHang.IDMonAn).get();
+        if (snapshot.size > 0) {
+          String khachHangId = snapshot.docs[0].id;
 
-      if (querySnapshot.size > 0) {
-        final cartItemRef = querySnapshot.docs.first.reference;
-        await cartItemRef.update({'soLuongMonDuocChon': quantity});
-      } else {
-        final newCartItem = cartRef.doc();
-        final data = {
-          'idMonAn': gioHang.IDMonAn,
-          'IDNhaHang': gioHang.IDNhaHang,
-          'tenMon': gioHang.tenMon,
-          'hinhAnhMA': gioHang.hinhAnhMA,
-          'giaTien': gioHang.giaTien,
-          'soLuongMonDuocChon': quantity,
-        };
-        await newCartItem.set(data);
+          QuerySnapshot gioHangSnapshot = await FirebaseFirestore.instance
+              .collection('khachHang')
+              .doc(khachHangId)
+              .collection('gioHang')
+              .where('idMonAn', isEqualTo: gioHang.IDMonAn)
+              .get();
+
+          if (gioHangSnapshot.size > 0) {
+            // Món đã có trong giỏ hàng, cập nhật số lượng
+            DocumentSnapshot gioHangDoc = gioHangSnapshot.docs[0];
+            Map<String, dynamic> gioHangData =
+                gioHangDoc.data() as Map<String, dynamic>;
+            int currentQuantity = gioHangData['soLuongMonDuocChon'];
+            int newQuantity = quantity;
+
+            gioHangDoc.reference
+                .update({'soLuongMonDuocChon': newQuantity}).then((value) {
+              print('Cập nhật số lượng món thành công');
+            }).catchError((e) {
+              print('Lỗi khi cập nhật số lượng món: $e');
+            });
+          } else {
+            // Món chưa có trong giỏ hàng, thêm vào
+            FirebaseFirestore.instance
+                .collection('khachHang')
+                .doc(khachHangId)
+                .collection('gioHang')
+                .add({
+              'idMonAn': widget.IDMonAn,
+              'IDNhaHang': gioHang.IDNhaHang,
+              'tenMon': gioHang.tenMon,
+              'hinhAnhMA': gioHang.hinhAnhMA,
+              'giaTien': gioHang.giaTien,
+              'soLuongMonDuocChon': quantity,
+            }).then((value) {
+              print('Thêm vào giỏ hàng thành công');
+            }).catchError((e) {
+              print('Lỗi khi thêm vào giỏ hàng: $e');
+            });
+          }
+        } else {
+          print(
+              'Không tìm thấy tài liệu KhachHang với số điện thoại $phoneNumber');
+        }
+      } catch (e) {
+        print('Lỗi khi thêm dữ liệu vào giỏ hàng: $e');
       }
-
-      print('Thêm dữ liệu vào giỏ hàng thành công');
-    } catch (e) {
-      print('Lỗi khi thêm dữ liệu vào giỏ hàng: $e');
     }
+  }
+
+  String idCuaKH = '';
+  Future<String> timIDKH() async {
+    if (phoneNumber.isNotEmpty) {
+      QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection('khachHang')
+          .where('sdt', isEqualTo: phoneNumber)
+          .get();
+
+      if (snapshot.size > 0) {
+        String idKhachHang = snapshot.docs[0].id;
+        setState(() {
+          idCuaKH = idKhachHang;
+        });
+        return idKhachHang;
+      } else {
+        print(
+            'Không tìm thấy tài liệu KhachHang với số điện thoại $phoneNumber');
+      }
+    }
+    return '';
+  }
+
+  void printIdKhachHang() async {
+    String idKhachHang = await timIDKH();
+    print('idKhachHang: $idKhachHang');
   }
 
   void xoaMonAnKhoiGioHang(int index) {
@@ -89,8 +151,12 @@ class _chiTietCuaMonAnPageState extends State<chiTietCuaMonAnPage> {
     }
   }
 
+  String phoneNumber = '';
+
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<User>(context);
+    phoneNumber = user.phoneNumber;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -640,9 +706,11 @@ class _chiTietCuaMonAnPageState extends State<chiTietCuaMonAnPage> {
                       ),
                       child: TextButton(
                         onPressed: () async {
+                          String idKhachHang = await timIDKH();
                           List<dynamic> soLuongVaIdMonAn = [
                             soLuong,
                             widget.IDMonAn,
+                            idKhachHang,
                           ];
 
                           final gioHang = GioHang(
@@ -657,7 +725,7 @@ class _chiTietCuaMonAnPageState extends State<chiTietCuaMonAnPage> {
                             gioHangItems.add(gioHang);
                           });
 
-                          print('${widget.IDNhaHang}');
+                          // print(idKhachHang);
 
                           Navigator.pop(context, soLuongVaIdMonAn);
                         },

@@ -13,6 +13,4 @@ class GioHang {
       required this.hinhAnhMA,
       required this.giaTien,
       this.soLuongMonDuocChon = 1});
-
-
 }

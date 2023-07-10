@@ -5,9 +5,8 @@ import 'package:intl/intl.dart';
 import 'page_trangThanhToan.dart';
 
 class gioHangPage extends StatefulWidget {
-  gioHangPage({
-    Key? key,
-  }) : super(key: key);
+  final String IDCuaKhachHang;
+  gioHangPage({Key? key, required this.IDCuaKhachHang}) : super(key: key);
 
   @override
   State<gioHangPage> createState() => _gioHangPageState();
@@ -19,10 +18,14 @@ class _gioHangPageState extends State<gioHangPage> {
   double tongTien = 0;
   int tongSoLuongMon = 0;
   bool kiemTraSoLuongThayDoi = false;
+  String idKhachHang = '';
 
   @override
   void initState() {
     super.initState();
+    setState(() {
+      idKhachHang = widget.IDCuaKhachHang ?? '';
+    });
 
     thayDoiSoLuongController.text = thayDoiSoLuong.toString();
     thayDoiSoLuongController.addListener(capNhatSoLuong);
@@ -30,8 +33,11 @@ class _gioHangPageState extends State<gioHangPage> {
   }
 
   void initTongTienVaSoLuong() async {
-    final snapshot =
-        await FirebaseFirestore.instance.collection('gioHang').get();
+    final snapshot = await FirebaseFirestore.instance
+        .collection('khachHang')
+        .doc(idKhachHang)
+        .collection('gioHang')
+        .get();
 
     final gioHangDocs = snapshot.docs;
     tinhTongSoLuongVaTien(gioHangDocs);
@@ -44,8 +50,11 @@ class _gioHangPageState extends State<gioHangPage> {
   }
 
   void xoaTatCaMonAn() async {
-    QuerySnapshot snapshot =
-        await FirebaseFirestore.instance.collection('gioHang').get();
+    QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection('khachHang')
+        .doc(idKhachHang)
+        .collection('gioHang')
+        .get();
 
     for (DocumentSnapshot doc in snapshot.docs) {
       await doc.reference.delete();
@@ -95,7 +104,6 @@ class _gioHangPageState extends State<gioHangPage> {
           TextButton(
             onPressed: () {
               xoaTatCaMonAn();
-              print('đã nhấn xóa');
             },
             child: const Text(
               'Xóa',
@@ -113,6 +121,8 @@ class _gioHangPageState extends State<gioHangPage> {
               height: 675,
               child: StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
+                    .collection('khachHang')
+                    .doc(idKhachHang)
                     .collection('gioHang')
                     .snapshots(),
                 builder: (context, snapshot) {
@@ -312,7 +322,7 @@ class _gioHangPageState extends State<gioHangPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => trangThanhToanPage(),
+                      builder: (context) => trangThanhToanPage(IDCuaKhachHang: idKhachHang),
                     ),
                   );
                 },
@@ -338,6 +348,8 @@ class _gioHangPageState extends State<gioHangPage> {
                       children: [
                         StreamBuilder<QuerySnapshot>(
                           stream: FirebaseFirestore.instance
+                              .collection('khachHang')
+                              .doc(idKhachHang)
                               .collection('gioHang')
                               .snapshots(),
                           builder: (context, snapshot) {
@@ -375,6 +387,8 @@ class _gioHangPageState extends State<gioHangPage> {
                         ),
                         StreamBuilder<QuerySnapshot>(
                           stream: FirebaseFirestore.instance
+                              .collection('khachHang')
+                              .doc(idKhachHang)
                               .collection('gioHang')
                               .snapshots(),
                           builder: (context, snapshot) {

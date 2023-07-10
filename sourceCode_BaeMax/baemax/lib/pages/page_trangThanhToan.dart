@@ -1,8 +1,12 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class trangThanhToanPage extends StatefulWidget {
-  const trangThanhToanPage({super.key});
+  final String IDCuaKhachHang;
+  trangThanhToanPage({Key? key, required this.IDCuaKhachHang})
+      : super(key: key);
 
   @override
   State<trangThanhToanPage> createState() => _trangThanhToanPageState();
@@ -16,10 +20,15 @@ class _trangThanhToanPageState extends State<trangThanhToanPage> {
 
   late Timer _timer;
 
+  String idKhachHang = '';
+  int tongSoLuongMon = 0;
   @override
   void initState() {
     super.initState();
     startTimer();
+    setState(() {
+      idKhachHang = widget.IDCuaKhachHang ?? '';
+    });
   }
 
   @override
@@ -48,6 +57,21 @@ class _trangThanhToanPageState extends State<trangThanhToanPage> {
     int minutes = ((seconds % 3600) / 60).floor();
     int remainingSeconds = seconds % 60;
     return '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}';
+  }
+
+  double tongTien = 0;
+  void tinhTongSoLuongVaTien(List<QueryDocumentSnapshot> gioHangDocs) {
+    tongTien = 0;
+    tongSoLuongMon = 0;
+
+    for (var doc in gioHangDocs) {
+      final data = doc.data() as Map<String, dynamic>;
+      int soLuong = data['soLuongMonDuocChon'] as int;
+      final giaMon = data['giaTien'] as double;
+
+      tongSoLuongMon += soLuong;
+      tongTien += giaMon * soLuong;
+    }
   }
 
   @override
@@ -180,173 +204,127 @@ class _trangThanhToanPageState extends State<trangThanhToanPage> {
                                 ),
                               ),
                               Container(
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                    bottom: BorderSide(
-                                      color: Colors.grey,
-                                      width: 1,
-                                    ),
-                                  ),
-                                ),
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 20,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const Text(
-                                      '1x',
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Container(
-                                      width: 200,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'Bún tươi mực thì bầm',
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.black,
-                                            ),
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                          ),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          Text(
-                                            'Trụng sẵn',
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.black,
-                                            ),
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Container(
-                                        child: Row(
-                                          children: [
-                                            Text(
-                                              '1.000.000đ',
-                                              style: TextStyle(
-                                                fontSize: 20,
-                                                color: Colors.black,
-                                              ),
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 1,
-                                            ),
-                                            IconButton(
-                                              onPressed: () {
-                                                print('nhấn xóa món ăn');
-                                              },
-                                              icon: Icon(
-                                                Icons.close,
-                                                size: 20,
+                                child: StreamBuilder<QuerySnapshot>(
+                                  stream: FirebaseFirestore.instance
+                                      .collection('khachHang')
+                                      .doc(idKhachHang)
+                                      .collection('gioHang')
+                                      .snapshots(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      final gioHangDocs = snapshot.data!.docs;
+                                      return Column(
+                                        children: gioHangDocs.map((doc) {
+                                          final data = doc.data()
+                                              as Map<String, dynamic>;
+                                          final tenMon =
+                                              data['tenMon'] as String;
+                                          int soLuong =
+                                              data['soLuongMonDuocChon'] as int;
+                                          final giaMon =
+                                              data['giaTien'] as double;
+
+                                          return Container(
+                                            decoration: BoxDecoration(
+                                              border: Border(
+                                                bottom: BorderSide(
+                                                  color: Colors.grey,
+                                                  width: 1,
+                                                ),
                                               ),
                                             ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                    bottom: BorderSide(
-                                      color: Colors.grey,
-                                      width: 1,
-                                    ),
-                                  ),
-                                ),
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 20,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const Text(
-                                      '1x',
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Container(
-                                      width: 200,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'Bún tươi mực thì bầm',
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.black,
+                                            padding: const EdgeInsets.symmetric(
+                                              vertical: 20,
                                             ),
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                          ),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          Text(
-                                            'Trụng sẵn',
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.black,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  '$soLuong x',
+                                                  style: const TextStyle(
+                                                    fontSize: 20,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  width: 10,
+                                                ),
+                                                Container(
+                                                  width: 230,
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        tenMon,
+                                                        style: const TextStyle(
+                                                          fontSize: 20,
+                                                          color: Colors.black,
+                                                        ),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        maxLines: 1,
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      const Text(
+                                                        'Trụng sẵn',
+                                                        style: TextStyle(
+                                                          fontSize: 20,
+                                                          color: Colors.black,
+                                                        ),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        maxLines: 1,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  child: Container(
+                                                    child: Row(
+                                                      children: [
+                                                        Text(
+                                                          NumberFormat("0.000")
+                                                              .format(giaMon),
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 20,
+                                                            color: Colors.black,
+                                                          ),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          maxLines: 1,
+                                                        ),
+                                                        IconButton(
+                                                          onPressed: () {
+                                                            print(
+                                                                'nhấn xóa món ăn');
+                                                          },
+                                                          icon: const Icon(
+                                                            Icons.close,
+                                                            size: 20,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Container(
-                                        child: Row(
-                                          children: [
-                                            Text(
-                                              '1.000.000đ',
-                                              style: TextStyle(
-                                                fontSize: 20,
-                                                color: Colors.black,
-                                              ),
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 1,
-                                            ),
-                                            IconButton(
-                                              onPressed: () {
-                                                print('nhấn xóa món ăn');
-                                              },
-                                              icon: Icon(
-                                                Icons.close,
-                                                size: 20,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                                          );
+                                        }).toList(),
+                                      );
+                                    } else if (snapshot.hasError) {
+                                      return const Text('Đã xảy ra lỗi');
+                                    } else {
+                                      return const CircularProgressIndicator();
+                                    }
+                                  },
                                 ),
                               ),
                               const SizedBox(
@@ -390,18 +368,67 @@ class _trangThanhToanPageState extends State<trangThanhToanPage> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                      'Tạm tính (2 món)',
-                                      style: TextStyle(
-                                          fontSize: 20, color: Colors.black),
+                                    StreamBuilder<QuerySnapshot>(
+                                      stream: FirebaseFirestore.instance
+                                          .collection('khachHang')
+                                          .doc(idKhachHang)
+                                          .collection('gioHang')
+                                          .snapshots(),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.hasData) {
+                                          final gioHangDocs =
+                                              snapshot.data!.docs;
+                                          tinhTongSoLuongVaTien(gioHangDocs);
+
+                                          return Text(
+                                            'Tạm tính ($tongSoLuongMon món)',
+                                            style: const TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.black,
+                                            ),
+                                          );
+                                        } else {
+                                          return const Text(
+                                            '0',
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          );
+                                        }
+                                      },
                                     ),
-                                    Text(
-                                      '2.000.000đ',
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        color: Colors.black,
-                                      ),
-                                    ),
+                                    StreamBuilder<QuerySnapshot>(
+                          stream: FirebaseFirestore.instance
+                              .collection('khachHang')
+                              .doc(idKhachHang)
+                              .collection('gioHang')
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              final gioHangDocs = snapshot.data!.docs;
+                              tinhTongSoLuongVaTien(gioHangDocs);
+
+                              return Text(
+                                '${NumberFormat("0.000").format(tongTien)}đ',
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.black,
+                                ),
+                              );
+                            } else {
+                              return const Text(
+                                '0.000',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              );
+                            }
+                          },
+                        ),
                                   ],
                                 ),
                               ),
