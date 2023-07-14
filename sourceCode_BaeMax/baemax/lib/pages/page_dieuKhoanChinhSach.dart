@@ -63,7 +63,7 @@ class _dieuKhoanChinhSachPageState extends State<dieuKhoanChinhSachPage> {
                 ),
               ),
               Text(
-                'I. Những Quy Định Chung của BaeMax',
+                'I. Những Quy Định Chung',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
